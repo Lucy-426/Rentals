@@ -20,3 +20,5 @@ from which we will establish a connection to our website and display the data.
 
 !![screenshot of using a tool to try out the API](unnamed.png)
 
+**Technical problems**: We did not encounter any severe technical problems this week, but we are still very slow in figuring out
+how to work with git and github. Hopefully as we work with it more consistently, the process of working with git will be faster.
