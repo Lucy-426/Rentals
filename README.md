@@ -13,10 +13,11 @@ such as grocery stores, restaurants, recreation, and public transit. This inform
 from which we will establish a connection to our website and display the data.
 
 
-**link to the documentation for an API**: [ATTOM API](https://api.developer.attomdata.com/docs)
+**Link to the documentation for an API**: [ATTOM API](https://api.developer.attomdata.com/docs)
 
 
-**screenshot of using a tool to try out the API:**
+**Screenshot of using a tool to try out the API:**
 
-!![screenshot of using a tool to try out the API](unnamed.png)
+![screenshot of using a tool to try out the API](unnamed.png)
 
+**Note:** For code on calling the API, please run Rentals.java under src/main/java/api.
