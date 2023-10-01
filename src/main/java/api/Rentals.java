@@ -14,13 +14,17 @@ public class Rentals {
 
     @Override
     public Grade getGrade(String utorid, String course) {
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
+        OkHttpClient client = new OkHttpClient();
+
         Request request = new Request.Builder()
-                .url(String.format("https://grade-logging-api.chenpan.ca/grade?course=%s&utorid=%s", course, utorid))
-                .addHeader("Authorization", API_TOKEN)
-                .addHeader("Content-Type", "application/json")
+                .url("https://api.gateway.attomdata.com/propertyapi/v1.0.0/property/detail?address1=4529%20Winona%20Court&address2=Denver%2C%20CO")
+                .get()
+                .addHeader("accept", "application/json")
+                .addHeader("apikey", "870e26a0ffcc29cbb6b8bc86012a8c28")
+
                 .build();
+
+        Response response = client.newCall(request).execute();
         try {
             Response response = client.newCall(request).execute();
             System.out.println(response);
