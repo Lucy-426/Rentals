@@ -18,4 +18,5 @@ from which we will establish a connection to our website and display the data.
 
 **screenshot of using a tool to try out the API:**
 
-!![screenshot of using a tool to try out the API](..%2F..%2F..%2F..%2F..%2FPictures%2FSaved%20Pictures%2Funnamed.png)
+!![screenshot of using a tool to try out the API](unnamed.png)
+
