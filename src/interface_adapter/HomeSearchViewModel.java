@@ -5,11 +5,8 @@ import java.beans.PropertyChangeSupport;
 
 public class HomeSearchViewModel extends ViewModel{
     public final String TITLE_LABEL = "Sign Up View";
-    public final String USERNAME_LABEL = "Choose username";
-    public final String PASSWORD_LABEL = "Choose password";
-    public final String REPEAT_PASSWORD_LABEL = "Enter password again";
 
-    public final String SEARCH_BAR_LABEL = "Sign up";
+    public final String SEARCH_BAR_LABEL = "Enter a city, address, or listing ID.";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
 
     public HomeSearchViewModel() {
