@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'abstract class AbstractList
+'abstract AbstractCollection
+'interface List
+'interface Collection
+'
+'List <|-- AbstractList
+'Collection <|-- AbstractCollection
+'
+'Collection <|- List
+'AbstractCollection <|- AbstractList
+'AbstractList <|-- ArrayList
+'
+'class ArrayList {
+'Object[] elementData
+'size()
+'}
+'
+'enum TimeUnit {
+'DAYS
+'HOURS
+'MINUTES
+'}
+
+class Property {
+String address
+float price
+int walkScore
+int numBed
+int numBath
+int squareFt
+int daysListedAgo
+bool furnished
+bool utilities
+bool parking
+String propertyType
+User contact
+}
+
+class User {
+String username
+String password
+Set<Property> saved
+}
+
+Property *-- User
+User *-- Property
+
+@enduml
