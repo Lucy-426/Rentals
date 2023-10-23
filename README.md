@@ -8,4 +8,4 @@ Users are also able to simply search for an address, city, or area through the s
 
 When a user clicks on a listing, it navigates them to the listing page, where all its details will be displayed, such as its price and property type, as well as a section with recommendations for other similar listings. They have the option to create an account and login to save the listing, should they need to come back and revisit the page again. 
 
-Note: the signup and login feature may or may not be included, depending on time. We will be focusing on the other use cases of opening and closing a listing, filtering through listings, and browsing through the interactive map. 
+Note: the recommendations and signup/login feature may or may not be included, depending on time. We will be focusing on the other use cases of opening and closing a listing, filtering through listings, and browsing through the interactive map. 
