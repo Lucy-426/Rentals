@@ -1,5 +1,7 @@
 package main.app;
 
+import interface_adapter.HomeSearchViewModel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,6 +19,10 @@ public class Main {
         // The various View objects. Only one view is visible at a time.
         JPanel views = new JPanel(cardLayout);
         application.add(views);
+
+        HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
+
+
 
         application.pack();
         application.setVisible(true);
