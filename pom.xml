@@ -8,6 +8,11 @@
     <artifactId>rentals-app</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories><repository>
+        <id>com.teamdev</id>
+        <url>https://us-maven.pkg.dev/jxbrowser/releases</url>
+    </repository></repositories>
+
     <dependencies>
 
         <dependency>
@@ -24,9 +29,19 @@
 
         <dependency>
             <groupId>com.teamdev.jxbrowser</groupId>
-            <artifactId>jxbrowser</artifactId>
-            <version>7.12.2</version>
+            <artifactId>jxbrowser-cross-platform</artifactId>
+            <version>7.36</version>
+            <type>pom</type>
         </dependency>
+
+        <dependency>
+            <groupId>com.teamdev.jxbrowser</groupId>
+            <artifactId>jxbrowser-swing</artifactId>
+            <version>7.36</version>
+            <type>pom</type>
+        </dependency>
+
+
 
 
     </dependencies>
