@@ -30,13 +30,14 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     }
 
 
+    // TODO: action performed and property change
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        System.out.println("action Performed");
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        System.out.println("property change");
     }
 }
