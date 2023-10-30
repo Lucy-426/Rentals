@@ -58,10 +58,11 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         GridBagLayout gridbag = new GridBagLayout();
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.5;
         panel.setLayout(gridbag);
         JLabel title = new JLabel("Listing Views");
         title.setFont(new Font("Arial", 1, 30));
-        c.ipadx = 20;
+        c.insets = new Insets(0,20,0,20);
         c.gridx = 0;
         c.gridy = 0;
         panel.add(title, c);
@@ -130,6 +131,7 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         panel.add(parking, c);
         JLabel contact = new JLabel("Contact: " + propTest.getContact());
         contact.setFont(normalText);
+        c.insets = new Insets(0,20,0,20);
         c.gridx = 2;
         c.gridy = 0;
         panel.add(contact, c);
