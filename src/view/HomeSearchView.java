@@ -18,7 +18,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     private final HomeSearchViewModel homesearchViewModel;
 
-    private final JTextField searchBar = new JTextField(30);
+    private final JTextField homeSearchBar = new JTextField(30);
 
     private final HomeSearchController homesearchController;
 
@@ -26,6 +26,17 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         this.homesearchController = controller;
         this.homesearchViewModel = viewModel;
         homesearchViewModel.addPropertyChangeListener(this);
+
+        JLabel title = new JLabel(homesearchViewModel.TITLE_LABEL);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        LabelTextPanel searchBar = new LabelTextPanel(
+                new JLabel(homesearchViewModel.SEARCH_BAR_LABEL), homeSearchBar);
+
+
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(searchBar);
 
     }
 
