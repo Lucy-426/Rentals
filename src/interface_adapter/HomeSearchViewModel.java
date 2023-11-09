@@ -10,7 +10,7 @@ public class HomeSearchViewModel extends ViewModel{
     public final String CANCEL_BUTTON_LABEL = "Cancel";
 
     public HomeSearchViewModel() {
-        super("sign up");
+        super("Search");
     }
 
     private HomeSearchState state = new HomeSearchState();
@@ -22,5 +22,13 @@ public class HomeSearchViewModel extends ViewModel{
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
+    }
+
+    public void setState(HomeSearchState state) {
+        this.state = state;
+    }
+
+    public HomeSearchState getState() {
+        return state;
     }
 }
