@@ -21,6 +21,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
 
+    private JComboBox<String> numRooms;
+
     private final HomeSearchController homesearchController;
 
     public HomeSearchView(HomeSearchController controller, HomeSearchViewModel viewModel) {
@@ -41,14 +43,24 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         // Add action listener to the search button
         searchButton.addActionListener(this);
 
+//        filter for number of rooms
+        String[] numRoomStrings = {"1", "2", "3", "4", "5+"};
+        numRooms = new JComboBox<>(numRoomStrings);
+        numRooms.setSelectedIndex(0);
+        numRooms.addActionListener(this);
+
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(searchBar);
-        // TODO: fix formatting of search button
+        // TODO: fix formatting of everything
         c.gridx = 10;
         c.gridy = 1;
         c.gridwidth = 1;
         this.add(searchButton, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        add(numRooms, c);
 
     }
 
@@ -61,6 +73,10 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
             String searchText = homeSearchBar.getText();
 //         Here, implement whatever search logic using searchText
             System.out.println("Searching for: " + searchText);
+        } else if (e.getSource() == numRooms) {
+            JComboBox cb = (JComboBox)e.getSource();
+            String numOfRoom = (String)cb.getSelectedItem();
+            System.out.println("Selected number of rooms: " + numOfRoom);
         }
     }
 
