@@ -26,6 +26,9 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private JComboBox<String> priceRange;
     private JComboBox<String> numBaths;
 
+    private JTextArea listingsArea;
+    private JScrollPane listingsScroll;
+
 
     private final HomeSearchController homesearchController;
 
@@ -64,6 +67,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         numBaths.addActionListener(this);
 
 
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(searchBar);
         // TODO: fix formatting of everything
@@ -84,7 +88,27 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         c.gridy = 2;
         add(numBaths);
 
+//    scroll pane for listings
+//    Create a JTextArea
+        listingsArea = new JTextArea(20, 20);
+        listingsArea.setEditable(false); // if you want to make it read-only
+        listingsArea.setText("Listings would go here...\n");
+//    Create a JScrollPane and add the JTextArea to it
+        listingsScroll = new JScrollPane(listingsArea);
+        listingsScroll.setPreferredSize(new Dimension(200, 200));  // Set a preferred size for the JScrollPane
 
+
+//     Set constraints for JScrollPane
+        c.gridx = 20;  // Change to desired column
+        c.gridy = 1;  // Change to desired row
+        c.gridwidth = 1;  // Spans across 1 column
+        c.gridheight = 3;  // Spans across 3 rows
+        c.fill = GridBagConstraints.BOTH;  // The component should be resized both horizontally and vertically
+        c.weightx = 1.0;  // The extra space should be distributed to this column
+        c.weighty = 1.0;  // The extra space should be distributed to this row
+
+        // Add the JScrollPane to the panel
+        add(listingsScroll, c);
     }
 
 
