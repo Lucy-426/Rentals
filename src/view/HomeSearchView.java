@@ -21,7 +21,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
 
+//    filters
     private JComboBox<String> numRooms;
+    private JComboBox<String> priceRange;
+    private JComboBox<String> numBaths;
+
 
     private final HomeSearchController homesearchController;
 
@@ -49,6 +53,16 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         numRooms.setSelectedIndex(0);
         numRooms.addActionListener(this);
 
+        String[] priceRangeStrings = {"<1000", "1000-1500", "1500-2000", "2000+"};
+        priceRange = new JComboBox<>(priceRangeStrings);
+        priceRange.setSelectedIndex(0);
+        priceRange.addActionListener(this);
+
+        String[] numBathsStrings = {"1", "2", "3", "4+"};
+        numBaths = new JComboBox<>(numBathsStrings);
+        numBaths.setSelectedIndex(0);
+        numBaths.addActionListener(this);
+
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(searchBar);
@@ -61,6 +75,15 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         c.gridx = 0;
         c.gridy = 2;
         add(numRooms, c);
+
+        c.gridx = 10;
+        c.gridy = 2;
+        add(priceRange, c);
+
+        c.gridx = 15;
+        c.gridy = 2;
+        add(numBaths);
+
 
     }
 
@@ -77,6 +100,14 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
             JComboBox cb = (JComboBox)e.getSource();
             String numOfRoom = (String)cb.getSelectedItem();
             System.out.println("Selected number of rooms: " + numOfRoom);
+        } else if (e.getSource() == priceRange) {
+            JComboBox cb = (JComboBox)e.getSource();
+            String priceRange = (String)cb.getSelectedItem();
+            System.out.println("Selected priceRange: " + priceRange);
+        } else if (e.getSource() == numBaths) {
+            JComboBox cb = (JComboBox)e.getSource();
+            String numOfBaths = (String)cb.getSelectedItem();
+            System.out.println("Selected number of bathrooms: " + numOfBaths);
         }
     }
 
