@@ -12,13 +12,14 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class HomeSearchView extends JPanel implements ActionListener, PropertyChangeListener{
+public class HomeSearchView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public  final String viewName = "home search";
+    public final String viewName = "home search";
 
     private final HomeSearchViewModel homesearchViewModel;
 
     private final JTextField homeSearchBar = new JTextField(30);
+    private JButton searchButton;
 
     private final HomeSearchController homesearchController;
 
@@ -27,16 +28,27 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         this.homesearchViewModel = viewModel;
         homesearchViewModel.addPropertyChangeListener(this);
 
+//        for formatting
+        setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
         JLabel title = new JLabel(homesearchViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel searchBar = new LabelTextPanel(
                 new JLabel(homesearchViewModel.SEARCH_BAR_LABEL), homeSearchBar);
-
+        searchButton = new JButton("Search");
+        // Add action listener to the search button
+        searchButton.addActionListener(this);
 
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(searchBar);
+        // TODO: fix formatting of search button
+        c.gridx = 10;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        this.add(searchButton, c);
 
     }
 
@@ -44,7 +56,12 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     // TODO: action performed and property change
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("action Performed");
+//        System.out.println("action Performed");
+        if (e.getSource() == searchButton) {
+            String searchText = homeSearchBar.getText();
+//         Here, implement whatever search logic using searchText
+            System.out.println("Searching for: " + searchText);
+        }
     }
 
     @Override
@@ -52,3 +69,4 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         System.out.println("property change");
     }
 }
+
