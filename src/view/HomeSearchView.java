@@ -73,18 +73,22 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         c.gridwidth = 1;
         this.add(searchButton, c);
 
+        this.add(new JLabel("Select number of bedrooms:"));
         c.gridx = 0;
         c.gridy = 2;
         add(numRooms, c);
 
+        this.add(new JLabel("Select price range:"));
         c.gridx = 10;
         c.gridy = 2;
         add(priceRange, c);
 
+        this.add(new JLabel("Select number of bathrooms:"));
         c.gridx = 15;
         c.gridy = 2;
         add(numBaths);
 
+        this.add(new JLabel("Listings:"));
 //    scroll pane for listings
 //    Create a JTextArea
         listingsArea = new JTextArea(20, 20);

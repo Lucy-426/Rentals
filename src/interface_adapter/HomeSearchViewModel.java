@@ -4,7 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class HomeSearchViewModel extends ViewModel{
-    public final String TITLE_LABEL = "Sign Up View";
+    public final String TITLE_LABEL = "Home Search View";
 
     public final String SEARCH_BAR_LABEL = "Enter a city, address, or listing ID.";
 
