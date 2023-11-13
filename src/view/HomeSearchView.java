@@ -1,6 +1,7 @@
 package view;
 
 import interface_adapter.HomeSearchController;
+import interface_adapter.HomeSearchState;
 import interface_adapter.HomeSearchViewModel;
 
 import javax.swing.*;
@@ -69,15 +70,15 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         numBaths.setSelectedIndex(0);
         numBaths.addActionListener(this);
 
-        walkScore = new JComboBox<>(homesearchViewModel.numBathsStrings);
+        walkScore = new JComboBox<>(homesearchViewModel.walkScoreStrings);
         walkScore.setSelectedIndex(0);
         walkScore.addActionListener(this);
 
-        furnished = new JComboBox<>(homesearchViewModel.numBathsStrings);
+        furnished = new JComboBox<>(homesearchViewModel.furnishedStrings);
         furnished.setSelectedIndex(0);
         furnished.addActionListener(this);
 
-        listingType = new JComboBox<>(homesearchViewModel.numBathsStrings);
+        listingType = new JComboBox<>(homesearchViewModel.listingTypeStrings);
         listingType.setSelectedIndex(0);
         listingType.addActionListener(this);
 
@@ -143,30 +144,130 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         // Add the JScrollPane to the panel
         add(listingsScroll, c);
+
+
+        homeSearchBar.addKeyListener(
+                new KeyListener() {
+                    @Override
+                    public void keyTyped (KeyEvent e) {
+                        HomeSearchState currentState = homesearchViewModel.getState();
+                        currentState.setAddress(homeSearchBar.getText() + e.getKeyChar());
+                        homesearchViewModel.setState(currentState);
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+
+                    }
+                }
+        );
+        searchButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource() == searchButton) {
+
+                            homesearchController.execute(homesearchViewModel.getState().getAddress(),
+                                    homesearchViewModel.getState().getNumRooms(), homesearchViewModel.getState().getPriceRange(),
+                                    homesearchViewModel.getState().getNumBaths(), homesearchViewModel.getState().getWalkScore(),
+                                    homesearchViewModel.getState().getFurnished(), homesearchViewModel.getState().getListingType());
+                        }
+                    }
+                }
+        );
+
+        numRooms.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource() == numRooms) {
+                            HomeSearchState currentState = homesearchViewModel.getState();
+                            JComboBox cb = (JComboBox) e.getSource();
+                            String numRooms = (String) cb.getSelectedItem();
+                            currentState.setNumRooms(numRooms);
+                            homesearchViewModel.setState(currentState);
+                        }
+                    }
+                }
+        );
+
+        priceRange.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource() == priceRange) {
+                            HomeSearchState currentState = homesearchViewModel.getState();
+                            JComboBox cb = (JComboBox) e.getSource();
+                            String priceRange = (String) cb.getSelectedItem();
+                            currentState.setPriceRange(priceRange);
+                            homesearchViewModel.setState(currentState);
+                        }
+                    }
+                }
+        );
+
+        numBaths.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource() == numBaths) {
+                            HomeSearchState currentState = homesearchViewModel.getState();
+                            JComboBox cb = (JComboBox) e.getSource();
+                            String numBaths = (String) cb.getSelectedItem();
+                            currentState.setNumBaths(numBaths);
+                            homesearchViewModel.setState(currentState);
+                        }
+                    }
+                }
+        );
+
+        walkScore.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource() == walkScore) {
+                            HomeSearchState currentState = homesearchViewModel.getState();
+                            JComboBox cb = (JComboBox) e.getSource();
+                            String walkScore = (String) cb.getSelectedItem();
+                            currentState.setWalkScore(walkScore);
+                            homesearchViewModel.setState(currentState);
+                        }
+                    }
+                }
+        );
+
+        furnished.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource() == furnished) {
+                            HomeSearchState currentState = homesearchViewModel.getState();
+                            JComboBox cb = (JComboBox) e.getSource();
+                            String furnished = (String) cb.getSelectedItem();
+                            currentState.setFurnished(furnished);
+                            homesearchViewModel.setState(currentState);
+                        }
+                    }
+                }
+        );
+
+        listingType.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource() == listingType) {
+                            HomeSearchState currentState = homesearchViewModel.getState();
+                            JComboBox cb = (JComboBox) e.getSource();
+                            String listingType = (String) cb.getSelectedItem();
+                            currentState.setListingType(listingType);
+                            homesearchViewModel.setState(currentState);
+                        }
+                    }
+                }
+        );
     }
 
 
     // TODO: action performed and property change
-    @Override
     public void actionPerformed(ActionEvent e) {
-//        System.out.println("action Performed");
-        if (e.getSource() == searchButton) {
-            String searchText = homeSearchBar.getText();
-//         Here, implement whatever search logic using searchText
-            System.out.println("Searching for: " + searchText);
-        } else if (e.getSource() == numRooms) {
-            JComboBox cb = (JComboBox)e.getSource();
-            String numOfRoom = (String)cb.getSelectedItem();
-            System.out.println("Selected number of rooms: " + numOfRoom);
-        } else if (e.getSource() == priceRange) {
-            JComboBox cb = (JComboBox)e.getSource();
-            String priceRange = (String)cb.getSelectedItem();
-            System.out.println("Selected priceRange: " + priceRange);
-        } else if (e.getSource() == numBaths) {
-            JComboBox cb = (JComboBox)e.getSource();
-            String numOfBaths = (String)cb.getSelectedItem();
-            System.out.println("Selected number of bathrooms: " + numOfBaths);
-        }
+        // System.out.println("action Performed");
     }
 
     @Override

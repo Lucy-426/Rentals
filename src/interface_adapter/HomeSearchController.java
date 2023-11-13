@@ -10,8 +10,9 @@ public class HomeSearchController {
         this.homeInteractor = homeInteractor;
     }
 
-    public void execute(String address, String rentalType, String contact) {
-        HomeInputData homeInputData = new HomeInputData(address, rentalType, contact);
+    public void execute(String address, String numRooms, String priceRange,
+                        String numBaths, String walkScore, String furnished, String listingType) {
+        HomeInputData homeInputData = new HomeInputData(address, numRooms, priceRange, numBaths, walkScore, furnished, listingType);
 
         homeInteractor.execute(homeInputData);
     }

@@ -3,6 +3,8 @@ package use_case.home;
 import entity.Property;
 import entity.PropertyFactory;
 
+import java.sql.SQLOutput;
+
 public class HomeInteractor implements HomeInputBoundary {
 
     final HomeSearchDataAccessInterface homeDataAccessObject;
@@ -19,11 +21,22 @@ public class HomeInteractor implements HomeInputBoundary {
     }
     @Override
     public void execute(HomeInputData homeInputData) {
-        // TODO: change input/output data so it's not hard coded
-        Property property = propertyFactory.create("address", "apartment", "contact");
-        homeDataAccessObject.save(property);
+        // TODO: change input/output data so it's not hard coded, and
+        //  also change so it doesn't create a property but rather passes it to a filter
 
-        HomeOutputData homeOutputData = new HomeOutputData("address1", "apartment1", "contact1");
+        // Property property = propertyFactory.create("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
+
+        // homeDataAccessObject.save(property);
+
+        System.out.println("searching for: " + homeInputData.getAddress());
+        System.out.println("rooms: " + homeInputData.getNumRooms());
+        System.out.println("price range: " + homeInputData.getPriceRange());
+        System.out.println("bathrooms: " + homeInputData.getNumBaths());
+        System.out.println("walk score: " + homeInputData.getWalkScore());
+        System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
+        System.out.println("listing type: " + homeInputData.getListingType());
+
+        HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
         homePresenter.prepareSuccessView(homeOutputData);
     }
 }

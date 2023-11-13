@@ -3,24 +3,55 @@ package entity;
 public class Property {
 
     private final String address;
-    private final String rentalType;
-    private final String contact;
 
-    public Property(String address, String rentalType, String contact) {
+    private final String numRooms;
+
+    private final String priceRange;
+
+    private final String numBaths;
+
+    private final String walkScore;
+
+    private final String furnished;
+
+    private final String listingType;
+
+    public Property(String address, String numRooms, String priceRange,
+                    String numBaths, String walkScore, String furnished, String listingType) {
         this.address = address;
-        this.rentalType = rentalType;
-        this.contact = contact;
+        this.numRooms = numRooms;
+        this.priceRange = priceRange;
+        this.numBaths = numBaths;
+        this.walkScore = walkScore;
+        this.furnished = furnished;
+        this.listingType = listingType;
     }
 
     public String getAddress(){
         return address;
     }
 
-    public String getRentalType(){
-        return rentalType;
+    public String getNumRooms(){
+        return numRooms;
     }
 
-    public String getContact() {
-        return contact;
+    public String getPriceRange() {
+        return priceRange;
+    }
+
+    public String getNumBaths() {
+        return numBaths;
+    }
+
+    public String getWalkScore() {
+        return walkScore;
+    }
+
+    public String getFurnished() {
+        return furnished;
+    }
+
+    public String getListingType() {
+        return listingType;
     }
 }
