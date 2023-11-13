@@ -13,6 +13,12 @@ public class HomeSearchViewModel extends ViewModel{
     public final String[] priceRangeStrings = {"all", "<1000", "1000-1500", "1500-2000", "2000+"};
 
     public final String[] numBathsStrings = {"all", "1", "2", "3", "4+"};
+    public final String[] walkScoreStrings = {"all", "1-3", "3-6", "6-10"};
+    public final String[] furnishedStrings = {"all", "furnished", "not furnished"};
+
+    public final String[] listingTypeStrings = {"all", "house", "townhouse", "apartment", "other"};
+
+
 
     public HomeSearchViewModel() {
         super("Search");
