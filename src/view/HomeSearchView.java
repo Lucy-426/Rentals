@@ -51,18 +51,15 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         searchButton.addActionListener(this);
 
 //        filter for number of rooms
-        String[] numRoomStrings = {"all", "1", "2", "3", "4", "5+"};
-        numRooms = new JComboBox<>(numRoomStrings);
+        numRooms = new JComboBox<>(homesearchViewModel.numRoomStrings);
         numRooms.setSelectedIndex(0);
         numRooms.addActionListener(this);
 
-        String[] priceRangeStrings = {"all", "<1000", "1000-1500", "1500-2000", "2000+"};
-        priceRange = new JComboBox<>(priceRangeStrings);
+        priceRange = new JComboBox<>(homesearchViewModel.priceRangeStrings);
         priceRange.setSelectedIndex(0);
         priceRange.addActionListener(this);
 
-        String[] numBathsStrings = {"all", "1", "2", "3", "4+"};
-        numBaths = new JComboBox<>(numBathsStrings);
+        numBaths = new JComboBox<>(homesearchViewModel.numBathsStrings);
         numBaths.setSelectedIndex(0);
         numBaths.addActionListener(this);
 

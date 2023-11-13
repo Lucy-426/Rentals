@@ -7,7 +7,12 @@ public class HomeSearchViewModel extends ViewModel{
     public final String TITLE_LABEL = "Sign Up View";
 
     public final String SEARCH_BAR_LABEL = "Enter a city, address, or listing ID.";
-    public final String CANCEL_BUTTON_LABEL = "Cancel";
+
+    public final String[] numRoomStrings = {"all", "1", "2", "3", "4", "5+"};
+
+    public final String[] priceRangeStrings = {"all", "<1000", "1000-1500", "1500-2000", "2000+"};
+
+    public final String[] numBathsStrings = {"all", "1", "2", "3", "4+"};
 
     public HomeSearchViewModel() {
         super("Search");
