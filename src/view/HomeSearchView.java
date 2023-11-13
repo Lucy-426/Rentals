@@ -25,6 +25,12 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private JComboBox<String> numRooms;
     private JComboBox<String> priceRange;
     private JComboBox<String> numBaths;
+    private JComboBox<String> walkScore;
+    private JComboBox<String> furnished;
+    private JComboBox<String> listingType;
+
+
+
 
     private JTextArea listingsArea;
     private JScrollPane listingsScroll;
@@ -63,6 +69,18 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         numBaths.setSelectedIndex(0);
         numBaths.addActionListener(this);
 
+        walkScore = new JComboBox<>(homesearchViewModel.numBathsStrings);
+        walkScore.setSelectedIndex(0);
+        walkScore.addActionListener(this);
+
+        furnished = new JComboBox<>(homesearchViewModel.numBathsStrings);
+        furnished.setSelectedIndex(0);
+        furnished.addActionListener(this);
+
+        listingType = new JComboBox<>(homesearchViewModel.numBathsStrings);
+        listingType.setSelectedIndex(0);
+        listingType.addActionListener(this);
+
 
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -87,6 +105,21 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         c.gridx = 15;
         c.gridy = 2;
         add(numBaths);
+
+        this.add(new JLabel("Select preferred walkscore:"));
+        c.gridx = 20;
+        c.gridy = 2;
+        add(walkScore);
+
+        this.add(new JLabel("furnished/not furnished"));
+        c.gridx = 25;
+        c.gridy = 2;
+        add(furnished);
+
+        this.add(new JLabel("Select preferred listing type:"));
+        c.gridx = 30;
+        c.gridy = 2;
+        add(listingType);
 
         this.add(new JLabel("Listings:"));
 //    scroll pane for listings
