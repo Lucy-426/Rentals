@@ -1,6 +1,8 @@
 package view;
 
 import entity.Property;
+import interface_adapter.ListingController;
+import interface_adapter.ListingViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,20 +10,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
 public class ListingView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewname = "Listing";
     private final JButton back;
 
-    public ListingView(){
-//        JLabel title = new JLabel(ListingView.TITLE_LABEL);
-        JLabel title = new JLabel("Listing View");
+    private final ListingViewModel listingViewModel;
+    private final ListingController listingController;
+
+    public ListingView(ListingController listingController, ListingViewModel listingViewModel){
+        this.listingController = listingController;
+        this.listingViewModel = listingViewModel;
+        JLabel title = new JLabel(ListingViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel buttons = new JPanel();
-//        back = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
-        back = new JButton("Back");
+        back = new JButton(ListingViewModel.BACK_BUTTON_LABEL);
         buttons.add(back);
     }
     @Override
