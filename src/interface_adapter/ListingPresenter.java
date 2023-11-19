@@ -10,13 +10,14 @@ public class ListingPresenter implements ListingOutputBoundary{
     public ListingPresenter(ViewManagerModel viewManagerModel, ListingViewModel listingViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.listingViewModel = listingViewModel;
-
     }
 
 
     @Override
     public void prepareSuccessView(ListingOutputData listingOutputData) {
-
+        ListingState listingState = listingViewModel.getState();
+        viewManagerModel.setActiveView(listingViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package use_case.listing;
 
 public interface ListingInputBoundary {
-    void execute();
+    void execute(ListingInputData listingInputData);
 
 }
