@@ -51,6 +51,7 @@ public InMemoryDataAccessObject(String csvPath) throws IOException {
                 String numRooms = String.valueOf(col[headers.get("numRooms")]);
                 String priceRange = String.valueOf(col[headers.get("priceRange")]);
                 String numBaths = String.valueOf(col[headers.get("numBaths")]);
+                String walkScore = String.valueOf(col[headers.get("walkScore")]);
                 String furnished = String.valueOf(col[headers.get("furnished")]);
                 String listingType = String.valueOf(col[headers.get("listingType")]);
 
@@ -59,6 +60,7 @@ public InMemoryDataAccessObject(String csvPath) throws IOException {
                 characteristics.add(numRooms);
                 characteristics.add(priceRange);
                 characteristics.add(numBaths);
+                characteristics.add(walkScore);
                 characteristics.add(furnished);
                 characteristics.add(listingType);
 
