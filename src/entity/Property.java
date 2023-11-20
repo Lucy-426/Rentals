@@ -1,6 +1,7 @@
-package use_case.home;
+package entity;
 
-public class HomeInputData {
+public class Property {
+
     private final String address;
 
     private final String numRooms;
@@ -15,8 +16,8 @@ public class HomeInputData {
 
     private final String listingType;
 
-    public HomeInputData(String address, String numRooms, String priceRange,
-                         String numBaths, String walkScore, String furnished, String listingType) {
+    public Property(String address, String numRooms, String priceRange,
+                    String numBaths, String walkScore, String furnished, String listingType) {
         this.address = address;
         this.numRooms = numRooms;
         this.priceRange = priceRange;
@@ -53,5 +54,4 @@ public class HomeInputData {
     public String getListingType() {
         return listingType;
     }
-
 }

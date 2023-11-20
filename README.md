@@ -1,4 +1,4 @@
-# Overview of Got Room?
+# Overview of Got Room? (Group 26)
 
 Our project is about finding rental listings and making recommendations to users in America, with a greater focus convenience of location. 
 
