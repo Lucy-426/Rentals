@@ -142,20 +142,13 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         c.ipady = 60;
         JButton listing2 = new JButton("Listing 2");
         JButton listing3 = new JButton("Listing 3");
-//        c.gridx = 2;
-//        c.gridy = 4;
-//        c.gridheight = 2;
         button1test.add(listing1);
         button1test.add(listing2);
         button1test.add(listing3);
-//        panel.add(button1test);
         JScrollPane listingScroll = new JScrollPane(button1test);
         listingScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         panel.add(listingScroll, c);
 
-
-//        panel.add(listingScroll, c);
-//        listingScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         JButton button = new JButton("Back");
         c.gridx = 2;
