@@ -46,6 +46,13 @@
             <artifactId>jxmapviewer2</artifactId>
             <version>1.3.1</version> <!-- Replace with the latest version -->
         </dependency>
+
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.15.0</version> <!-- Replace with the latest version -->
+        </dependency>
+
     </dependencies>
 
 
