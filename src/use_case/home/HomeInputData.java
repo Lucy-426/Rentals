@@ -1,6 +1,8 @@
 package use_case.home;
 
 public class HomeInputData {
+    private final String id;
+    private final String city;
     private final String address;
 
     private final String numRooms;
@@ -15,8 +17,10 @@ public class HomeInputData {
 
     private final String listingType;
 
-    public HomeInputData(String address, String numRooms, String priceRange,
+    public HomeInputData(String id, String city, String address, String numRooms, String priceRange,
                          String numBaths, String walkScore, String furnished, String listingType) {
+        this.id = id;
+        this.city = city;
         this.address = address;
         this.numRooms = numRooms;
         this.priceRange = priceRange;
@@ -25,6 +29,10 @@ public class HomeInputData {
         this.furnished = furnished;
         this.listingType = listingType;
     }
+
+    public String getId() { return id; }
+
+    public String getCity() { return city; }
 
     public String getAddress(){
         return address;

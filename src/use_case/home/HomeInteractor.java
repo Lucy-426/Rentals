@@ -28,7 +28,8 @@ public class HomeInteractor implements HomeInputBoundary {
 
         // homeDataAccessObject.save(property);
 
-        System.out.println("searching for: " + homeInputData.getAddress());
+        System.out.println("searching for: " + homeInputData.getId() + " " + homeInputData.getCity() + " " +
+                homeInputData.getAddress());
         System.out.println("rooms: " + homeInputData.getNumRooms());
         System.out.println("price range: " + homeInputData.getPriceRange());
         System.out.println("bathrooms: " + homeInputData.getNumBaths());
