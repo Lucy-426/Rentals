@@ -1,5 +1,6 @@
 package main.app;
 
+import data_access.HomeSearchDataAccessInterface;
 import data_access.InMemoryDataAccessObject;
 import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
@@ -9,7 +10,6 @@ import interface_adapter.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
 import use_case.home.*;
 import view.HomeSearchView;
-import view.ViewManager;
 
 import javax.swing.*;
 import java.io.IOException;

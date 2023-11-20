@@ -1,9 +1,7 @@
 package use_case.home;
 
-import entity.Property;
+import data_access.HomeSearchDataAccessInterface;
 import entity.PropertyFactory;
-
-import java.sql.SQLOutput;
 
 public class HomeInteractor implements HomeInputBoundary {
 

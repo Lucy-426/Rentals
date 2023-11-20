@@ -10,7 +10,6 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import use_case.home.HomeSearchDataAccessInterface;
 
 import java.io.*;
 import java.util.*;
