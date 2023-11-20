@@ -1,6 +1,6 @@
 package entity;
 
-public class Property {
+public class Listing {
 
     private final String rentalType;
     private final int daysListedAgo;
@@ -13,7 +13,7 @@ public class Property {
     private final boolean parking;
     private final String contact;
 
-    public Property(String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
+    public Listing(String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
                     int squareFeet, boolean furnished, boolean parking, String contact) {
         this.rentalType = rentalType;
         this.daysListedAgo = daysListedAgo;

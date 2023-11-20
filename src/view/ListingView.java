@@ -1,6 +1,6 @@
 package view;
 
-import entity.Property;
+import entity.Listing;
 import interface_adapter.ListingController;
 import interface_adapter.ListingViewModel;
 
@@ -40,7 +40,7 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         application.pack();
         application.setVisible(true);
 
-        Property propTest = new Property("Apartment",60, 350, 8, 3, 2,
+        Listing propTest = new Listing("Apartment",60, 350, 8, 3, 2,
                 300, true, false, "John Smith 4373294732");
 
         JPanel panel = new JPanel();
