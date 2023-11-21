@@ -1,13 +1,13 @@
 package main.app;
 
-import data_access.FileUserDataAccessObject;
+import data_access.UserDataAccessObject;
 import data_access.UserSignupDataAccessInterface;
 import entity.CommonUserFactory;
 import entity.UserFactory;
-import interface_adapter.ViewManagerModel;
-import use_case.SignupInputBoundary;
-import use_case.SignupInteractor;
-import use_case.SignupOutputBoundary;
+import interface_adapter.*;
+import use_case.signup.SignupInputBoundary;
+import use_case.signup.SignupInteractor;
+import use_case.signup.SignupOutputBoundary;
 import view.SignupView;
 
 import javax.swing.*;
@@ -31,7 +31,7 @@ public class SignupUseCaseFactory {
     }
 
     private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel) throws IOException {
-        UserSignupDataAccessInterface userDataAccessObject = new FileUserDataAccessObject("./users.csv", new CommonUserFactory());
+        UserSignupDataAccessInterface userDataAccessObject = new UserDataAccessObject("./users.csv", new CommonUserFactory());
 
         // Notice how we pass this method's parameters to the Presenter.
         SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
