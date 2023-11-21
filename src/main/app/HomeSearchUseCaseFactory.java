@@ -1,7 +1,6 @@
 package main.app;
 
-import data_access.HomeSearchDataAccessInterface;
-import data_access.InMemoryDataAccessObject;
+import use_case.home.HomeSearchDataAccessInterface;
 import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
 import interface_adapter.homeSearch.HomeSearchController;

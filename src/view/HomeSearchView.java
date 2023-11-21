@@ -151,7 +151,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     @Override
                     public void keyTyped (KeyEvent e) {
                         HomeSearchState currentState = homesearchViewModel.getState();
-                        currentState.setAddress(homeSearchBar.getText() + e.getKeyChar());
+                        currentState.setSearchBarInput(homeSearchBar.getText() + e.getKeyChar());
                         homesearchViewModel.setState(currentState);
                     }
 
@@ -169,6 +169,20 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                 new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == searchButton) {
+                            // Determine whether search bar input is a city, address, or listing ID
+                            if (homesearchViewModel.getState().getSearchBarInput().matches("[0-9]+")) {
+                                HomeSearchState currentState = homesearchViewModel.getState();
+                                currentState.setId(homesearchViewModel.getState().getSearchBarInput());
+                                homesearchViewModel.setState(currentState);
+                            } else if (homesearchViewModel.getState().getSearchBarInput().matches("[a-zA-Z\\s]+")) {
+                                HomeSearchState currentState = homesearchViewModel.getState();
+                                currentState.setCity(homesearchViewModel.getState().getSearchBarInput());
+                                homesearchViewModel.setState(currentState);
+                            } else if (homesearchViewModel.getState().getSearchBarInput().matches(".+")) {
+                                HomeSearchState currentState = homesearchViewModel.getState();
+                                currentState.setAddress(homesearchViewModel.getState().getSearchBarInput());
+                                homesearchViewModel.setState(currentState);
+                            }
 
                             homesearchController.execute(homesearchViewModel.getState().getId(),
                                     homesearchViewModel.getState().getCity(), homesearchViewModel.getState().getAddress(),

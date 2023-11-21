@@ -6,6 +6,7 @@ import java.util.Properties;
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.
 
+    private String searchBarInput;
     private String id;
 
     private String city;
@@ -27,6 +28,7 @@ public class HomeSearchState {
     private ArrayList<Properties> displayedListings;
 
     public HomeSearchState(HomeSearchState copy) {
+        searchBarInput = copy.searchBarInput;
         id = copy.id;
         city = copy.city;
         address = copy.address;
@@ -39,6 +41,10 @@ public class HomeSearchState {
         displayedListings = copy.displayedListings;
     }
     public HomeSearchState() {}
+
+    public String getSearchBarInput() {
+        return searchBarInput;
+    }
     public String getId() { return id; }
 
     public String getCity() { return city; }
@@ -73,6 +79,10 @@ public class HomeSearchState {
 
     public ArrayList<Properties> getDisplayedListings() {
         return displayedListings;
+    }
+
+    public void setSearchBarInput(String searchBarInput) {
+        this.searchBarInput = searchBarInput;
     }
 
     public void setId(String id) { this.id = id; }
