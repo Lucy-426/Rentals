@@ -42,7 +42,7 @@ public InMemoryDataAccessObject(String csvPath) throws IOException {
             String header = reader.readLine();
 
             // TODO clean this up by creating a new Exception subclass and handling it in the UI.
-            assert header.equals("username,password,creation_time");
+            assert header.equals("id, city, address, numRooms, priceRange,numBaths, walkScore, furnished, listingType");
 
             String row;
             while ((row = reader.readLine()) != null) {
@@ -82,14 +82,14 @@ public InMemoryDataAccessObject(String csvPath) throws IOException {
     public void filter(HashMap property_chars) {
         filtered_properties.putAll(property_chars);
 // my pseudocode:
-//        for property in filtered_properties:
-//          if (city != null or city != "all" or city != property.city)
-//               filtered_properties.remove(property)
-//          if (address != null or address != "all" or address != property.address)
-//               filtered_properties.remove(property)
+//        filtered_properties.forEach((id, characteristics) -> {
+//          if (city != null or city != "all" or city != characteristics[headers.get("city") or 1])
+//               filtered_properties.remove(filtered_properties.remove(id))
+//          if (address != null or address != "all" or address != characteristics[0])
+//               filtered_properties.remove(filtered_properties.remove(id))
 //          if (numRooms != null or numRooms != "all" or numRooms != property.numRooms)
-//               filtered_properties.remove(property)
-//        and so on...
+//               filtered_properties.remove(filtered_properties.remove(id))
+//        and so on...  });
     }
 
 }
