@@ -170,7 +170,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == searchButton) {
 
-                            homesearchController.execute(homesearchViewModel.getState().getAddress(),
+                            homesearchController.execute(homesearchViewModel.getState().getId(),
+                                    homesearchViewModel.getState().getCity(), homesearchViewModel.getState().getAddress(),
                                     homesearchViewModel.getState().getNumRooms(), homesearchViewModel.getState().getPriceRange(),
                                     homesearchViewModel.getState().getNumBaths(), homesearchViewModel.getState().getWalkScore(),
                                     homesearchViewModel.getState().getFurnished(), homesearchViewModel.getState().getListingType());
