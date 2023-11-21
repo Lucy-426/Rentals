@@ -1,4 +1,4 @@
-package interface_adapter;
+package interface_adapter.homeSearch;
 
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.

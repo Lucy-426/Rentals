@@ -1,4 +1,4 @@
-package interface_adapter;
+package interface_adapter.homeSearch;
 
 import use_case.home.HomeInputBoundary;
 import use_case.home.HomeInputData;

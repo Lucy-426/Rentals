@@ -1,8 +1,8 @@
 package view;
 
-import interface_adapter.HomeSearchController;
-import interface_adapter.HomeSearchState;
-import interface_adapter.HomeSearchViewModel;
+import interface_adapter.homeSearch.HomeSearchController;
+import interface_adapter.homeSearch.HomeSearchState;
+import interface_adapter.homeSearch.HomeSearchViewModel;
 
 import javax.swing.*;
 import java.awt.*;
