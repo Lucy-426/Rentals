@@ -3,6 +3,7 @@ package data_access;
 import com.jayway.jsonpath.JsonPath;
 import entity.Property;
 import entity.PropertyFactory;
+import use_case.home.HomeSearchDataAccessInterface;
 import kotlin.Pair;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,6 +42,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private static final ArrayList<Pair> cities = new ArrayList<>();
 
     private PropertyFactory propertyFactory;
+
+    private ArrayList<Property> inputProperties = new ArrayList<>();
 
     public PropertyDataAccessObject(String csvPath, PropertyFactory propertyFactory) throws IOException {
         this.propertyFactory = propertyFactory;
@@ -82,7 +85,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
     public void save(Property property) {
-
+        inputProperties.add(property);
     }
 
     // Method to call the API for a given city and parse the json response
