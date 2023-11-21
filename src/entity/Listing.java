@@ -1,13 +1,7 @@
-package use_case.listing;
+package entity;
 
-public class ListingInputData {
-    // should we just have a property id all pull all the data from that
-//    private final String propertyId;
-//
-//    public ListingInputData(String propertyId) {
-//        this.propertyId = propertyId;
-//    }
-    // or should we list all the data
+public class Listing {
+
     private final String rentalType;
     private final int daysListedAgo;
     private final float price;
@@ -19,7 +13,7 @@ public class ListingInputData {
     private final boolean parking;
     private final String contact;
 
-    public ListingInputData(String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
+    public Listing(String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
                     int squareFeet, boolean furnished, boolean parking, String contact) {
         this.rentalType = rentalType;
         this.daysListedAgo = daysListedAgo;

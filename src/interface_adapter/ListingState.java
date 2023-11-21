@@ -1,7 +1,6 @@
 package interface_adapter;
 
 public class ListingState {
-    // Because of the previous copy constructor, the default constructor must be explicit.
-    public ListingState() {}
+    // do we add the same input data + property details
 
 }
