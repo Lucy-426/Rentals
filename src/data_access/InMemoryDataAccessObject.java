@@ -78,7 +78,7 @@ public InMemoryDataAccessObject(String csvPath) throws IOException {
     public void save(Property property) {
 
     }
-
+// datacccessobject.filet(property) need to make the filtering process happen with the property holds the input data
     public void filter(HashMap property_chars) {
         filtered_properties.putAll(property_chars);
 // my pseudocode:
