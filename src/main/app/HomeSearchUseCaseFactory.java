@@ -10,17 +10,20 @@ import use_case.home.*;
 import view.HomeSearchView;
 import view.ViewManager;
 
+import java.io.IOException;
+
 //TODO: add exceptions / try/catch
 public class HomeSearchUseCaseFactory {
     private HomeSearchUseCaseFactory() {};
 
-    public static HomeSearchView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) {
+    public static HomeSearchView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) throws IOException {
         HomeSearchController homeSearchController = createHomeSearchUseCase(viewManagerModel, homeSearchViewModel);
         return new HomeSearchView(homeSearchController, homeSearchViewModel);
     }
 
-    private static HomeSearchController createHomeSearchUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) {
-        HomeSearchDataAccessInterface homeDataAccessObject = new InMemoryDataAccessObject();
+    private static HomeSearchController createHomeSearchUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) throws IOException {
+        //TODO: input csvfile in parameters
+        HomeSearchDataAccessInterface homeDataAccessObject = new InMemoryDataAccessObject("");
 
         HomeOutputBoundary homeOutputBoundary = new HomeSearchPresenter(homeSearchViewModel, viewManagerModel);
 
