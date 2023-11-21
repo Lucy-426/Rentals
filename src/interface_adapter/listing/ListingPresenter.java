@@ -1,5 +1,28 @@
 package interface_adapter.listing;
 
-public class ListingPresenter {
+import interface_adapter.ViewManagerModel;
+import use_case.listing.ListingOutputBoundary;
+import use_case.listing.ListingOutputData;
 
+public class ListingPresenter implements ListingOutputBoundary{
+    private final ListingViewModel listingViewModel;
+    private ViewManagerModel viewManagerModel;
+
+    public ListingPresenter(ViewManagerModel viewManagerModel, ListingViewModel listingViewModel) {
+        this.viewManagerModel = viewManagerModel;
+        this.listingViewModel = listingViewModel;
+    }
+
+
+    @Override
+    public void prepareSuccessView(ListingOutputData listingOutputData) {
+        ListingState listingState = listingViewModel.getState();
+        viewManagerModel.setActiveView(listingViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void prepareFailView(String error) {
+
+    }
 }
