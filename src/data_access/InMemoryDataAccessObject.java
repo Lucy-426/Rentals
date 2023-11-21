@@ -1,7 +1,6 @@
 package data_access;
 
 import entity.Property;
-import use_case.home.HomeSearchDataAccessInterface;
 
 import java.util.Map;
 import java.util.HashMap;

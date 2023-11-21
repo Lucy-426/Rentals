@@ -1,8 +1,8 @@
 package view;
 
 import entity.Listing;
-import interface_adapter.ListingController;
-import interface_adapter.ListingViewModel;
+import interface_adapter.listing.ListingController;
+import interface_adapter.listing.ListingViewModel;
 
 import javax.swing.*;
 import java.awt.*;

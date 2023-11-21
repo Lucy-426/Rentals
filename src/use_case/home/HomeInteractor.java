@@ -1,9 +1,7 @@
 package use_case.home;
 
-import entity.Property;
+import data_access.HomeSearchDataAccessInterface;
 import entity.PropertyFactory;
-
-import java.sql.SQLOutput;
 
 public class HomeInteractor implements HomeInputBoundary {
 
@@ -24,11 +22,10 @@ public class HomeInteractor implements HomeInputBoundary {
         // TODO: change input/output data so it's not hard coded, and
         //  also change so it doesn't create a property but rather passes it to a filter
 
-        // Property property = propertyFactory.create("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
-
         // homeDataAccessObject.save(property);
 
-        System.out.println("searching for: " + homeInputData.getAddress());
+        System.out.println("searching for: " + homeInputData.getId() + " " + homeInputData.getCity() + " " +
+                homeInputData.getAddress());
         System.out.println("rooms: " + homeInputData.getNumRooms());
         System.out.println("price range: " + homeInputData.getPriceRange());
         System.out.println("bathrooms: " + homeInputData.getNumBaths());

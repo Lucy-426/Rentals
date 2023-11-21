@@ -1,9 +1,11 @@
-package interface_adapter;
+package interface_adapter.homeSearch;
+
+import interface_adapter.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class HomeSearchViewModel extends ViewModel{
+public class HomeSearchViewModel extends ViewModel {
     public final String TITLE_LABEL = "Home Search View";
 
     public final String SEARCH_BAR_LABEL = "Enter a city, address, or listing ID.";
