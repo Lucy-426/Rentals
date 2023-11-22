@@ -2,7 +2,8 @@ package data_access;
 
 import entity.Property;
 import entity.PropertyFactory;
-import use_case.home.HomeSearchDataAccessInterface;
+import data_access.HomeSearchDataAccessInterface;
+
 
 import java.io.*;
 import java.time.LocalDateTime;

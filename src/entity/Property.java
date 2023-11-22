@@ -1,6 +1,9 @@
 package entity;
 
 public class Property {
+    private final String id;
+
+    private final String city;
 
     private final String address;
 
@@ -16,8 +19,10 @@ public class Property {
 
     private final String listingType;
 
-    public Property(String address, String numRooms, String priceRange,
+    public Property(String id, String city, String address, String numRooms, String priceRange,
                     String numBaths, String walkScore, String furnished, String listingType) {
+        this.id = id;
+        this.city = city;
         this.address = address;
         this.numRooms = numRooms;
         this.priceRange = priceRange;
@@ -27,6 +32,8 @@ public class Property {
         this.listingType = listingType;
     }
 
+    public String getID() { return id; }
+    public String getCity() { return city; }
     public String getAddress(){
         return address;
     }

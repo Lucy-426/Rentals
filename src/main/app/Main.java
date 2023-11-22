@@ -1,6 +1,6 @@
 package main.app;
 
-import interface_adapter.HomeSearchViewModel;
+import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
 import view.HomeSearchView;
 import view.ViewManager;

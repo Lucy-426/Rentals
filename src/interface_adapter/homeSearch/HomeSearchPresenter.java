@@ -1,5 +1,6 @@
-package interface_adapter;
+package interface_adapter.homeSearch;
 
+import interface_adapter.ViewManagerModel;
 import use_case.home.HomeOutputBoundary;
 import use_case.home.HomeOutputData;
 

@@ -1,4 +1,4 @@
-package use_case.home;
+package data_access;
 
 import entity.Property;
 
