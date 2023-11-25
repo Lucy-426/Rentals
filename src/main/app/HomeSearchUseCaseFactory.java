@@ -32,14 +32,14 @@ public class HomeSearchUseCaseFactory {
     }
 
     private static HomeSearchController createHomeSearchUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) throws IOException {
-        HomeSearchDataAccessInterface homeDataAccessObject = new InMemoryDataAccessObject();
+//        HomeSearchDataAccessInterface homeDataAccessObject = new InMemoryDataAccessObject();
         HomeSearchDataAccessInterface propertyDataAccessObject = new PropertyDataAccessObject("./properties.csv", new PropertyFactory());
 
         HomeOutputBoundary homeOutputBoundary = new HomeSearchPresenter(homeSearchViewModel, viewManagerModel);
 
         PropertyFactory propertyFactory = new PropertyFactory();
 
-        HomeInputBoundary homeInteractor = new HomeInteractor(homeDataAccessObject, homeOutputBoundary, propertyFactory);
+        HomeInputBoundary homeInteractor = new HomeInteractor(homeOutputBoundary, propertyFactory);
 
         return new HomeSearchController(homeInteractor);
 

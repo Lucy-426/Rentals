@@ -80,8 +80,8 @@ public InMemoryDataAccessObject(String csvPath) throws IOException {
 
     }
 // datacccessobject.filet(property) need to make the filtering process happen with the property holds the input data
-    public void filter(HashMap property_chars) {
-        filtered_properties.putAll(property_chars);
+    public void filter(Property property) {
+//        filtered_properties.putAll(property_chars);
 // my pseudocode:
 //        filtered_properties.forEach((id, characteristics) -> {
 //          if (city != null or city != "all" or city != characteristics[headers.get("city") or 1])

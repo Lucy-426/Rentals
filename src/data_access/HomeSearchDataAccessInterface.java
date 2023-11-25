@@ -8,5 +8,5 @@ public interface HomeSearchDataAccessInterface {
 
     // TODO: change this?
     void save(Property property);
-    void filter(HashMap property_chars);
+    void filter(Property property);
 }

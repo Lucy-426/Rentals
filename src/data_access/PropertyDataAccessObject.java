@@ -20,6 +20,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
+    private final Map<String, Property> filtered_properties = new HashMap<>();
 
     // Root URL - can later adapt so that for various functions, we attach ending (i.e. .../property/detail)
     private static final String API_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0/";
@@ -145,6 +146,54 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+//    TODO: test the filter method
+    @Override
+    public void filter(Property property) {
+        filtered_properties.putAll(properties);
+
+        String id = property.getID();
+        String city = property.getCity();
+        String address = property.getAddress();
+        String numRooms = property.getNumRooms();
+        String priceRange = property.getPriceRange();
+        String numBaths = property.getNumBaths();
+        String walkScore = property.getWalkScore();
+        String furnished = property.getFurnished();
+        String listingType = property.getListingType();
+
+//      goes over the copy of the list of properties made from csv files and removes each id:property if it doesn't match the input property object attributes (user information)
+        for (Map.Entry<String,Property> entry : filtered_properties.entrySet()) {
+            if (!id.equals("null") && !id.equals("all") && !id.equals(entry.getValue().getID())) {
+                filtered_properties.remove(entry.getKey());
+            }
+            if (!city.equals("null") && !city.equals("all") && !city.equals(entry.getValue().getCity())) {
+                filtered_properties.remove(entry.getKey());
+            }
+            if (!address.equals("null") && !address.equals("all") && !address.equals(entry.getValue().getAddress())) {
+                filtered_properties.remove(entry.getKey());
+            }
+            if (!numRooms.equals("null") && !numRooms.equals("all") && !numRooms.equals(entry.getValue().getNumRooms())) {
+                filtered_properties.remove(entry.getKey());
+            }
+            if (!priceRange.equals("null") && !priceRange.equals("all") && !priceRange.equals(entry.getValue().getPriceRange())) {
+                filtered_properties.remove(entry.getKey());
+            }
+            if (!numBaths.equals("null") && !numBaths.equals("all") && !numBaths.equals(entry.getValue().getNumBaths())) {
+                filtered_properties.remove(entry.getKey());
+            }
+            if (!walkScore.equals("null") && !walkScore.equals("all") && !walkScore.equals(entry.getValue().getWalkScore())) {
+                filtered_properties.remove(entry.getKey());
+            }
+            if (!furnished.equals("null") && !furnished.equals("all") && !furnished.equals(entry.getValue().getFurnished())) {
+                filtered_properties.remove(entry.getKey());
+            }
+            if (!listingType.equals("null") && !listingType.equals("all") && !listingType.equals(entry.getValue().getListingType())) {
+                filtered_properties.remove(entry.getKey());
+            }
+        }
+        System.out.println(filtered_properties);
     }
 
     // Writing the Property object inside of properties to the csv file

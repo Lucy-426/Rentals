@@ -5,15 +5,14 @@ import entity.PropertyFactory;
 
 public class HomeInteractor implements HomeInputBoundary {
 
-    final HomeSearchDataAccessInterface homeDataAccessObject;
+//    final HomeSearchDataAccessInterface homeDataAccessObject;
 
     final HomeOutputBoundary homePresenter;
 
     final PropertyFactory propertyFactory;
 
-    public HomeInteractor(HomeSearchDataAccessInterface homesearchDataAccessInterface,
-                          HomeOutputBoundary homeOutputBoundary, PropertyFactory propertyFactory) {
-        this.homeDataAccessObject = homesearchDataAccessInterface;
+    public HomeInteractor(HomeOutputBoundary homeOutputBoundary, PropertyFactory propertyFactory) {
+//        this.homeDataAccessObject = homesearchDataAccessInterface;
         this.homePresenter = homeOutputBoundary;
         this.propertyFactory = propertyFactory;
     }
@@ -32,6 +31,8 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("walk score: " + homeInputData.getWalkScore());
         System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
         System.out.println("listing type: " + homeInputData.getListingType());
+
+//        System.out.println("filtered properties: " + );
 
         HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
         homePresenter.prepareSuccessView(homeOutputData);
