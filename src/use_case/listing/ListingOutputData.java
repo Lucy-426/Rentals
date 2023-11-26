@@ -3,6 +3,8 @@ package use_case.listing;
 public class ListingOutputData {
 
     // edit to include only necessary variables
+    private final String id;
+    private final String city;
     private final String rentalType;
     private final int daysListedAgo;
     private final float price;
@@ -14,8 +16,10 @@ public class ListingOutputData {
     private final boolean parking;
     private final String contact;
 
-    public ListingOutputData(String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
+    public ListingOutputData(String id, String city, String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
                     int squareFeet, boolean furnished, boolean parking, String contact) {
+        this.id = id;
+        this.city = city;
         this.rentalType = rentalType;
         this.daysListedAgo = daysListedAgo;
         this.price = price;

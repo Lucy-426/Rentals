@@ -17,7 +17,7 @@ public class ListingInteractor implements ListingInputBoundary{
     public void execute(ListingInputData listingInputData) {
 
 
-        ListingOutputData listingOutputData = new ListingOutputData("Apartment",60, 350, 8, 3, 2,
+        ListingOutputData listingOutputData = new ListingOutputData("22", "New York", "Apartment",60, 350, 8, 3, 2,
                 300, true, false, "John Smith 4373294732");
         listingPresenter.prepareSuccessView(listingOutputData);
 

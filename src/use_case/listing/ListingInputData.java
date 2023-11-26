@@ -8,6 +8,8 @@ public class ListingInputData {
 //        this.propertyId = propertyId;
 //    }
     // or should we list all the data
+    private final String id;
+    private final String city;
     private final String rentalType;
     private final int daysListedAgo;
     private final float price;
@@ -19,8 +21,10 @@ public class ListingInputData {
     private final boolean parking;
     private final String contact;
 
-    public ListingInputData(String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
+    public ListingInputData(String id, String city, String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
                     int squareFeet, boolean furnished, boolean parking, String contact) {
+        this.id = id;
+        this.city = city;
         this.rentalType = rentalType;
         this.daysListedAgo = daysListedAgo;
         this.price = price;
@@ -32,7 +36,12 @@ public class ListingInputData {
         this.parking = parking;
         this.contact = contact;
     }
-
+    public String getId(){
+        return id;
+    }
+    public String getCity(){
+        return city;
+    }
     public String getRentalType(){
         return rentalType;
     }
