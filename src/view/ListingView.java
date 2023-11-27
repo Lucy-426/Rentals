@@ -13,11 +13,13 @@ import java.beans.PropertyChangeListener;
 
 public class ListingView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public final String viewname = "Listing";
+    private final String viewname = "Listing";
     private final JButton back;
 
     private final ListingViewModel listingViewModel;
     private final ListingController listingController;
+
+
 
     public ListingView(ListingController listingController, ListingViewModel listingViewModel){
         this.listingController = listingController;
