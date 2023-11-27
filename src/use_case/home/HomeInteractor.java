@@ -1,6 +1,6 @@
 package use_case.home;
 
-import data_access.HomeSearchDataAccessInterface;
+import entity.Property;
 import entity.PropertyFactory;
 
 public class HomeInteractor implements HomeInputBoundary {
@@ -22,10 +22,14 @@ public class HomeInteractor implements HomeInputBoundary {
         // TODO: change input/output data so it's not hard coded, and
         //  also change so it doesn't create a property but rather passes it to a filter
 
-        // homeDataAccessObject.save(property);
+        Property property = propertyFactory.create(homeInputData.getId(), homeInputData.getCity(), homeInputData.getAddress(),
+                homeInputData.getNumRooms(), homeInputData.getPriceRange(), homeInputData.getNumBaths(),
+                homeInputData.getWalkScore(), homeInputData.getFurnished(), homeInputData.getListingType());
+        homeDataAccessObject.save(property);
 
-        System.out.println("searching for: " + homeInputData.getId() + " " + homeInputData.getCity() + " " +
-                homeInputData.getAddress());
+        System.out.println("id: " + homeInputData.getId());
+        System.out.println("city: " + homeInputData.getCity());
+        System.out.println("address: " + homeInputData.getAddress());
         System.out.println("rooms: " + homeInputData.getNumRooms());
         System.out.println("price range: " + homeInputData.getPriceRange());
         System.out.println("bathrooms: " + homeInputData.getNumBaths());
@@ -33,7 +37,12 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
         System.out.println("listing type: " + homeInputData.getListingType());
 
+        // TODO: filtering step goes here, output data should be the filtered properties
+        // homeDataAccessObject.filter();
         HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
-        homePresenter.prepareSuccessView(homeOutputData);
+        // homePresenter.prepareSuccessView(homeOutputData);
+        // TODO: change homeoutputdata? maybe create listing from home input data?
+        homePresenter.prepareListingView(homeOutputData);
     }
+
 }

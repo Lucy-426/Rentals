@@ -1,6 +1,7 @@
 package data_access;
 
 import entity.Property;
+import use_case.home.HomeSearchDataAccessInterface;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -9,6 +10,11 @@ public class InMemoryDataAccessObject implements HomeSearchDataAccessInterface {
 
     public void save(Property property) {
         properties.put(property.getAddress(), property);
+    }
+
+    @Override
+    public void filter() {
+
     }
 
 }

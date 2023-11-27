@@ -10,7 +10,7 @@ public class ListingViewModel extends ViewModel {
 
     public static final String TITLE_LABEL = "Listing View";
     public static final String BACK_BUTTON_LABEL = "Back";
-    public ListingViewModel(String viewName) {
+    public ListingViewModel() {
         super("Listing");
     }
 

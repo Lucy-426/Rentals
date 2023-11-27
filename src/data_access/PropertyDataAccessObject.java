@@ -3,6 +3,7 @@ package data_access;
 import com.jayway.jsonpath.JsonPath;
 import entity.Property;
 import entity.PropertyFactory;
+import use_case.home.HomeSearchDataAccessInterface;
 import kotlin.Pair;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,9 +18,12 @@ import java.util.*;
 public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final File csvFile;
 
+    private File filteredcsvFile;
+
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
+    private final Map<String, Property> filtered_properties = new HashMap<>();
 
     // Root URL - can later adapt so that for various functions, we attach ending (i.e. .../property/detail)
     private static final String API_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0/";
@@ -41,6 +45,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private static final ArrayList<Pair> cities = new ArrayList<>();
 
     private PropertyFactory propertyFactory;
+
+    private Property inputProperty;
 
     public PropertyDataAccessObject(String csvPath, PropertyFactory propertyFactory) throws IOException {
         this.propertyFactory = propertyFactory;
@@ -82,7 +88,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
     public void save(Property property) {
-
+        this.inputProperty = property;
     }
 
     // Method to call the API for a given city and parse the json response
@@ -147,6 +153,52 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
     }
 
+//    TODO: test the filter method
+    @Override
+    public void filter() {
+//        filtered_properties.putAll(properties);
+
+        String id = inputProperty.getID();
+        String city = inputProperty.getCity();
+        String address = inputProperty.getAddress();
+        String numRooms = inputProperty.getNumRooms();
+        String priceRange = inputProperty.getPriceRange();
+        String numBaths = inputProperty.getNumBaths();
+        String walkScore = inputProperty.getWalkScore();
+        String furnished = inputProperty.getFurnished();
+        String listingType = inputProperty.getListingType();
+
+//      goes over the copy of the list of properties made from csv files and
+//      removes each id:property if it doesn't match the input property object attributes (user information)
+        for (Map.Entry<String,Property> entry : properties.entrySet()) {
+            if ((id == null) || id.equals("all") || id.equals(entry.getValue().getID())) {
+                if ((city == null) || city.equals("all") || city.equals(entry.getValue().getCity())) {
+                    if ((address == null) || address.equals("all") || address.equals(entry.getValue().getAddress())) {
+                        if ((numRooms == null) || numRooms.equals("all") || numRooms.equals(entry.getValue().getNumRooms())) {
+                            // TODO: change price range filter
+                            if ((priceRange == null) || priceRange.equals("all") || priceRange.equals(entry.getValue().getPriceRange())) {
+                                if ((numBaths == null) || numBaths.equals("all") || numBaths.equals(entry.getValue().getNumBaths())) {
+                                    if ((walkScore == null) || walkScore.equals("all") || walkScore.equals(entry.getValue().getWalkScore())) {
+                                        if ((furnished == null) || furnished.equals("all") || furnished.equals(entry.getValue().getFurnished())) {
+                                            // TODO: change listing type filter
+                                            if ((listingType == null) || listingType.equals("all") || listingType.equals(entry.getValue().getListingType())) {
+                                                filtered_properties.put(entry.getKey(), entry.getValue());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println("we've filtered");
+        filteredcsvFile =  new File("./filtered_properties.csv");
+        saveFilteredProperties();
+    }
+
     // Writing the Property object inside of properties to the csv file
     private void save() {
         BufferedWriter writer;
@@ -159,6 +211,29 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
             for (Property property : properties.values()) {
                 String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(
                         property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(), property.getPriceRange(),
+                        property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType()
+                );
+                writer.write(line);
+                writer.newLine();
+            }
+
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Writing the input data to a csv file
+    private void saveFilteredProperties() {
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(filteredcsvFile));
+            writer.write(String.join(",", headers.keySet()));
+            writer.newLine();
+
+            // Go through properties and format attributes to csv file columns
+            for (Property property : filtered_properties.values()) {
+                String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(), property.getPriceRange(),
                         property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType()
                 );
                 writer.write(line);
