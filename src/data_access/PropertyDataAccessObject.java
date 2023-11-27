@@ -10,11 +10,18 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.PlacesApi;
+import com.google.maps.model.*;
+
+import use_case.search.SearchDataAccessInterface;
 
 import java.io.*;
 import java.util.*;
 
-public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
+public class PropertyDataAccessObject implements HomeSearchDataAccessInterface, SearchDataAccessInterface {
     private final File csvFile;
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -24,6 +31,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     // Root URL - can later adapt so that for various functions, we attach ending (i.e. .../property/detail)
     private static final String API_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0/";
     private static final String API_TOKEN = "a29ec8d3d48c6a36e4ce59f96a94606a";
+    private static final String MAPS_API_KEY = "AIzaSyAMz9doGhcdEYjPoXY3Cv4TCd58-eHDubU";
 
     // The cities that we are getting listings from
     private static final Pair<String, String> SF_CA = new Pair<>("37.656305","-122.417006");
@@ -169,5 +177,64 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean exists(String address) {
+        GeoApiContext context = new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build();
+
+        try {
+            // Perform geocoding to get the location information
+            GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
+
+            // Check if there is at least one result and that it contains lat/lng coordinates
+            return results[0].geometry.location != null;
+
+        } catch (Exception e) {
+            // Not a valid address
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public double getLat(String address) {
+        try {
+            PlacesSearchResponse placesSearchResponse = PlacesApi.textSearchQuery(
+                    new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build(),
+                    address).await();
+
+            PlacesSearchResult result = placesSearchResponse.results[0];
+            LatLng location = result.geometry.location;
+            double latitude = location.lat;
+            return latitude;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public double getLong(String address) {
+        try {
+            PlacesSearchResponse placesSearchResponse = PlacesApi.textSearchQuery(
+                    new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build(),
+                    address).await();
+
+            PlacesSearchResult result = placesSearchResponse.results[0];
+            LatLng location = result.geometry.location;
+            double longitude = location.lng;
+            return longitude;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public void centerMap(double lat, double lng) {
+
     }
 }
