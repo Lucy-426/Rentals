@@ -8,13 +8,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class ViewManager implements PropertyChangeListener {
-    private final CardLayout cardLayout;
+    private final BorderLayout borderLayout;
     private final JPanel views;
     private ViewManagerModel viewManagerModel;
 
-    public ViewManager(JPanel views, CardLayout cardLayout, ViewManagerModel viewManagerModel) {
+    public ViewManager(JPanel views, BorderLayout borderLayout, ViewManagerModel viewManagerModel) {
         this.views = views;
-        this.cardLayout = cardLayout;
+        this.borderLayout = borderLayout;
         this.viewManagerModel = viewManagerModel;
         this.viewManagerModel.addPropertyChangeListener(this);
     }
@@ -23,7 +23,7 @@ public class ViewManager implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("view")) {
             String viewModelName = (String) evt.getNewValue();
-            cardLayout.show(views, viewModelName);
+//            cardLayout.show(views, viewModelName);
         }
     }
 }
