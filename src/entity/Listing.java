@@ -1,5 +1,8 @@
 package entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Listing {
     private final String id;
     private final String city;
@@ -13,6 +16,8 @@ public class Listing {
     private final boolean furnished;
     private final boolean parking;
     private final String contact;
+
+    private final Map<String, Property> recListings;
 
     public Listing(String id, String city, String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
                     int squareFeet, boolean furnished, boolean parking, String contact) {
@@ -28,6 +33,7 @@ public class Listing {
         this.furnished = furnished;
         this.parking = parking;
         this.contact = contact;
+        recListings = new HashMap<>();
     }
     public String getId(){
         return id;
@@ -79,4 +85,6 @@ public class Listing {
     public String getContact() {
         return contact;
     }
+
+
 }

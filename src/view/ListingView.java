@@ -34,7 +34,7 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         back = new JButton(ListingViewModel.BACK_BUTTON_LABEL);
         buttons.add(back);
 
-        Listing propTest = new Listing("Apartment", 60, 350, 8, 3, 2, true, false, "John Smith 4373294732");
+        Listing propTest = new Listing("22", "New York", "Apartment", 60, 350, 8, 3, 2, 650, true, false, "John Smith 4373294732");
 
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 0.5;
@@ -114,9 +114,9 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         c.gridy = 1;
         this.add(recommendations, c);
 
-        JPanel button1test = new JPanel();
+        JPanel recommendedListings = new JPanel();
         GridLayout gridlayout = new GridLayout(3, 1);
-        button1test.setLayout(gridlayout);
+        recommendedListings.setLayout(gridlayout);
 
         JButton listing1 = new JButton("Listing 1");
         c.gridx = 2;
@@ -125,12 +125,10 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         c.ipady = 60;
         JButton listing2 = new JButton("Listing 2");
         JButton listing3 = new JButton("Listing 3");
-        button1test.add(listing1);
-        button1test.add(listing2);
-        button1test.add(listing3);
-        JScrollPane listingScroll = new JScrollPane(button1test);
-        listingScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.add(listingScroll, c);
+        recommendedListings.add(listing1);
+        recommendedListings.add(listing2);
+        recommendedListings.add(listing3);
+        this.add(recommendedListings, c);
 
 
         JButton button = new JButton("Back");
