@@ -12,4 +12,9 @@ public class InMemoryDataAccessObject implements HomeSearchDataAccessInterface {
         properties.put(property.getAddress(), property);
     }
 
+    @Override
+    public void filter() {
+
+    }
+
 }

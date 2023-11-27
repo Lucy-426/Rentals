@@ -18,6 +18,8 @@ import java.util.*;
 public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final File csvFile;
 
+    private File filteredcsvFile;
+
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
@@ -44,7 +46,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
     private PropertyFactory propertyFactory;
 
-    private ArrayList<Property> inputProperties = new ArrayList<>();
+    private Property inputProperty;
 
     public PropertyDataAccessObject(String csvPath, PropertyFactory propertyFactory) throws IOException {
         this.propertyFactory = propertyFactory;
@@ -86,7 +88,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
     public void save(Property property) {
-        inputProperties.add(property);
+        this.inputProperty = property;
     }
 
     // Method to call the API for a given city and parse the json response
@@ -153,50 +155,73 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
 //    TODO: test the filter method
     @Override
-    public void filter(Property property) {
+    public void filter() {
         filtered_properties.putAll(properties);
 
-        String id = property.getID();
-        String city = property.getCity();
-        String address = property.getAddress();
-        String numRooms = property.getNumRooms();
-        String priceRange = property.getPriceRange();
-        String numBaths = property.getNumBaths();
-        String walkScore = property.getWalkScore();
-        String furnished = property.getFurnished();
-        String listingType = property.getListingType();
+        String id = inputProperty.getID();
+        String city = inputProperty.getCity();
+        String address = inputProperty.getAddress();
+        String numRooms = inputProperty.getNumRooms();
+        String priceRange = inputProperty.getPriceRange();
+        String numBaths = inputProperty.getNumBaths();
+        String walkScore = inputProperty.getWalkScore();
+        String furnished = inputProperty.getFurnished();
+        String listingType = inputProperty.getListingType();
 
-//      goes over the copy of the list of properties made from csv files and removes each id:property if it doesn't match the input property object attributes (user information)
+//      goes over the copy of the list of properties made from csv files and
+//      removes each id:property if it doesn't match the input property object attributes (user information)
         for (Map.Entry<String,Property> entry : filtered_properties.entrySet()) {
-            if (!id.equals("null") && !id.equals("all") && !id.equals(entry.getValue().getID())) {
-                filtered_properties.remove(entry.getKey());
+            if (!(id == null)) {
+                if (!id.equals("all") && !id.equals(entry.getValue().getID())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
-            if (!city.equals("null") && !city.equals("all") && !city.equals(entry.getValue().getCity())) {
-                filtered_properties.remove(entry.getKey());
+            if (!(city == null)){
+                if (!city.equals("all") && !city.equals(entry.getValue().getCity())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
-            if (!address.equals("null") && !address.equals("all") && !address.equals(entry.getValue().getAddress())) {
-                filtered_properties.remove(entry.getKey());
+            if (!(address == null)) {
+                if (!address.equals("all") && !address.equals(entry.getValue().getAddress())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
-            if (!numRooms.equals("null") && !numRooms.equals("all") && !numRooms.equals(entry.getValue().getNumRooms())) {
-                filtered_properties.remove(entry.getKey());
+            if (!(numRooms == null)) {
+                if(!numRooms.equals("all") && !numRooms.equals(entry.getValue().getNumRooms())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
-            if (!priceRange.equals("null") && !priceRange.equals("all") && !priceRange.equals(entry.getValue().getPriceRange())) {
-                filtered_properties.remove(entry.getKey());
+            // TODO: change price range filter
+            if (!(priceRange == null)) {
+                if(!priceRange.equals("all") && !priceRange.equals(entry.getValue().getPriceRange())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
-            if (!numBaths.equals("null") && !numBaths.equals("all") && !numBaths.equals(entry.getValue().getNumBaths())) {
-                filtered_properties.remove(entry.getKey());
+            if (!(numBaths == null)) {
+                if (!numBaths.equals("all") && !numBaths.equals(entry.getValue().getNumBaths())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
-            if (!walkScore.equals("null") && !walkScore.equals("all") && !walkScore.equals(entry.getValue().getWalkScore())) {
-                filtered_properties.remove(entry.getKey());
+            if (!(walkScore == null)) {
+                if (!walkScore.equals("all") && !walkScore.equals(entry.getValue().getWalkScore())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
-            if (!furnished.equals("null") && !furnished.equals("all") && !furnished.equals(entry.getValue().getFurnished())) {
-                filtered_properties.remove(entry.getKey());
+            if (!(furnished == null)) {
+                if (!furnished.equals("all") && !furnished.equals(entry.getValue().getFurnished())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
-            if (!listingType.equals("null") && !listingType.equals("all") && !listingType.equals(entry.getValue().getListingType())) {
-                filtered_properties.remove(entry.getKey());
+            // TODO: change listing type filter
+            if (!(listingType == null)) {
+                if (!listingType.equals("all") && !listingType.equals(entry.getValue().getListingType())) {
+                    filtered_properties.remove(entry.getKey());
+                }
             }
         }
-        System.out.println(filtered_properties);
+        System.out.println("we've filtered");
+        filteredcsvFile =  new File("./filtered_properties.csv");
+        saveFilteredProperties();
     }
 
     // Writing the Property object inside of properties to the csv file
@@ -211,6 +236,29 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
             for (Property property : properties.values()) {
                 String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(
                         property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(), property.getPriceRange(),
+                        property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType()
+                );
+                writer.write(line);
+                writer.newLine();
+            }
+
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Writing the input data to a csv file
+    private void saveFilteredProperties() {
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(filteredcsvFile));
+            writer.write(String.join(",", headers.keySet()));
+            writer.newLine();
+
+            // Go through properties and format attributes to csv file columns
+            for (Property property : filtered_properties.values()) {
+                String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(), property.getPriceRange(),
                         property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType()
                 );
                 writer.write(line);
