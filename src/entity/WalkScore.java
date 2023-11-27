@@ -7,10 +7,6 @@ import com.google.maps.model.PlaceType;
 import com.google.maps.model.PlacesSearchResponse;
 import com.google.maps.model.PlacesSearchResult;
 import entity.DistanceCalculation;
-import entity.LatLngGetter;
-
-import java.sql.SQLOutput;
-import java.util.Arrays;
 
 public class WalkScore {
     public static double assignScore(double distance) {
@@ -39,7 +35,8 @@ public class WalkScore {
             return 0;
         }
     }
-    public static void calculation(double startLat, double startLng) {
+
+    public static int calculation(double startLat, double startLng) {
         String apiKey = "AIzaSyAMz9doGhcdEYjPoXY3Cv4TCd58-eHDubU";
 
         LatLng location = new LatLng(startLat, startLng);
@@ -67,30 +64,46 @@ public class WalkScore {
                         .type(place)
                         .await();
 
-                double placeTypeScore = 0;
                 for (PlacesSearchResult result : response.results) {
+                    // Uncomment this code to see which places are being generated
                     System.out.println("Place Name: " + result.name);
-//                    System.out.println("Place Type: " + Arrays.toString(result.types));
 
+                    // Get the latitude and longitude of generated place
                     double endLat = result.geometry.location.lat;
                     double endLng = result.geometry.location.lng;
+
+                    // Calculate the distance between the origin and the generated place
                     double distance = DistanceCalculation.calculation(startLat, startLng, endLat, endLng);
+
+                    // Uncomment this code to see the distance between the origin and the generated place
                     System.out.println("Distance from origin: " + distance);
+
+                    // Get each place's individual walk score (worth 1% of total walk score)
                     double score = assignScore(distance);
+
+                    // Uncomment this code to see the individual walk score of each generated place
                     System.out.println("Walk score: " + score);
+
+                    // Accumulate total walk score with individual walk score
                     walkScore += score;
                 }
             }
-            System.out.println(walkScore);
+            // Print out walk score for testing purposes
+            System.out.println((int) walkScore);
+            return (int) walkScore;
         } catch(Exception e) {
             e.printStackTrace();
+            return 0;
         }
     }
 
     // Sample calls to the walk score function - delete at the end
+    // Note that this function takes a bit of time to return a value; but you can verify that it works
+    // by enabling the print statements to see that it is iterating through each place and
+    // accumulating the walk score.
     public static void main(String[] args) {
-        calculation(43.6598084,-79.3998729); // A location in Toronto near campus
+//        calculation(43.6598084,-79.3998729); // A location in Toronto near campus
 //        calculation(43.5422741,-79.694035); // A location in Mississauga near UTM
-//        calculation(43.649093,-79.394538); // A location in Toronto near the lakefront
+        calculation(43.649093,-79.394538); // A location in Toronto near the lakefront
     }
 }
