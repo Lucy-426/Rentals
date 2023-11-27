@@ -10,11 +10,20 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.PlacesApi;
 import com.google.maps.model.*;
+
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.JXMapViewer;
+import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.Waypoint;
+import org.jdesktop.swingx.mapviewer.WaypointPainter;
+
 
 import use_case.search.SearchDataAccessInterface;
 
