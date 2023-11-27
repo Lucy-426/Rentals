@@ -1,7 +1,7 @@
 package interface_adapter.signup;
 
 import use_case.signup.SignupInputBoundary;
-import use_case.SignupInputData;
+import use_case.signup.SignupInputData;
 
 public class SignupController {
 
@@ -15,5 +15,9 @@ public class SignupController {
                 username, password1, password2);
 
         userSignupUseCaseInteractor.execute(signupInputData);
+    }
+
+    public void displayHome() {
+        userSignupUseCaseInteractor.displayHome();
     }
 }

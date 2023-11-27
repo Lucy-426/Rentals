@@ -4,4 +4,6 @@ import use_case.signup.SignupInputData;
 
 public interface SignupInputBoundary {
     void execute(SignupInputData signupInputData);
+
+    void displayHome();
 }

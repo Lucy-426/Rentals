@@ -36,4 +36,12 @@ public class HomeInteractor implements HomeInputBoundary {
         HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
         homePresenter.prepareSuccessView(homeOutputData);
     }
+
+    public void displaySignupView() {
+        homePresenter.displaySignupView();
+    }
+
+    public void displayLoginView() {
+        homePresenter.displayLoginView();
+    }
 }

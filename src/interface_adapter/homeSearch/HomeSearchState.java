@@ -21,6 +21,8 @@ public class HomeSearchState {
 
     private String listingType;
 
+    private boolean loggedIn;
+
     public HomeSearchState(HomeSearchState copy) {
         id = copy.id;
         city = copy.city;
@@ -31,6 +33,7 @@ public class HomeSearchState {
         walkScore = copy.walkScore;
         furnished = copy.furnished;
         listingType = copy.listingType;
+        loggedIn = copy.loggedIn;
     }
     public HomeSearchState() {}
     public String getId() { return id; }
@@ -65,6 +68,8 @@ public class HomeSearchState {
         return listingType;
     }
 
+    public boolean getLoggedIn() { return loggedIn; }
+
     public void setId(String id) { this.id = id; }
 
     public void setCity(String city) { this.city = city; }
@@ -96,5 +101,7 @@ public class HomeSearchState {
     public void setListingType(String listingType) {
         this.listingType = listingType;
     }
+
+    public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }
 
 }

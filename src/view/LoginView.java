@@ -1,7 +1,9 @@
 package view;
 
+import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.signup.SignupState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +17,8 @@ import java.beans.PropertyChangeListener;
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "log in";
+
+    private final LoginController loginController;
     private final LoginViewModel loginViewModel;
 
     /**
@@ -34,7 +38,8 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     /**
      * A window with a title and a JButton.
      */
-    public LoginView(LoginViewModel loginViewModel) {
+    public LoginView(LoginController loginController, LoginViewModel loginViewModel) {
+        this.loginController = loginController;
         this.loginViewModel = loginViewModel;
         this.loginViewModel.addPropertyChangeListener(this);
 
@@ -52,23 +57,77 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         cancel = new JButton(loginViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
 
-        logIn.addActionListener(this);
-        cancel.addActionListener(this);
-
-        usernameInputField.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                LoginState currentState = loginViewModel.getState();
-                currentState.setUsername(usernameInputField.getText());
-                loginViewModel.setState(currentState);
+        logIn.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    if (evt.getSource().equals(logIn)) {
+                        loginController.execute(loginViewModel.getState().getUsername(),
+                                loginViewModel.getState().getPassword());
+                    }
+                }
             }
+        );
 
-            @Override
-            public void keyPressed(KeyEvent e) {}
+        cancel.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    if (evt.getSource().equals(cancel)) {
+                        loginController.displayHome();
+                    }
+                }
+            }
+        );
 
-            @Override
-            public void keyReleased(KeyEvent e) {}
-        });
+        usernameInputField.addKeyListener(
+                new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        LoginState currentState = loginViewModel.getState();
+                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                            currentState.setUsername(usernameInputField.getText());
+                        } else {
+                            currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
+                        }
+                        System.out.println(currentState.getUsername());
+                        loginViewModel.setState(currentState);
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                    }
+                });
+
+        passwordInputField.addKeyListener(
+                new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        LoginState currentState = loginViewModel.getState();
+                        char[] password = passwordInputField.getPassword();
+                        String text_pass = "";
+                        for(char character: password) {
+                            text_pass += character;
+                        }
+                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                            currentState.setPassword(text_pass);
+                        } else {
+                            currentState.setPassword(text_pass + e.getKeyChar());
+                        }
+                        loginViewModel.setState(currentState);
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                    }
+                });
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(title);
@@ -90,6 +149,9 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     public void propertyChange(PropertyChangeEvent evt) {
         LoginState state = (LoginState) evt.getNewValue();
         setFields(state);
+        if (state.getUsernameError() != null) {
+            JOptionPane.showMessageDialog(this, state.getUsernameError());
+        }
     }
 
     private void setFields(LoginState state) {

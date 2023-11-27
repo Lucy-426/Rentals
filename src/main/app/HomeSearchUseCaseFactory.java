@@ -8,8 +8,11 @@ import interface_adapter.homeSearch.HomeSearchController;
 import interface_adapter.homeSearch.HomeSearchPresenter;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.signup.SignupViewModel;
 import use_case.home.*;
 import view.HomeSearchView;
+import view.LoginView;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -18,9 +21,11 @@ import java.io.IOException;
 public class HomeSearchUseCaseFactory {
     private HomeSearchUseCaseFactory() {};
 
-    public static HomeSearchView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) {
+    public static HomeSearchView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
+                                        SignupViewModel signupViewModel, LoginViewModel loginViewModel) {
         try {
-            HomeSearchController homeSearchController = createHomeSearchUseCase(viewManagerModel, homeSearchViewModel);
+            HomeSearchController homeSearchController = createHomeSearchUseCase(viewManagerModel, homeSearchViewModel,
+                    signupViewModel, loginViewModel);
             return new HomeSearchView(homeSearchController, homeSearchViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open property data file.");
@@ -28,11 +33,12 @@ public class HomeSearchUseCaseFactory {
         return null;
     }
 
-    private static HomeSearchController createHomeSearchUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) throws IOException {
+    private static HomeSearchController createHomeSearchUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
+                                                                SignupViewModel signupViewModel, LoginViewModel loginViewModel) throws IOException {
         HomeSearchDataAccessInterface homeDataAccessObject = new InMemoryDataAccessObject();
         HomeSearchDataAccessInterface propertyDataAccessObject = new PropertyDataAccessObject("./properties.csv", new PropertyFactory());
 
-        HomeOutputBoundary homeOutputBoundary = new HomeSearchPresenter(homeSearchViewModel, viewManagerModel);
+        HomeOutputBoundary homeOutputBoundary = new HomeSearchPresenter(homeSearchViewModel, viewManagerModel, signupViewModel, loginViewModel);
 
         PropertyFactory propertyFactory = new PropertyFactory();
 

@@ -16,4 +16,12 @@ public class HomeSearchController {
 
         homeInteractor.execute(homeInputData);
     }
+
+    public void displaySignupView() {
+        homeInteractor.displaySignupView();
+    }
+
+    public void displayLoginView() {
+        homeInteractor.displayLoginView();
+    }
 }

@@ -1,5 +1,7 @@
 package interface_adapter.signup;
 
+import interface_adapter.homeSearch.HomeSearchState;
+import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.ViewManagerModel;
@@ -11,14 +13,17 @@ import java.time.format.DateTimeFormatter;
 
 public class SignupPresenter implements SignupOutputBoundary {
 
+    private final HomeSearchViewModel homeSearchViewModel;
     private final SignupViewModel signupViewModel;
     private final LoginViewModel loginViewModel;
     private ViewManagerModel viewManagerModel;
 
     public SignupPresenter(ViewManagerModel viewManagerModel,
+                           HomeSearchViewModel homeSearchViewModel,
                            SignupViewModel signupViewModel,
                            LoginViewModel loginViewModel) {
         this.viewManagerModel = viewManagerModel;
+        this.homeSearchViewModel = homeSearchViewModel;
         this.signupViewModel = signupViewModel;
         this.loginViewModel = loginViewModel;
     }
@@ -43,5 +48,13 @@ public class SignupPresenter implements SignupOutputBoundary {
         SignupState signupState = signupViewModel.getState();
         signupState.setUsernameError(error);
         signupViewModel.firePropertyChanged();
+    }
+
+    public void displayHome() {
+        HomeSearchState homeSearchState = homeSearchViewModel.getState();
+        this.homeSearchViewModel.setState(homeSearchState);
+        homeSearchViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView(homeSearchViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 }

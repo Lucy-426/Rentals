@@ -3,6 +3,7 @@ package view;
 import interface_adapter.homeSearch.HomeSearchController;
 import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
+import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,11 +16,18 @@ import java.beans.PropertyChangeListener;
 
 public class HomeSearchView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public final String viewName = "home search";
+    public final String viewName = "Search";
 
     private final HomeSearchViewModel homesearchViewModel;
 
+    // See if this is necessaryH
+    //private final SignupViewModel signupViewModel;
+
     private final JTextField homeSearchBar = new JTextField(30);
+
+    private final JButton signUp;
+
+    private final JButton logIn;
     private JButton searchButton;
 
 //    filters
@@ -50,6 +58,13 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         JLabel title = new JLabel(homesearchViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // sign up and log in buttons
+        JPanel buttons = new JPanel();
+        signUp = new JButton("Sign Up");
+        buttons.add(signUp);
+        logIn = new JButton("Log In");
+        buttons.add(logIn);
 
         LabelTextPanel searchBar = new LabelTextPanel(
                 new JLabel(homesearchViewModel.SEARCH_BAR_LABEL), homeSearchBar);
@@ -85,6 +100,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(buttons, c);
         this.add(searchBar);
         // TODO: fix formatting of everything
         c.gridx = 10;
@@ -145,6 +161,25 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         // Add the JScrollPane to the panel
         add(listingsScroll, c);
 
+        signUp.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    if (evt.getSource().equals(signUp)) {
+                        homesearchController.displaySignupView();
+                    }
+                }
+            }
+        );
+
+        logIn.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(logIn)) {
+                            homesearchController.displayLoginView();
+                        }
+                    }
+                }
+        );
 
         homeSearchBar.addKeyListener(
                 new KeyListener() {

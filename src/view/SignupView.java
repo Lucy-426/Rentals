@@ -59,7 +59,14 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     }
                 }
         );
-        cancel.addActionListener(this);
+        cancel.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(cancel)) {
+                            signupController.displayHome();
+                        }
+                    }
+        });
 
         // This makes a new KeyListener implementing class, instantiates it, and
         // makes it listen to keystrokes in the usernameInputField.
@@ -70,7 +77,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     @Override
                     public void keyTyped(KeyEvent e) {
                         SignupState currentState = signupViewModel.getState();
-                        currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
+                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                            currentState.setUsername(usernameInputField.getText());
+                        } else {
+                            currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
+                        }
                         signupViewModel.setState(currentState);
                     }
 
@@ -93,7 +104,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                         for(char character: password) {
                             text_pass += character;
                         }
-                        currentState.setPassword(text_pass + e.getKeyChar());
+                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                            currentState.setPassword(text_pass);
+                        } else {
+                            currentState.setPassword(text_pass + e.getKeyChar());
+                        }
                         signupViewModel.setState(currentState);
                     }
 
@@ -116,7 +131,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                         for(char character: password) {
                             text_pass += character;
                         }
-                        currentState.setRepeatPassword(text_pass + e.getKeyChar());
+                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                            currentState.setRepeatPassword(text_pass);
+                        } else {
+                            currentState.setRepeatPassword(text_pass + e.getKeyChar());
+                        }
                         signupViewModel.setState(currentState);
                     }
 
@@ -137,11 +156,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(buttons);
     }
 
-    /**
-     * React to a button click that results in evt.
-     */
     public void actionPerformed(ActionEvent evt) {
-        System.out.println("Cancel not implemented yet.");
+        System.out.println("Click " + evt.getActionCommand());
     }
 
     @Override
