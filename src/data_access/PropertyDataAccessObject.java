@@ -156,7 +156,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 //    TODO: test the filter method
     @Override
     public void filter() {
-        filtered_properties.putAll(properties);
+//        filtered_properties.putAll(properties);
 
         String id = inputProperty.getID();
         String city = inputProperty.getCity();
@@ -170,55 +170,30 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
 //      goes over the copy of the list of properties made from csv files and
 //      removes each id:property if it doesn't match the input property object attributes (user information)
-        for (Map.Entry<String,Property> entry : filtered_properties.entrySet()) {
-            if (!(id == null)) {
-                if (!id.equals("all") && !id.equals(entry.getValue().getID())) {
-                    filtered_properties.remove(entry.getKey());
-                }
-            }
-            if (!(city == null)){
-                if (!city.equals("all") && !city.equals(entry.getValue().getCity())) {
-                    filtered_properties.remove(entry.getKey());
-                }
-            }
-            if (!(address == null)) {
-                if (!address.equals("all") && !address.equals(entry.getValue().getAddress())) {
-                    filtered_properties.remove(entry.getKey());
-                }
-            }
-            if (!(numRooms == null)) {
-                if(!numRooms.equals("all") && !numRooms.equals(entry.getValue().getNumRooms())) {
-                    filtered_properties.remove(entry.getKey());
-                }
-            }
-            // TODO: change price range filter
-            if (!(priceRange == null)) {
-                if(!priceRange.equals("all") && !priceRange.equals(entry.getValue().getPriceRange())) {
-                    filtered_properties.remove(entry.getKey());
-                }
-            }
-            if (!(numBaths == null)) {
-                if (!numBaths.equals("all") && !numBaths.equals(entry.getValue().getNumBaths())) {
-                    filtered_properties.remove(entry.getKey());
-                }
-            }
-            if (!(walkScore == null)) {
-                if (!walkScore.equals("all") && !walkScore.equals(entry.getValue().getWalkScore())) {
-                    filtered_properties.remove(entry.getKey());
-                }
-            }
-            if (!(furnished == null)) {
-                if (!furnished.equals("all") && !furnished.equals(entry.getValue().getFurnished())) {
-                    filtered_properties.remove(entry.getKey());
-                }
-            }
-            // TODO: change listing type filter
-            if (!(listingType == null)) {
-                if (!listingType.equals("all") && !listingType.equals(entry.getValue().getListingType())) {
-                    filtered_properties.remove(entry.getKey());
+        for (Map.Entry<String,Property> entry : properties.entrySet()) {
+            if ((id == null) || id.equals("all") || id.equals(entry.getValue().getID())) {
+                if ((city == null) || city.equals("all") || city.equals(entry.getValue().getCity())) {
+                    if ((address == null) || address.equals("all") || address.equals(entry.getValue().getAddress())) {
+                        if ((numRooms == null) || numRooms.equals("all") || numRooms.equals(entry.getValue().getNumRooms())) {
+                            // TODO: change price range filter
+                            if ((priceRange == null) || priceRange.equals("all") || priceRange.equals(entry.getValue().getPriceRange())) {
+                                if ((numBaths == null) || numBaths.equals("all") || numBaths.equals(entry.getValue().getNumBaths())) {
+                                    if ((walkScore == null) || walkScore.equals("all") || walkScore.equals(entry.getValue().getWalkScore())) {
+                                        if ((furnished == null) || furnished.equals("all") || furnished.equals(entry.getValue().getFurnished())) {
+                                            // TODO: change listing type filter
+                                            if ((listingType == null) || listingType.equals("all") || listingType.equals(entry.getValue().getListingType())) {
+                                                filtered_properties.put(entry.getKey(), entry.getValue());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+
         System.out.println("we've filtered");
         filteredcsvFile =  new File("./filtered_properties.csv");
         saveFilteredProperties();
