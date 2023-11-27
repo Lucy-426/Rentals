@@ -17,15 +17,15 @@ public class Main {
         JFrame application = new JFrame("Got Room?");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        BorderLayout borderLayout = new BorderLayout();
+        CardLayout cardLayout = new CardLayout();
 
         // The various View objects. Only one view is visible at a time.
-        JPanel views = new JPanel(borderLayout);
+        JPanel views = new JPanel(cardLayout);
         application.add(views);
 
 
         ViewManagerModel viewManagerModel = new ViewManagerModel();
-        new ViewManager(views, borderLayout, viewManagerModel);
+        new ViewManager(views, cardLayout, viewManagerModel);
 
 
         HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
