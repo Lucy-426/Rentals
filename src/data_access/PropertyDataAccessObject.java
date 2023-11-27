@@ -181,8 +181,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                                 if ((numBaths == null) || numBaths.equals("all") || numBaths.equals(entry.getValue().getNumBaths())) {
                                     if ((walkScore == null) || walkScore.equals("all") || walkScore.equals(entry.getValue().getWalkScore())) {
                                         if ((furnished == null) || furnished.equals("all") || furnished.equals(entry.getValue().getFurnished())) {
-                                            // TODO: change listing type filter
-                                            if ((listingType == null) || listingType.equals("all") || listingType.equals(entry.getValue().getListingType())) {
+                                            if (listingTypeCheck(entry.getValue())) {
+//                                            if ((listingType == null) || listingType.equals("all") || listingType.equals(entry.getValue().getListingType())) {
                                                 filtered_properties.put(entry.getKey(), entry.getValue());
                                             }
                                         }
@@ -222,7 +222,13 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
 //    helper method to check if inputproperty listing type filter word is found in csv property listing type
     private boolean listingTypeCheck(Property property) {
-        return true
+        String listingType = inputProperty.getListingType();
+        if (listingType.equals("other")) {
+//            return true if "House", "Townhouse", "Apartment" not in the csv property
+            return !property.getListingType().contains("House") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
+        } else {
+            return (listingType == null || listingType.equals("all") || property.getListingType().contains(listingType));
+        }
     }
 
 
