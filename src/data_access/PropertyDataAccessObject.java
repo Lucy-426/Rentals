@@ -188,6 +188,12 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface, 
         }
     }
 
+    private void populate(double lat, double lng) {
+        /*
+        Adds a waypoint on the map for the given latitude and longitude coordinates
+         */
+    }
+
     @Override
     public boolean exists(String address) {
         GeoApiContext context = new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build();
