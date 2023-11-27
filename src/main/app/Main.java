@@ -2,7 +2,9 @@ package main.app;
 
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.listing.ListingViewModel;
 import view.HomeSearchView;
+import view.ListingView;
 import view.ViewManager;
 
 import javax.swing.*;
@@ -30,9 +32,13 @@ public class Main {
 
 
         HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
+        ListingViewModel listingViewModel = new ListingViewModel();
 
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel);
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel, listingViewModel);
         views.add(homeSearchView, homeSearchView.viewName);
+
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(viewManagerModel, homesearchViewModel, listingViewModel);
+        views.add(listingView, listingView.viewName);
 
         viewManagerModel.setActiveView(homeSearchView.viewName);
         viewManagerModel.firePropertyChanged();
