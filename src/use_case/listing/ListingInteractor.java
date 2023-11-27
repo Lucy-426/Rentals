@@ -20,10 +20,10 @@ public class ListingInteractor implements ListingInputBoundary{
 
     @Override
     public void execute(ListingInputData listingInputData) {
+        // TODO: edit so it's not hard coded
 
-
-        ListingOutputData listingOutputData = new ListingOutputData("Apartment",60, 350, 8, 3, 2,
-                300, true, false, "John Smith 4373294732");
+        ListingOutputData listingOutputData = new ListingOutputData("123456", "Apartment","2", "300000", "1", "3", "furnished",
+                "apartment");
         listingPresenter.prepareSuccessView(listingOutputData);
 
     }

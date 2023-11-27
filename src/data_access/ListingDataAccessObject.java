@@ -5,7 +5,7 @@ import entity.ListingFactory;
 import use_case.listing.ListingDataAccessInterface;
 
 public class ListingDataAccessObject implements ListingDataAccessInterface {
-
+    // TODO: check if this is needed?
     private ListingFactory listingFactory;
 
     private Listing listing;

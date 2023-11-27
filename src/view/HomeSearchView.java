@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class HomeSearchView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public final String viewName = "home search";
+    public final String viewName = "Search";
 
     private final HomeSearchViewModel homesearchViewModel;
 
@@ -38,13 +38,16 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     private final HomeSearchController homesearchController;
 
+    private final ListingController listingController;
 
-    public HomeSearchView(HomeSearchController homeController, HomeSearchViewModel viewModel) {
+
+    public HomeSearchView(HomeSearchController homeController, ListingController listingController, HomeSearchViewModel viewModel) {
         this.homesearchController = homeController;
+        this.listingController = listingController;
         this.homesearchViewModel = viewModel;
         homesearchViewModel.addPropertyChangeListener(this);
 
-//        for formatting
+        // for formatting
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -57,7 +60,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         // Add action listener to the search button
         searchButton.addActionListener(this);
 
-//        filter for number of rooms
+        // filter for number of rooms
         numRooms = new JComboBox<>(homesearchViewModel.numRoomStrings);
         numRooms.setSelectedIndex(0);
         numRooms.addActionListener(this);
@@ -85,7 +88,6 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(searchBar);
-        // TODO: fix formatting of everything
         c.gridx = 10;
         c.gridy = 1;
         c.gridwidth = 1;
@@ -314,20 +316,17 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     public void actionPerformed(ActionEvent evt) {
         for (JButton button : listingButtons) {
             if (evt.getSource() == button) {
-                // TODO: edit this execute?
-                homesearchController.execute(homesearchViewModel.getState().getId(),
-                        homesearchViewModel.getState().getCity(), homesearchViewModel.getState().getAddress(),
+                // TODO: change input for this execute
+                listingController.execute(homesearchViewModel.getState().getId(), homesearchViewModel.getState().getAddress(),
                         homesearchViewModel.getState().getNumRooms(), homesearchViewModel.getState().getPriceRange(),
                         homesearchViewModel.getState().getNumBaths(), homesearchViewModel.getState().getWalkScore(),
                         homesearchViewModel.getState().getFurnished(), homesearchViewModel.getState().getListingType());
-                System.out.println("listing");
             }
         }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("property change");
     }
 }
 

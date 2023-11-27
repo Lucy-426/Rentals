@@ -31,7 +31,8 @@ public class HomeSearchUseCaseFactory {
     public static HomeSearchView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
         try {
             HomeSearchController homeSearchController = createHomeSearchUseCase(viewManagerModel, homeSearchViewModel,listingViewModel);
-            return new HomeSearchView(homeSearchController, homeSearchViewModel);
+            ListingController listingController = createListingUseCase(viewManagerModel, homeSearchViewModel, listingViewModel);
+            return new HomeSearchView(homeSearchController, listingController, homeSearchViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open property data file.");
         }
@@ -51,7 +52,7 @@ public class HomeSearchUseCaseFactory {
 
     }
     public static ListingView createListingView(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
-        ListingController listingController = createListingUseCase(viewManagerModel, homeSearchViewModel,listingViewModel);
+        ListingController listingController = createListingUseCase(viewManagerModel, homeSearchViewModel, listingViewModel);
         return new ListingView(listingController, listingViewModel);
 
     }
@@ -59,12 +60,12 @@ public class HomeSearchUseCaseFactory {
     private static ListingController createListingUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
         ListingDataAccessInterface listingDataAccessObject = new ListingDataAccessObject(new ListingFactory());
 
-        ListingOutputBoundary listingOutputBoundary = new ListingPresenter(viewManagerModel, homeSearchViewModel, listingViewModel);
+        ListingOutputBoundary listingOutputBoundary = new ListingPresenter(viewManagerModel, listingViewModel);
 
         ListingFactory listingFactory = new ListingFactory();
 
         ListingInputBoundary listingInteractor = new ListingInteractor(listingDataAccessObject, listingOutputBoundary, listingFactory);
 
-        return new ListingController(listingInteractor);
+        return new ListingController(listingInteractor, homeSearchViewModel, viewManagerModel);
     }
 }

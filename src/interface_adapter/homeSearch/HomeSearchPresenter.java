@@ -15,7 +15,7 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
     private ViewManagerModel viewManagerModel;
 
 
-    // TODO: link listing view model?
+    // TODO: can get rid of listing view model here?
     public HomeSearchPresenter(HomeSearchViewModel homesearchViewModel, ListingViewModel listingViewModel, ViewManagerModel viewManagerModel) {
         this.homesearchViewModel = homesearchViewModel;
         this.listingViewModel = listingViewModel;
@@ -29,21 +29,6 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
         viewManagerModel.firePropertyChanged();
 
 
-    }
-    @Override
-    public void prepareListingView(HomeOutputData homeOutputData) {
-        ListingState listingState = listingViewModel.getState();
-        listingState.setAddress(homeOutputData.getAddress());
-        listingState.setNumRooms(homeOutputData.getNumRooms());
-        listingState.setPrice(homeOutputData.getPrice());
-        listingState.setNumBaths(homeOutputData.getNumBaths());
-        listingState.setWalkScore(homeOutputData.getWalkScore());
-        listingState.setFurnished(homeOutputData.getFurnished());
-        listingState.setListingType(homeOutputData.getListingType());
-        this.listingViewModel.setState(listingState);
-        listingViewModel.firePropertyChanged();
-        viewManagerModel.setActiveView(listingViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
     }
 
 }

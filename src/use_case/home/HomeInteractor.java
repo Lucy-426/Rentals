@@ -41,8 +41,6 @@ public class HomeInteractor implements HomeInputBoundary {
         // homeDataAccessObject.filter();
         HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
         // homePresenter.prepareSuccessView(homeOutputData);
-        // TODO: change homeoutputdata? maybe create listing from home input data?
-        homePresenter.prepareListingView(homeOutputData);
     }
 
 }
