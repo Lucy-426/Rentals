@@ -5,7 +5,7 @@ public class HomeOutputData {
 
     private final String numRooms;
 
-    private final String priceRange;
+    private final String price;
 
     private final String numBaths;
 
@@ -15,14 +15,36 @@ public class HomeOutputData {
 
     private final String listingType;
 
-    public HomeOutputData(String address, String numRooms, String priceRange,
+    public HomeOutputData(String address, String numRooms, String price,
                           String numBaths, String walkScore, String furnished, String listingType) {
         this.address = address;
         this.numRooms = numRooms;
-        this.priceRange = priceRange;
+        this.price = price;
         this.numBaths = numBaths;
         this.walkScore = walkScore;
         this.furnished = furnished;
         this.listingType = listingType;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+    public String getNumRooms() {
+        return numRooms;
+    }
+    public String getPrice() {
+        return price;
+    }
+    public String getNumBaths() {
+        return numBaths;
+    }
+    public String getWalkScore() {
+        return walkScore;
+    }
+    public String getFurnished() {
+        return furnished;
+    }
+    public String getListingType() {
+        return listingType;
     }
 }

@@ -38,7 +38,11 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("listing type: " + homeInputData.getListingType());
 
         // TODO: filtering step goes here, output data should be the filtered properties
+        // homeDataAccessObject.filter();
         HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
-        homePresenter.prepareSuccessView(homeOutputData);
+        // homePresenter.prepareSuccessView(homeOutputData);
+        // TODO: change homeoutputdata? maybe create listing from home input data?
+        homePresenter.prepareListingView(homeOutputData);
     }
+
 }

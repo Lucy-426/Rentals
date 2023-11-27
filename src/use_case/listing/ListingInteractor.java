@@ -1,15 +1,20 @@
 package use_case.listing;
 
+import entity.Listing;
+import entity.ListingFactory;
 import entity.PropertyFactory;
 import use_case.home.HomeOutputBoundary;
 
 public class ListingInteractor implements ListingInputBoundary{
-    final ListingOutputBoundary listingPresenter;
-    final PropertyFactory propertyFactory;
 
-    public ListingInteractor(ListingOutputBoundary listingOutputBoundary, PropertyFactory propertyFactory) {
+    final ListingDataAccessInterface listingDataAccessObject;
+    final ListingOutputBoundary listingPresenter;
+    final ListingFactory listingFactory;
+
+    public ListingInteractor(ListingDataAccessInterface listingDataAccessInterface, ListingOutputBoundary listingOutputBoundary, ListingFactory listingFactory) {
+        this.listingDataAccessObject = listingDataAccessInterface;
         this.listingPresenter = listingOutputBoundary;
-        this.propertyFactory = propertyFactory;
+        this.listingFactory = listingFactory;
     }
 
 

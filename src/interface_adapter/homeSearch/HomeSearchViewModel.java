@@ -12,7 +12,7 @@ public class HomeSearchViewModel extends ViewModel {
 
     public final String[] numRoomStrings = {"all", "1", "2", "3", "4", "5+"};
 
-    public final String[] priceRangeStrings = {"all", "<100000", "100000-300000", "300000-500000", "500000"};
+    public final String[] priceRangeStrings = {"all", "<100000", "100000-300000", "300000-500000", "500000+"};
 
     public final String[] numBathsStrings = {"all", "1", "2", "3", "4+"};
     public final String[] walkScoreStrings = {"all", "1-3", "3-6", "6-10"};

@@ -1,13 +1,7 @@
 package use_case.listing;
 
 public class ListingInputData {
-    // should we just have a property id all pull all the data from that
-//    private final String propertyId;
-//
-//    public ListingInputData(String propertyId) {
-//        this.propertyId = propertyId;
-//    }
-    // or should we list all the data
+
     private final String rentalType;
     private final int daysListedAgo;
     private final float price;

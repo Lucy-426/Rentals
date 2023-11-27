@@ -3,6 +3,7 @@ package view;
 import interface_adapter.homeSearch.HomeSearchController;
 import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
+import interface_adapter.listing.ListingController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class HomeSearchView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -29,18 +32,15 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private JComboBox<String> walkScore;
     private JComboBox<String> furnished;
     private JComboBox<String> listingType;
-
-
-
-
     private JTextArea listingsArea;
     private JScrollPane listingsScroll;
-
+    private ArrayList<JButton> listingButtons = new ArrayList<>();
 
     private final HomeSearchController homesearchController;
 
-    public HomeSearchView(HomeSearchController controller, HomeSearchViewModel viewModel) {
-        this.homesearchController = controller;
+
+    public HomeSearchView(HomeSearchController homeController, HomeSearchViewModel viewModel) {
+        this.homesearchController = homeController;
         this.homesearchViewModel = viewModel;
         homesearchViewModel.addPropertyChangeListener(this);
 
@@ -81,7 +81,6 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         listingType = new JComboBox<>(homesearchViewModel.listingTypeStrings);
         listingType.setSelectedIndex(0);
         listingType.addActionListener(this);
-
 
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -128,8 +127,30 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         listingsArea = new JTextArea(20, 20);
         listingsArea.setEditable(false); // if you want to make it read-only
         listingsArea.setText("Listings would go here...\n");
-//    Create a JScrollPane and add the JTextArea to it
-        listingsScroll = new JScrollPane(listingsArea);
+
+        // Create a JPanel for the buttons to put in the JScrollPane
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+
+        // TODO: make it so listings in buttons aren't hard coded, figure out how to have default properties
+        JButton listing1 = new JButton("listing1");
+        listing1.addActionListener(this);
+        JButton listing2 = new JButton("listing2");
+        listing2.addActionListener(this);
+        JButton listing3 = new JButton("listing3");
+        listing3.addActionListener(this);
+        JButton listing4 = new JButton("listing4");
+        listing4.addActionListener(this);
+        listingButtons.add(listing1);
+        listingButtons.add(listing2);
+        listingButtons.add(listing3);
+        listingButtons.add(listing4);
+
+        for (JButton button : listingButtons) {
+            buttonsPanel.add(button);
+        }
+        // Create a JScrollPane and add the JPanel of buttons to it
+        listingsScroll = new JScrollPane(buttonsPanel);
         listingsScroll.setPreferredSize(new Dimension(200, 200));  // Set a preferred size for the JScrollPane
 
 
@@ -167,18 +188,21 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         );
         searchButton.addActionListener(
                 new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == searchButton) {
                             // Determine whether search bar input is a city, address, or listing ID
-                            if (homesearchViewModel.getState().getSearchBarInput().matches("[0-9]+")) {
+                            String input = homesearchViewModel.getState().getSearchBarInput();
+                            if (input == null) {} // if nothing was typed in the search bar
+                            else if (input.matches("[0-9]+")) {
                                 HomeSearchState currentState = homesearchViewModel.getState();
                                 currentState.setId(homesearchViewModel.getState().getSearchBarInput());
                                 homesearchViewModel.setState(currentState);
-                            } else if (homesearchViewModel.getState().getSearchBarInput().matches("[a-zA-Z\\s]+")) {
+                            } else if (input.matches("[a-zA-Z\\s]+")) {
                                 HomeSearchState currentState = homesearchViewModel.getState();
                                 currentState.setCity(homesearchViewModel.getState().getSearchBarInput());
                                 homesearchViewModel.setState(currentState);
-                            } else if (homesearchViewModel.getState().getSearchBarInput().matches(".+")) {
+                            } else if (input.matches(".+")) {
                                 HomeSearchState currentState = homesearchViewModel.getState();
                                 currentState.setAddress(homesearchViewModel.getState().getSearchBarInput());
                                 homesearchViewModel.setState(currentState);
@@ -196,6 +220,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         numRooms.addActionListener(
                 new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == numRooms) {
                             HomeSearchState currentState = homesearchViewModel.getState();
@@ -210,6 +235,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         priceRange.addActionListener(
                 new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == priceRange) {
                             HomeSearchState currentState = homesearchViewModel.getState();
@@ -224,6 +250,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         numBaths.addActionListener(
                 new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == numBaths) {
                             HomeSearchState currentState = homesearchViewModel.getState();
@@ -238,6 +265,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         walkScore.addActionListener(
                 new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == walkScore) {
                             HomeSearchState currentState = homesearchViewModel.getState();
@@ -252,6 +280,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         furnished.addActionListener(
                 new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == furnished) {
                             HomeSearchState currentState = homesearchViewModel.getState();
@@ -266,6 +295,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         listingType.addActionListener(
                 new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == listingType) {
                             HomeSearchState currentState = homesearchViewModel.getState();
@@ -281,8 +311,18 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
 
     // TODO: action performed and property change
-    public void actionPerformed(ActionEvent e) {
-        // System.out.println("action Performed");
+    public void actionPerformed(ActionEvent evt) {
+        for (JButton button : listingButtons) {
+            if (evt.getSource() == button) {
+                // TODO: edit this execute?
+                homesearchController.execute(homesearchViewModel.getState().getId(),
+                        homesearchViewModel.getState().getCity(), homesearchViewModel.getState().getAddress(),
+                        homesearchViewModel.getState().getNumRooms(), homesearchViewModel.getState().getPriceRange(),
+                        homesearchViewModel.getState().getNumBaths(), homesearchViewModel.getState().getWalkScore(),
+                        homesearchViewModel.getState().getFurnished(), homesearchViewModel.getState().getListingType());
+                System.out.println("listing");
+            }
+        }
     }
 
     @Override

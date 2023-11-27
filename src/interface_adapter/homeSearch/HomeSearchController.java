@@ -16,4 +16,5 @@ public class HomeSearchController {
 
         homeInteractor.execute(homeInputData);
     }
+
 }
