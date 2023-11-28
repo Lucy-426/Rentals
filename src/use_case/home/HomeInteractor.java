@@ -32,8 +32,5 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("walk score: " + homeInputData.getWalkScore());
         System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
         System.out.println("listing type: " + homeInputData.getListingType());
-
-        HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
-        homePresenter.prepareSuccessView(homeOutputData);
     }
 }
