@@ -1,0 +1,106 @@
+package data_access;
+
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.PlacesApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.PlacesSearchResponse;
+import com.google.maps.model.PlacesSearchResult;
+import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
+import use_case.CenterMap.CenterMapDataAccessInterface;
+
+public class MapDataAccessObject implements CenterMapDataAccessInterface {
+
+    private static final String MAPS_API_KEY = "AIzaSyAMz9doGhcdEYjPoXY3Cv4TCd58-eHDubU";
+
+//    public void addWaypoint(double lat, double lng) {
+//        waypoints.add(new DefaultWaypoint(lat, lng));
+//    }
+//
+//    // IMPORTANT: ALL addresses to be shown on the map must be added to waypoints
+//    // via addWaypoint BEFORE calling populate!
+//    public void populate() {
+//        waypointPainter.setWaypoints(waypoints);
+//    }
+
+    @Override
+    public boolean exists (String address) {
+//        GeoApiContext context = new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build();
+//
+//        try {
+//            // Perform geocoding to get the location information
+//            GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
+//
+//            // Check if there is at least one result and that it contains lat/lng coordinates
+//            return results[0].geometry.location != null;
+//
+//        } catch (Exception e) {
+//            // Not a valid address
+//            e.printStackTrace();
+//            return false;
+//        }
+        return true;
+    }
+
+    public String addressFromCoordinates(double lat, double lng) {
+        GeoApiContext context = new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build();
+
+        try {
+            // Perform geocoding request
+            GeocodingResult[] results = GeocodingApi.newRequest(context)
+                    .latlng(new com.google.maps.model.LatLng(lat, lng))
+                    .await();
+
+            // Print the formatted address
+            if (results != null && results.length > 0) {
+                return results[0].formattedAddress;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public double getLat(String address) {
+        try {
+            PlacesSearchResponse placesSearchResponse = PlacesApi.textSearchQuery(
+                    new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build(),
+                    address).await();
+
+            PlacesSearchResult result = placesSearchResponse.results[0];
+            LatLng location = result.geometry.location;
+            return location.lat;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public double getLong(String address) {
+        try {
+            PlacesSearchResponse placesSearchResponse = PlacesApi.textSearchQuery(
+                    new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build(),
+                    address).await();
+
+            PlacesSearchResult result = placesSearchResponse.results[0];
+            LatLng location = result.geometry.location;
+            return location.lng;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public void centerMap(double lat, double lng) {
+
+    }
+}
