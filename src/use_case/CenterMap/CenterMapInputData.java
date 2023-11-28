@@ -1,11 +1,11 @@
-package use_case.search;
+package use_case.CenterMap;
 
-public class SearchInputData {
+public class CenterMapInputData {
 
     // Could be lat/lng coordinates, an address, or a city
     final private String address;
 
-    public SearchInputData(String address) {
+    public CenterMapInputData(String address) {
         this.address = address;
     }
 
