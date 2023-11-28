@@ -1,6 +1,6 @@
-package use_case.search;
+package use_case.CenterMap;
 
-public interface SearchDataAccessInterface {
+public interface CenterMapDataAccessInterface {
 
     // Verifies whether an address exists (users can presumably enter lat/long, a human-readable address, or a city)
     boolean exists(String address);
