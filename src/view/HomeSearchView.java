@@ -167,32 +167,9 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         jxMapKit.setDataProviderCreditShown(true);
         jxMapKit.setZoom(5);
         jxMapKit.setAddressLocationShown(true);
-
-
-    // Displaying waypoints
-    // Note: this should be done in the add listings use case or
-    // another file, but I'll leave it here for reference
-//        Set<Waypoint> waypoints = new HashSet<>();
-//        waypoints.add(new DefaultWaypoint(43.6669356, -79.3945384));
-//        waypoints.add(new DefaultWaypoint(43.6634425, -79.3964002));
-//        WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<>();
-//        waypointPainter.setWaypoints(waypoints);
-
-
-    // Add the waypoint painter to the map viewer
-//        jxMapKit.getMainMap().setOverlayPainter(waypointPainter);
-
-
-    // Set starting point at UofT
-//        GeoPosition waypoint1 = new GeoPosition(43.6634425, -79.3964002);
         jxMapKit.setAddressLocation(homesearchViewModel.startPosition);
 
-        GridBagConstraints rc = new GridBagConstraints();
-        rc.gridx = 1;
-        rc.gridy = 0;
-        rc.gridheight = 7;
-        rc.anchor = GridBagConstraints.EAST;
-        add(jxMapKit, rc);
+        this.add(jxMapKit);
 
 
         homeSearchBar.addKeyListener(
