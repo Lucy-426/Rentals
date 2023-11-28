@@ -1,5 +1,5 @@
-package use_case.search;
+package use_case.CenterMap;
 
-public interface SearchInputBoundary {
-    void execute(SearchInputData searchInputData);
+public interface CenterMapInputBoundary {
+    void execute(CenterMapInputData centerMapInputData);
 }
