@@ -9,7 +9,4 @@ public interface CenterMapDataAccessInterface {
     double getLat(String address);
 
     double getLong(String address);
-
-    // Center map on the address
-    void centerMap(double lat, double lng);
 }
