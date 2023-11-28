@@ -16,8 +16,7 @@ public class HomeOutputData {
     private final String listingType;
 
     public HomeOutputData(String address, String numRooms, String priceRange,
-                          String numBaths, String walkScore, String furnished,
-                          String listingType, double latitude, double longitude) {
+                          String numBaths, String walkScore, String furnished, String listingType) {
         this.address = address;
         this.numRooms = numRooms;
         this.priceRange = priceRange;
