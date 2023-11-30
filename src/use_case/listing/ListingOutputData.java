@@ -3,6 +3,8 @@ package use_case.listing;
 public class ListingOutputData {
 
     private final String id;
+
+    private final String city;
     private final String address;
 
     private final String numRooms;
@@ -17,9 +19,10 @@ public class ListingOutputData {
 
     private final String listingType;
 
-    public ListingOutputData(String id, String address, String numRooms, String price,
+    public ListingOutputData(String id, String city, String address, String numRooms, String price,
                              String numBaths, String walkScore, String furnished, String listingType) {
         this.id = id;
+        this.city = city;
         this.address = address;
         this.numRooms = numRooms;
         this.price = price;
@@ -29,6 +32,12 @@ public class ListingOutputData {
         this.listingType = listingType;
     }
 
+    public String getId() {
+        return id;
+    }
+    public String getCity() {
+        return city;
+    }
     public String getAddress(){
         return address;
     }

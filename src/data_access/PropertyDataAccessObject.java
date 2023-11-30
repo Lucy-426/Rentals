@@ -20,8 +20,6 @@ import java.util.*;
 public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final File csvFile;
 
-    private File filteredcsvFile;
-
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
@@ -282,29 +280,6 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
     }
 
-    // Writing the input data to a csv file
-    private void saveFilteredProperties() {
-        BufferedWriter writer;
-        try {
-            writer = new BufferedWriter(new FileWriter(filteredcsvFile));
-            writer.write(String.join(",", headers.keySet()));
-            writer.newLine();
-
-            // Go through properties and format attributes to csv file columns
-            for (Property property : filtered_properties.values()) {
-                String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(), property.getPriceRange(),
-                        property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType()
-                );
-                writer.write(line);
-                writer.newLine();
-            }
-
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public HashMap<String, String> getFilteredProperties() {
         HashMap <String, String> displayProperties = new HashMap<>();
@@ -313,4 +288,11 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
         return displayProperties;
     }
+
+    @Override
+    public Property getProperty(String id) {
+        return properties.get(id);
+    }
+
+
 }

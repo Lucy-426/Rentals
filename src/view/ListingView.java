@@ -1,6 +1,5 @@
 package view;
 
-import entity.Listing;
 import interface_adapter.listing.ListingController;
 import interface_adapter.listing.ListingViewModel;
 
@@ -156,6 +155,8 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("property change");
+        // TODO: add all the info here
 
     }
 }

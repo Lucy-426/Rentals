@@ -37,7 +37,6 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
         System.out.println("listing type: " + homeInputData.getListingType());
 
-        // TODO: filtering step goes here, output data should be the filtered properties
         homeDataAccessObject.filter();
         HashMap<String, String> displayedProperties = homeDataAccessObject.getFilteredProperties();
         HomeOutputData homeOutputData = new HomeOutputData(displayedProperties);

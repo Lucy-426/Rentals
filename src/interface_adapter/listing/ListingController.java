@@ -21,10 +21,8 @@ public class ListingController {
         this.viewManagerModel = viewManagerModel;
     }
 
-    public void execute(String id, String address, String numRooms, String price,
-                        String numBaths, String walkScore, String furnished, String listingType){
-        ListingInputData listingInputData = new ListingInputData(id, address, numRooms, price, numBaths,
-                walkScore, furnished, listingType);
+    public void execute(String id){
+        ListingInputData listingInputData = new ListingInputData(id);
 
         listingInteractor.execute(listingInputData);
     }

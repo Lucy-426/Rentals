@@ -298,11 +298,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         for (JButton button : listingButtons) {
             if (evt.getSource() == button) {
                 // TODO: change input for this execute?
-
-                listingController.execute(homesearchViewModel.getState().getId(), homesearchViewModel.getState().getAddress(),
-                        homesearchViewModel.getState().getNumRooms(), homesearchViewModel.getState().getPriceRange(),
-                        homesearchViewModel.getState().getNumBaths(), homesearchViewModel.getState().getWalkScore(),
-                        homesearchViewModel.getState().getFurnished(), homesearchViewModel.getState().getListingType());
+                System.out.println(button.getName());
+                listingController.execute(button.getName());
             }
         }
     }
@@ -314,6 +311,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
             listingButtons = new ArrayList<>();
             for (String id : homesearchViewModel.getState().getDisplayedListings().keySet()) {
                 JButton listingButton = new JButton(homesearchViewModel.getState().getDisplayedListings().get(id));
+                listingButton.setName(id);
                 listingButton.addActionListener(this);
                 listingButtons.add(listingButton);
             }

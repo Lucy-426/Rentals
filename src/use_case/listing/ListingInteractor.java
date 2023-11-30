@@ -1,29 +1,27 @@
 package use_case.listing;
 
-import entity.Listing;
-import entity.ListingFactory;
+import entity.Property;
 import entity.PropertyFactory;
-import use_case.home.HomeOutputBoundary;
+import use_case.home.HomeSearchDataAccessInterface;
 
 public class ListingInteractor implements ListingInputBoundary{
 
-    final ListingDataAccessInterface listingDataAccessObject;
+    final HomeSearchDataAccessInterface homeSearchDataAccessObject;
     final ListingOutputBoundary listingPresenter;
-    final ListingFactory listingFactory;
 
-    public ListingInteractor(ListingDataAccessInterface listingDataAccessInterface, ListingOutputBoundary listingOutputBoundary, ListingFactory listingFactory) {
-        this.listingDataAccessObject = listingDataAccessInterface;
+    public ListingInteractor(HomeSearchDataAccessInterface homeSearchDataAccessInterface, ListingOutputBoundary listingOutputBoundary) {
+        this.homeSearchDataAccessObject = homeSearchDataAccessInterface;
         this.listingPresenter = listingOutputBoundary;
-        this.listingFactory = listingFactory;
     }
 
 
     @Override
     public void execute(ListingInputData listingInputData) {
-        // TODO: edit so it's not hard coded
 
-        ListingOutputData listingOutputData = new ListingOutputData("123456", "Apartment","2", "300000", "1", "3", "furnished",
-                "apartment");
+        Property property = homeSearchDataAccessObject.getProperty(listingInputData.getId());
+
+        ListingOutputData listingOutputData = new ListingOutputData(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(),
+                property.getPriceRange(), property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType());
         listingPresenter.prepareSuccessView(listingOutputData);
 
     }
