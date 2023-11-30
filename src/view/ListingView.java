@@ -38,7 +38,6 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         back.addActionListener(this);
         buttons.add(back);
 
-        // TODO: change this
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 0.5;
         JLabel name = new JLabel("Listing View");
@@ -149,6 +148,7 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
     public void actionPerformed(ActionEvent e) {
         for (JButton button : listingButtons) {
             if (e.getSource() == button) {
+                // TODO: add functionality
                 System.out.println("listing button");
             }
         }

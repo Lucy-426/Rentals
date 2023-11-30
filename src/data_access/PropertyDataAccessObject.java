@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
@@ -23,7 +24,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
-    private final Map<String, Property> filtered_properties = new HashMap<>();
+    private Map<String, Property> filtered_properties;
 
     // Root URL - can later adapt so that for various functions, we attach ending (i.e. .../property/detail)
     private static final String API_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0/";
@@ -156,8 +157,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 //    TODO: test the filter method
     @Override
     public void filter() {
-//        filtered_properties.putAll(properties);
-
+        filtered_properties = new HashMap<>();
         String id = inputProperty.getID();
         String city = inputProperty.getCity();
         String address = inputProperty.getAddress();
@@ -193,10 +193,10 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     }
                 }
             }
-            System.out.println("we've filtered");
-            filteredcsvFile = new File("./filtered_properties.csv");
-            saveFilteredProperties();
         }
+        System.out.println("we've filtered");
+        System.out.println(filtered_properties.entrySet());
+
     }
 
 
@@ -223,11 +223,14 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 //    helper method to check if inputproperty listing type filter word is found in csv property listing type
     private boolean listingTypeCheck(Property property) {
         String listingType = inputProperty.getListingType();
-        if (listingType.equals("other")) {
+        if (listingType == null) {
+            return true;
+        }
+        else if (listingType.equals("other")) {
 //            return true if "House", "Townhouse", "Apartment" not in the csv property
             return !property.getListingType().contains("House") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
         } else {
-            return (listingType == null || listingType.equals("all") || property.getListingType().contains(listingType));
+            return (listingType.equals("all") || property.getListingType().contains(listingType));
         }
     }
 
@@ -277,5 +280,14 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public HashMap<String, String> getFilteredProperties() {
+        HashMap <String, String> displayProperties = new HashMap<>();
+        for (HashMap.Entry<String, Property> entry : filtered_properties.entrySet()) {
+            displayProperties.put(entry.getKey(), entry.getValue().getAddress());
+        }
+        return displayProperties;
     }
 }

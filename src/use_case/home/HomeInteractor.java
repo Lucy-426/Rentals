@@ -3,6 +3,8 @@ package use_case.home;
 import entity.Property;
 import entity.PropertyFactory;
 
+import java.util.HashMap;
+
 public class HomeInteractor implements HomeInputBoundary {
 
     final HomeSearchDataAccessInterface homeDataAccessObject;
@@ -19,8 +21,6 @@ public class HomeInteractor implements HomeInputBoundary {
     }
     @Override
     public void execute(HomeInputData homeInputData) {
-        // TODO: change input/output data so it's not hard coded, and
-        //  also change so it doesn't create a property but rather passes it to a filter
 
         Property property = propertyFactory.create(homeInputData.getId(), homeInputData.getCity(), homeInputData.getAddress(),
                 homeInputData.getNumRooms(), homeInputData.getPriceRange(), homeInputData.getNumBaths(),
@@ -38,9 +38,10 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("listing type: " + homeInputData.getListingType());
 
         // TODO: filtering step goes here, output data should be the filtered properties
-        // homeDataAccessObject.filter();
-        HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
-        // homePresenter.prepareSuccessView(homeOutputData);
+        homeDataAccessObject.filter();
+        HashMap<String, String> displayedProperties = homeDataAccessObject.getFilteredProperties();
+        HomeOutputData homeOutputData = new HomeOutputData(displayedProperties);
+        homePresenter.prepareSuccessView(homeOutputData);
     }
 
 }

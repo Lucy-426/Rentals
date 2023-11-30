@@ -48,7 +48,7 @@ public class HomeSearchUseCaseFactory {
 
         HomeInputBoundary homeInteractor = new HomeInteractor(propertyDataAccessObject, homeOutputBoundary, propertyFactory);
 
-        return new HomeSearchController(homeInteractor);
+        return new HomeSearchController(homeInteractor, homeSearchViewModel, viewManagerModel);
 
     }
     public static ListingView createListingView(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {

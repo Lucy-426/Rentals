@@ -25,6 +25,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
 
+    private JButton update;
+
 //    filters
     private JComboBox<String> numRooms;
     private JComboBox<String> priceRange;
@@ -32,10 +34,15 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private JComboBox<String> walkScore;
     private JComboBox<String> furnished;
     private JComboBox<String> listingType;
-    private JTextArea listingsArea;
+
+    // Scroll pane
     private JScrollPane listingsScroll;
     private ArrayList<JButton> listingButtons = new ArrayList<>();
 
+    private JPanel buttonsPanel;
+
+
+    // Controllers
     private final HomeSearchController homesearchController;
 
     private final ListingController listingController;
@@ -124,37 +131,13 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         add(listingType);
 
         this.add(new JLabel("Listings:"));
-//    scroll pane for listings
-//    Create a JTextArea
-        listingsArea = new JTextArea(20, 20);
-        listingsArea.setEditable(false); // if you want to make it read-only
-        listingsArea.setText("Listings would go here...\n");
 
         // Create a JPanel for the buttons to put in the JScrollPane
-        JPanel buttonsPanel = new JPanel();
+        buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
-        // TODO: make it so listings in buttons aren't hard coded, figure out how to have default properties
-        JButton listing1 = new JButton("listing1");
-        listing1.addActionListener(this);
-        JButton listing2 = new JButton("listing2");
-        listing2.addActionListener(this);
-        JButton listing3 = new JButton("listing3");
-        listing3.addActionListener(this);
-        JButton listing4 = new JButton("listing4");
-        listing4.addActionListener(this);
-        listingButtons.add(listing1);
-        listingButtons.add(listing2);
-        listingButtons.add(listing3);
-        listingButtons.add(listing4);
-
-        for (JButton button : listingButtons) {
-            buttonsPanel.add(button);
-        }
-        // Create a JScrollPane and add the JPanel of buttons to it
-        listingsScroll = new JScrollPane(buttonsPanel);
+        listingsScroll = new JScrollPane(new JLabel("Click Search to find listings"));
         listingsScroll.setPreferredSize(new Dimension(200, 200));  // Set a preferred size for the JScrollPane
-
 
 //     Set constraints for JScrollPane
         c.gridx = 20;  // Change to desired column
@@ -166,7 +149,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         c.weighty = 1.0;  // The extra space should be distributed to this row
 
         // Add the JScrollPane to the panel
-        add(listingsScroll, c);
+        this.add(listingsScroll, c);
 
 
         homeSearchBar.addKeyListener(
@@ -311,12 +294,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         );
     }
 
-
-    // TODO: action performed and property change
     public void actionPerformed(ActionEvent evt) {
         for (JButton button : listingButtons) {
             if (evt.getSource() == button) {
-                // TODO: change input for this execute
+                // TODO: change input for this execute?
+
                 listingController.execute(homesearchViewModel.getState().getId(), homesearchViewModel.getState().getAddress(),
                         homesearchViewModel.getState().getNumRooms(), homesearchViewModel.getState().getPriceRange(),
                         homesearchViewModel.getState().getNumBaths(), homesearchViewModel.getState().getWalkScore(),
@@ -327,6 +309,26 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        // Updates the home page to add buttons according to the filtered listings
+        if (!(homesearchViewModel.getState().getDisplayedListings() == null)) {
+            listingButtons = new ArrayList<>();
+            for (String id : homesearchViewModel.getState().getDisplayedListings().keySet()) {
+                JButton listingButton = new JButton(homesearchViewModel.getState().getDisplayedListings().get(id));
+                listingButton.addActionListener(this);
+                listingButtons.add(listingButton);
+            }
+        }
+        buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+        for (JButton button : listingButtons) {
+            buttonsPanel.add(button);
+        }
+        this.remove(listingsScroll);
+        listingsScroll = new JScrollPane(buttonsPanel);
+        listingsScroll.setPreferredSize(new Dimension(200, 200));
+        this.add(listingsScroll);
+        this.revalidate();
+        this.repaint();
     }
 }
 

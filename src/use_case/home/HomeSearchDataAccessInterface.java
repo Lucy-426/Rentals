@@ -8,4 +8,6 @@ public interface HomeSearchDataAccessInterface {
 
     void save(Property property);
     void filter();
+
+    HashMap<String, String> getFilteredProperties();
 }

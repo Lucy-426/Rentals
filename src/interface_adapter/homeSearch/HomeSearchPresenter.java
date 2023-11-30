@@ -24,7 +24,10 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
     @Override
     public void prepareSuccessView(HomeOutputData homeOutputData) {
         HomeSearchState homeSearchState = homesearchViewModel.getState();
-        // TODO: update states for home view
+        homeSearchState.setDisplayedListings(homeOutputData.getDisplayedProperties());
+        homesearchViewModel.setState(homeSearchState);
+        homesearchViewModel.firePropertyChanged();
+
         viewManagerModel.setActiveView(homesearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 

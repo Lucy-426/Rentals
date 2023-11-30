@@ -1,7 +1,6 @@
 package interface_adapter.homeSearch;
 
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.HashMap;
 
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.
@@ -25,7 +24,7 @@ public class HomeSearchState {
 
     private String listingType;
 
-    private ArrayList<Properties> displayedListings;
+    private HashMap<String, String> displayedListings;
 
     public HomeSearchState(HomeSearchState copy) {
         searchBarInput = copy.searchBarInput;
@@ -77,7 +76,7 @@ public class HomeSearchState {
         return listingType;
     }
 
-    public ArrayList<Properties> getDisplayedListings() {
+    public HashMap<String, String> getDisplayedListings() {
         return displayedListings;
     }
 
@@ -117,7 +116,7 @@ public class HomeSearchState {
         this.listingType = listingType;
     }
 
-    public void setDisplayedListings(ArrayList<Properties> displayedListings) {
+    public void setDisplayedListings(HashMap<String, String> displayedListings) {
         this.displayedListings = displayedListings;
     }
 }
