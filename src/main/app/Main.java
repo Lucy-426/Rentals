@@ -1,8 +1,11 @@
 package main.app;
 
+import data_access.PropertyDataAccessObject;
+import entity.PropertyFactory;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.listing.ListingViewModel;
+import use_case.home.HomeSearchDataAccessInterface;
 import view.HomeSearchView;
 import view.ListingView;
 import view.ViewManager;
@@ -34,10 +37,18 @@ public class Main {
         HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
         ListingViewModel listingViewModel = new ListingViewModel();
 
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel, listingViewModel);
+        PropertyDataAccessObject propertyDataAccessObject;
+        try {
+            propertyDataAccessObject = new PropertyDataAccessObject("./properties.csv", new PropertyFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         views.add(homeSearchView, homeSearchView.viewName);
 
-        ListingView listingView = HomeSearchUseCaseFactory.createListingView(viewManagerModel, homesearchViewModel, listingViewModel);
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         views.add(listingView, listingView.viewName);
 
         viewManagerModel.setActiveView(homeSearchView.viewName);
