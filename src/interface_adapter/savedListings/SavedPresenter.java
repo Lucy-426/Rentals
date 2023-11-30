@@ -1,2 +1,4 @@
-package interface_adapter.savedListings;public class SavedPresenter {
+package interface_adapter.savedListings;
+
+public class SavedPresenter {
 }

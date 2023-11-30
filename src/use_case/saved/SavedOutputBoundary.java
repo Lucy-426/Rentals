@@ -1,2 +1,7 @@
-package use_case.saved;public class SavedOutputBoundary {
+package use_case.saved;
+
+public interface SavedOutputBoundary {
+    void prepareSuccessView(SavedOutputData savedOutputData);
+
+    void prepareListingView(SavedOutputData savedOutputData);
 }

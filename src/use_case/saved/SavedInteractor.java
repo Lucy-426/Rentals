@@ -1,2 +1,4 @@
-package use_case.saved;public class SavedInteractor {
+package use_case.saved;
+
+public class SavedInteractor {
 }
