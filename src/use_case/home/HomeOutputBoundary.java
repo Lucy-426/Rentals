@@ -7,5 +7,7 @@ public interface HomeOutputBoundary {
 
     void displayLoginView();
 
+    void logOut();
+
     //TODO: add prepareFailView
 }

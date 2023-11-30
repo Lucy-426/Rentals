@@ -22,6 +22,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     private final JTextField homeSearchBar = new JTextField(30);
 
+    private JPanel buttons;
+
     private JButton searchButton;
 
 //    filters
@@ -53,77 +55,34 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         JLabel title = new JLabel(homesearchViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel buttons = new JPanel();
+        buttons = new JPanel();
+
+        JButton signUp = new JButton("Sign Up");
+        buttons.add(signUp);
+        JButton logIn = new JButton("Log In");
+        buttons.add(logIn);
+
+        signUp.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(signUp)) {
+                            homesearchController.displaySignupView();
+                        }
+                    }
+                }
+        );
+
+        logIn.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(logIn)) {
+                            homesearchController.displayLoginView();
+                        }
+                    }
+                }
+        );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.add(buttons, c);
-
-
-        HomeSearchState currentState = homesearchViewModel.getState();
-
-        System.out.println(currentState.getLoggedIn());
-        if (currentState.getLoggedIn()) {
-            this.remove(buttons);
-            this.revalidate();
-            this.repaint();
-            buttons = new JPanel();
-            JButton profile = new JButton("Profile");
-            buttons.add(profile);
-            JButton logOut = new JButton("Log Out");
-            buttons.add(logOut);
-
-            profile.addActionListener(
-                    new ActionListener() {
-                        public void actionPerformed(ActionEvent evt) {
-                            if (evt.getSource().equals(profile)) {
-                                homesearchController.displaySignupView();
-                            }
-                        }
-                    }
-            );
-
-            logOut.addActionListener(
-                    new ActionListener() {
-                        public void actionPerformed(ActionEvent evt) {
-                            if (evt.getSource().equals(logOut)) {
-                                homesearchController.displayLoginView();
-                            }
-                        }
-                    }
-            );
-
-            this.add(buttons);
-        } else {
-            this.remove(buttons);
-            this.revalidate();
-            this.repaint();
-            buttons = new JPanel();
-            JButton signUp = new JButton("Sign Up");
-            buttons.add(signUp);
-            JButton logIn = new JButton("Log In");
-            buttons.add(logIn);
-
-            signUp.addActionListener(
-                    new ActionListener() {
-                        public void actionPerformed(ActionEvent evt) {
-                            if (evt.getSource().equals(signUp)) {
-                                homesearchController.displaySignupView();
-                            }
-                        }
-                    }
-            );
-
-            logIn.addActionListener(
-                    new ActionListener() {
-                        public void actionPerformed(ActionEvent evt) {
-                            if (evt.getSource().equals(logIn)) {
-                                homesearchController.displayLoginView();
-                            }
-                        }
-                    }
-            );
-            this.add(buttons);
-        }
 
         LabelTextPanel searchBar = new LabelTextPanel(
                 new JLabel(homesearchViewModel.SEARCH_BAR_LABEL), homeSearchBar);
@@ -216,6 +175,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         // Add the JScrollPane to the panel
         add(listingsScroll, c);
+
+        this.add(buttons);
 
         homeSearchBar.addKeyListener(
                 new KeyListener() {
@@ -344,7 +305,72 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("property change");
+        HomeSearchState currentState = homesearchViewModel.getState();
+
+        if (currentState.getLoggedIn()) {
+            this.remove(buttons);
+            this.revalidate();
+            this.repaint();
+            buttons = new JPanel();
+            JButton profile = new JButton("Profile");
+            buttons.add(profile);
+            JButton logOut = new JButton("Log Out");
+            buttons.add(logOut);
+
+            profile.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(profile)) {
+                                homesearchController.displaySignupView();
+                            }
+                        }
+                    }
+            );
+
+            logOut.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(logOut)) {
+                                homesearchController.logOut();
+                            }
+                        }
+                    }
+            );
+
+            this.add(buttons);
+        } else {
+            this.remove(buttons);
+            this.revalidate();
+            this.repaint();
+
+            buttons = new JPanel();
+            JButton signUp = new JButton("Sign Up");
+            buttons.add(signUp);
+            JButton logIn = new JButton("Log In");
+            buttons.add(logIn);
+
+            signUp.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(signUp)) {
+                                homesearchController.displaySignupView();
+                            }
+                        }
+                    }
+            );
+
+            logIn.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(logIn)) {
+                                homesearchController.displayLoginView();
+                            }
+                        }
+                    }
+            );
+
+            this.add(buttons);
+        }
     }
 }
 

@@ -44,4 +44,6 @@ public class HomeInteractor implements HomeInputBoundary {
     public void displayLoginView() {
         homePresenter.displayLoginView();
     }
+
+    public void logOut() { homePresenter.logOut(); }
 }

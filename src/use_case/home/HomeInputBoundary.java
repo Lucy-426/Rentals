@@ -6,4 +6,6 @@ public interface HomeInputBoundary {
     void displaySignupView();
 
     void displayLoginView();
+
+    void logOut();
 }
