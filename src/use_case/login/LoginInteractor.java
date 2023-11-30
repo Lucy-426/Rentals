@@ -19,8 +19,6 @@ public class LoginInteractor implements LoginInputBoundary {
 
     @Override
     public void execute(LoginInputData loginInputData) {
-        System.out.println(userDataAccessObject.existsByName(loginInputData.getUsername()));
-        System.out.println("user: " + loginInputData.getUsername());
         if (userDataAccessObject.existsByName(loginInputData.getUsername())) {
             if (Objects.equals(userDataAccessObject.getUserPassword(loginInputData.getUsername()), loginInputData.getPassword())) {
                 LoginOutputData loginOutputData = new LoginOutputData(loginInputData.getUsername());

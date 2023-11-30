@@ -21,7 +21,7 @@ public class HomeSearchState {
 
     private String listingType;
 
-    private boolean loggedIn;
+    private boolean loggedIn = false;
 
     public HomeSearchState(HomeSearchState copy) {
         id = copy.id;

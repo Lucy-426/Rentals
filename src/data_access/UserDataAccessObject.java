@@ -54,7 +54,6 @@ public class UserDataAccessObject implements UserSignupDataAccessInterface {
     @Override
     public void save(User user) {
         accounts.put(user.getName(), user);
-        System.out.println(accounts.keySet() + "save");
         this.save();
     }
 
@@ -87,7 +86,6 @@ public class UserDataAccessObject implements UserSignupDataAccessInterface {
      */
     @Override
     public boolean existsByName(String identifier) {
-        System.out.println(accounts.keySet());
         return accounts.containsKey(identifier);
     }
 

@@ -36,7 +36,7 @@ public class LoginPresenter implements LoginOutputBoundary {
         HomeSearchState homeSearchState = homeSearchViewModel.getState();
         homeSearchState.setLoggedIn(true);
         this.homeSearchViewModel.setState(homeSearchState);
-        homeSearchViewModel.firePropertyChanged();
+        this.homeSearchViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(homeSearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
