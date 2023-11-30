@@ -4,12 +4,8 @@ import interface_adapter.homeSearch.HomeSearchController;
 import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 
-import interface_adapter.search.CenterMapController;
+import interface_adapter.CenterMap.CenterMapController;
 import org.jdesktop.swingx.JXMapKit;
-import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
-import org.jdesktop.swingx.mapviewer.Waypoint;
-import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +15,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class HomeSearchView extends JPanel implements ActionListener, PropertyChangeListener {
 
