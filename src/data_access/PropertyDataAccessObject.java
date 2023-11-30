@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
@@ -28,7 +29,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
     // Root URL - can later adapt so that for various functions, we attach ending (i.e. .../property/detail)
     private static final String API_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0/";
-    private static final String API_TOKEN = "a29ec8d3d48c6a36e4ce59f96a94606a";
+    private static final String API_TOKEN = "bdc142f975386786593145e4c20e19e3";
 
     // The cities that we are getting listings from
     private static final Pair<String, String> SF_CA = new Pair<>("37.656305","-122.417006");
@@ -84,6 +85,28 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
             // Once all the cities' data have been loaded,
             // save (write all the data) to csv
             this.save();
+        } else {
+            try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+                String header = reader.readLine();
+
+                assert header.equals("id,city,address,numRooms,priceRange,numBaths,walkScore,furnished,listingType");
+
+                String row;
+                while ((row = reader.readLine()) != null) {
+                    String[] col = row.split(",");
+                    String id = String.valueOf(col[headers.get("id")]);
+                    String city = String.valueOf(col[headers.get("city")]);
+                    String address = String.valueOf(col[headers.get("address")]);
+                    String rooms = String.valueOf(col[headers.get("numRooms")]);
+                    String price = String.valueOf(col[headers.get("priceRange")]);
+                    String baths = String.valueOf(col[headers.get("numBaths")]);
+                    String walkscore = String.valueOf(col[headers.get("walkScore")]);
+                    String furnished = String.valueOf(col[headers.get("furnished")]);
+                    String listingType = String.valueOf(col[headers.get("listingType")]);
+                    Property property = propertyFactory.create(id, city, address, rooms, price, baths, walkscore, furnished, listingType);
+                    properties.put(property.getID(), property);
+                }
+            }
         }
 
     }
