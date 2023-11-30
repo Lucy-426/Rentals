@@ -18,7 +18,7 @@ public class HomeSearchViewModel extends ViewModel {
     public final String[] walkScoreStrings = {"all", "1-3", "3-6", "6-10"};
     public final String[] furnishedStrings = {"all", "furnished", "not furnished"};
 
-    public final String[] listingTypeStrings = {"all", "house", "townhouse", "apartment", "other"};
+    public final String[] listingTypeStrings = {"all", "House", "Townhouse", "Apartment", "other"};
 
 
 
