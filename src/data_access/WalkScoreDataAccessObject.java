@@ -1,4 +1,4 @@
-package entity;
+package data_access;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.PlacesApi;
@@ -8,7 +8,7 @@ import com.google.maps.model.PlacesSearchResponse;
 import com.google.maps.model.PlacesSearchResult;
 import entity.DistanceCalculation;
 
-public class WalkScore {
+public class WalkScoreDataAccessObject {
     public static double assignScore(double distance) {
         // 5-minute walk to destination
         if (distance >= 0 && distance < 0.4) {
@@ -36,7 +36,7 @@ public class WalkScore {
         }
     }
 
-    public static int calculation(double startLat, double startLng) {
+    public int calculation(double startLat, double startLng) {
         String apiKey = "AIzaSyAMz9doGhcdEYjPoXY3Cv4TCd58-eHDubU";
 
         LatLng location = new LatLng(startLat, startLng);
@@ -95,15 +95,5 @@ public class WalkScore {
             e.printStackTrace();
             return 0;
         }
-    }
-
-    // Sample calls to the walk score function - delete at the end
-    // Note that this function takes a bit of time to return a value; but you can verify that it works
-    // by enabling the print statements to see that it is iterating through each place and
-    // accumulating the walk score.
-    public static void main(String[] args) {
-//        calculation(43.6598084,-79.3998729); // A location in Toronto near campus
-//        calculation(43.5422741,-79.694035); // A location in Mississauga near UTM
-        calculation(43.649093,-79.394538); // A location in Toronto near the lakefront
     }
 }
