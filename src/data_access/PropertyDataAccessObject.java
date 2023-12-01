@@ -213,9 +213,6 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                 }
             }
         }
-        System.out.println("we've filtered");
-        System.out.println(filtered_properties.entrySet());
-
     }
 
 
