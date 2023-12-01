@@ -15,10 +15,10 @@ public class HomeSearchViewModel extends ViewModel {
     public final String[] priceRangeStrings = {"all", "<100000", "100000-300000", "300000-500000", "500000+"};
 
     public final String[] numBathsStrings = {"all", "1", "2", "3", "4+"};
-    public final String[] walkScoreStrings = {"all", "1-3", "3-6", "6-10"};
+    public final String[] walkScoreStrings = {"all", "10-30", "30-60", "60-100"};
     public final String[] furnishedStrings = {"all", "Yes", "No"};
 
-    public final String[] listingTypeStrings = {"all", "House", "Townhouse", "Apartment", "other"};
+    public final String[] listingTypeStrings = {"all", "Residence", "Townhouse", "Apartment", "other"};
 
 
 

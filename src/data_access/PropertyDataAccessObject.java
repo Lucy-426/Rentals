@@ -178,23 +178,16 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     public void filter() {
         filtered_properties = new HashMap<>();
         String id = inputProperty.getID();
-        String city = inputProperty.getCity();
         String address = inputProperty.getAddress();
-        String numRooms = inputProperty.getNumRooms();
-//      This attribute isn't used because I use it in my pricerangecheck helper method
-        String priceRange = inputProperty.getPriceRange();
-        String numBaths = inputProperty.getNumBaths();
-        String walkScore = inputProperty.getWalkScore();
         String furnished = inputProperty.getFurnished();
-        String listingType = inputProperty.getListingType();
 
 
 //      goes over the copy of the list of properties made from csv files and
 //      removes each id:property if it doesn't match the input property object attributes (user information)
         for (Map.Entry<String, Property> entry : properties.entrySet()) {
             if ((id == null) || id.equals("all") || id.equals(entry.getValue().getID())) {
-                if ((city == null) || city.equals("all") || city.equals(entry.getValue().getCity())) {
-                    if ((address == null) || address.equals("all") || address.equals(entry.getValue().getAddress())) {
+                if (cityCheck(entry.getValue())) {
+                    if (addressCheck(entry.getValue())) {
                         if (numRoomsCheck(entry.getValue())) {
                             if (priceRangeCheck(entry.getValue())) {
                                 if (numBathsCheck(entry.getValue())) {
@@ -218,62 +211,63 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
 
-
-//    helper method to find if the pricerange of inputproperty fits with the csv property
     private boolean priceRangeCheck(Property property) {
         String helperPriceRange = inputProperty.getPriceRange();
+        String propertyPriceRange = property.getPriceRange();
 
-//        compares the values of inputProperty price range to the property given as parameter.
-//        Here I assume that the given property has a fixed price and not a range.
-        if (helperPriceRange == null || helperPriceRange.equals("all")) {
+        if (helperPriceRange == null || helperPriceRange.equals("all") || helperPriceRange.isEmpty()) {
             return true;
         } else if (helperPriceRange.equals("<100000")) {
-            return Integer.valueOf(property.getPriceRange()) <= 100000;
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && Integer.valueOf(propertyPriceRange.trim()) <= 100000;
         } else if (helperPriceRange.equals("100000-300000")) {
-            return 1000000 <= Integer.valueOf(property.getPriceRange()) && Integer.valueOf(property.getPriceRange()) <= 300000;
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 100000 <= Integer.valueOf(propertyPriceRange.trim()) && Integer.valueOf(propertyPriceRange.trim()) <= 300000;
         } else if (helperPriceRange.equals("300000-500000")) {
-            return 3000000 <= Integer.valueOf(property.getPriceRange()) && Integer.valueOf(property.getPriceRange()) <= 500000;
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 300000 <= Integer.valueOf(propertyPriceRange.trim()) && Integer.valueOf(propertyPriceRange.trim()) <= 500000;
         } else {
-            return 5000000 <= Integer.valueOf(property.getPriceRange());
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 500000 <= Integer.valueOf(propertyPriceRange.trim());
         }
     }
 
-//    helper method to check if inputproperty listing type filter word is found in csv property listing type
+
+    //    helper method to check if inputproperty listing type filter word is found in csv property listing type
     private boolean listingTypeCheck(Property property) {
         String listingType = inputProperty.getListingType();
-        if (listingType == null) {
+        if (listingType == null || listingType.equals("all")) {
             return true;
         }
         else if (listingType.equals("other")) {
 //            return true if "House", "Townhouse", "Apartment" not in the csv property
-            return !property.getListingType().contains("House") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
+            return !property.getListingType().contains("Residence") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
+        } else if (listingType.equals("House")){
+            return (property.getListingType().contains("Residence"));
         } else {
-            return (listingType.equals("all") || property.getListingType().contains(listingType));
+            return (property.getListingType().contains(listingType));
         }
     }
 
-//TODO: make helper methods for city, numRooms, numBaths, address, walkscore
     private boolean numRoomsCheck(Property property) {
         String helperNumRooms = inputProperty.getNumRooms();
+        String propertyNumRooms = property.getNumRooms();
 
-        if (helperNumRooms == null || helperNumRooms.equals("all")) {
+        if (helperNumRooms == null || helperNumRooms.equals("all") || helperNumRooms.isEmpty()) {
             return true;
         } else if (helperNumRooms.equals("5+")) {
-            return Integer.valueOf(property.getNumRooms()) >= 5;
+            return propertyNumRooms != null && !propertyNumRooms.trim().isEmpty() && Integer.valueOf(propertyNumRooms.trim()) >= 5;
         } else {
-            return Integer.valueOf(helperNumRooms).equals(Integer.valueOf(property.getNumRooms()));
+            return propertyNumRooms != null && !propertyNumRooms.trim().isEmpty() && Integer.valueOf(helperNumRooms).equals(Integer.valueOf(propertyNumRooms));
         }
     }
 
     private boolean numBathsCheck(Property property) {
         String helperNumBaths = inputProperty.getNumBaths();
+        String propertyNumBaths = property.getNumBaths();
 
-        if (helperNumBaths == null || helperNumBaths.equals("all")) {
+        if (helperNumBaths == null || helperNumBaths.equals("all") || helperNumBaths.isEmpty()) {
             return true;
         } else if (helperNumBaths.equals("4+")) {
-            return Integer.valueOf(property.getNumBaths()) >= 4;
+            return propertyNumBaths != null && !propertyNumBaths.trim().isEmpty() && Integer.valueOf(propertyNumBaths.trim()) >= 4;
         } else {
-            return Integer.valueOf(helperNumBaths).equals(Integer.valueOf(property.getNumBaths()));
+            return propertyNumBaths != null && !propertyNumBaths.trim().isEmpty() && Integer.valueOf(helperNumBaths).equals(Integer.valueOf(propertyNumBaths));
         }
     }
 
@@ -282,13 +276,32 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         String helperWalkscore = inputProperty.getWalkScore();
         if (helperWalkscore == null || helperWalkscore.equals("all")) {
             return true;
-        } else if (helperWalkscore.equals("1-3")) {
-            return Integer.valueOf(property.getWalkScore()) <= 3 && Integer.valueOf(property.getWalkScore()) >= 1;
-        } else if (helperWalkscore.equals("3-6")) {
-            return Integer.valueOf(property.getWalkScore()) >= 3 && Integer.valueOf(property.getWalkScore()) <= 6;
+        } else if (helperWalkscore.equals("10-30")) {
+            return Integer.valueOf(property.getWalkScore()) <= 30 && Integer.valueOf(property.getWalkScore()) >= 10;
+        } else if (helperWalkscore.equals("30-60")) {
+            return Integer.valueOf(property.getWalkScore()) >= 30 && Integer.valueOf(property.getWalkScore()) <= 60;
         } else {
 //            don't need < 10 because properties always have walkscore less than 10
-            return Integer.valueOf(property.getWalkScore()) >= 6;
+            return Integer.valueOf(property.getWalkScore()) >= 60;
+        }
+    }
+
+    private boolean cityCheck(Property property) {
+        String helperCity = inputProperty.getCity();
+        if (helperCity == null) {
+            return true;
+        } else {
+            return (property.getCity().contains(helperCity.toUpperCase()));
+        }
+    }
+
+//    after inputting a city then deleting it with other filters the same, after pressing search button it recognizes it as an empty address and makes address attribute be empty string. This makes the list of properties empty
+    private boolean addressCheck(Property property) {
+        String helperAddress = inputProperty.getAddress();
+        if (helperAddress == null || helperAddress.isEmpty()) {
+            return true;
+        } else {
+            return (property.getAddress().contains(helperAddress.toUpperCase()));
         }
     }
 
