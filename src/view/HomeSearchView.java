@@ -3,6 +3,7 @@ package view;
 import interface_adapter.homeSearch.HomeSearchController;
 import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
+import interface_adapter.saved.SavedState;
 import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
@@ -321,7 +322,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     new ActionListener() {
                         public void actionPerformed(ActionEvent evt) {
                             if (evt.getSource().equals(profile)) {
-                                homesearchController.displayProfile();
+                                homesearchController.displayProfile(homesearchViewModel.getState().getSavedState());
                             }
                         }
                     }

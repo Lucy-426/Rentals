@@ -1,13 +1,12 @@
 package data_access;
 
+import entity.Property;
 import entity.User;
 import entity.UserFactory;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UserDataAccessObject implements UserSignupDataAccessInterface {
 
@@ -16,6 +15,8 @@ public class UserDataAccessObject implements UserSignupDataAccessInterface {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, User> accounts = new HashMap<>();
+
+    private final Map<String, ArrayList<Property>> userProperties = new HashMap<>();
 
     private UserFactory userFactory;
 
@@ -55,6 +56,23 @@ public class UserDataAccessObject implements UserSignupDataAccessInterface {
     public void save(User user) {
         accounts.put(user.getName(), user);
         this.save();
+    }
+
+    @Override
+    public ArrayList<Property> getUserProperties(String username) {
+        return userProperties.get(username);
+    }
+
+    // this method should only be able to be called from a logged in state
+    // in this case, no need to check if user exists, check would've happened when logging in
+    @Override
+    public void saveUserProperty(String username, Property property) {
+        if (userProperties.containsKey(username)) {
+            userProperties.get(username).add(property);
+        } else {
+            userProperties.put(username, new ArrayList<Property>());
+            userProperties.get(username).add(property);
+        }
     }
 
     private void save() {

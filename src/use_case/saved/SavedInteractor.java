@@ -18,5 +18,9 @@ public class SavedInteractor implements SavedInputBoundary {
 
     }
 
+    public void displayHome() { savedPresenter.displayHome(); }
+
+    public void logOut() { savedPresenter.logOut(); }
+
 
 }

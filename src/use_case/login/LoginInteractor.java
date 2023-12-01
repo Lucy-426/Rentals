@@ -1,10 +1,12 @@
 package use_case.login;
 
 import data_access.UserSignupDataAccessInterface;
+import entity.Property;
 import entity.User;
 import use_case.signup.SignupOutputData;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class LoginInteractor implements LoginInputBoundary {
@@ -21,7 +23,8 @@ public class LoginInteractor implements LoginInputBoundary {
     public void execute(LoginInputData loginInputData) {
         if (userDataAccessObject.existsByName(loginInputData.getUsername())) {
             if (Objects.equals(userDataAccessObject.getUserPassword(loginInputData.getUsername()), loginInputData.getPassword())) {
-                LoginOutputData loginOutputData = new LoginOutputData(loginInputData.getUsername());
+                ArrayList<Property> userProperties = userDataAccessObject.getUserProperties(loginInputData.getUsername());
+                LoginOutputData loginOutputData = new LoginOutputData(loginInputData.getUsername(), userProperties);
                 loginPresenter.prepareSuccessView(loginOutputData);
             } else {
                 loginPresenter.prepareFailView("You have entered an incorrect password.");

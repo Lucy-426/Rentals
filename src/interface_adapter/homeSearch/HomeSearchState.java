@@ -1,5 +1,7 @@
 package interface_adapter.homeSearch;
 
+import interface_adapter.saved.SavedState;
+
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.
 
@@ -23,6 +25,8 @@ public class HomeSearchState {
 
     private boolean loggedIn = false;
 
+    private SavedState savedState = null;
+
     public HomeSearchState(HomeSearchState copy) {
         id = copy.id;
         city = copy.city;
@@ -34,6 +38,7 @@ public class HomeSearchState {
         furnished = copy.furnished;
         listingType = copy.listingType;
         loggedIn = copy.loggedIn;
+        savedState = copy.savedState;
     }
     public HomeSearchState() {}
     public String getId() { return id; }
@@ -70,6 +75,8 @@ public class HomeSearchState {
 
     public boolean getLoggedIn() { return loggedIn; }
 
+    public SavedState getSavedState() { return savedState; }
+
     public void setId(String id) { this.id = id; }
 
     public void setCity(String city) { this.city = city; }
@@ -104,4 +111,5 @@ public class HomeSearchState {
 
     public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }
 
+    public void setSavedState(SavedState savedState) { this.savedState = savedState; }
 }

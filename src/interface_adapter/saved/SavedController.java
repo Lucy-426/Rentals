@@ -19,4 +19,8 @@ public class SavedController {
 
         savedInteractor.execute(savedInputData);
     }
+
+    public void displayHome() { savedInteractor.displayHome(); }
+
+    public void logOut() { savedInteractor.logOut(); }
 }

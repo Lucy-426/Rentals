@@ -9,6 +9,7 @@ import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.saved.SavedViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
@@ -30,12 +31,12 @@ public class LoginUseCaseFactory {
     private LoginUseCaseFactory() {}
 
     public static LoginView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
-                                   LoginViewModel loginViewModel, SignupViewModel signupViewModel,
+                                   LoginViewModel loginViewModel, SavedViewModel savedViewModel,
                                    UserDataAccessObject userDataAccessObject) {
 
         try {
             LoginController loginController = createUserLoginUseCase(viewManagerModel, homeSearchViewModel,
-                    signupViewModel, loginViewModel, userDataAccessObject);
+                    loginViewModel, savedViewModel, userDataAccessObject);
             return new LoginView(loginController, loginViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -45,11 +46,11 @@ public class LoginUseCaseFactory {
     }
 
     private static LoginController createUserLoginUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
-                                                            SignupViewModel signupViewModel, LoginViewModel loginViewModel,
+                                                          LoginViewModel loginViewModel, SavedViewModel savedViewModel,
                                                           UserDataAccessObject userDataAccessObject) throws IOException {
         // Notice how we pass this method's parameters to the Presenter.
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, homeSearchViewModel,
-                signupViewModel, loginViewModel);
+                loginViewModel, savedViewModel);
 
         LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);

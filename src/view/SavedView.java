@@ -1,11 +1,9 @@
 package view;
 
-import interface_adapter.login.LoginController;
-import interface_adapter.login.LoginState;
-import interface_adapter.login.LoginViewModel;
 import interface_adapter.saved.SavedController;
 import interface_adapter.saved.SavedState;
 import interface_adapter.saved.SavedViewModel;
+import use_case.saved.SavedOutputBoundary;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,16 +21,11 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
     private final SavedController savedController;
     private final SavedViewModel savedViewModel;
 
-    /**
-     * The username chosen by the user
-     */
-    final JTextField usernameInputField = new JTextField(15);
-    private final JLabel usernameErrorField = new JLabel();
-    /**
-     * The password
-     */
-    final JPasswordField passwordInputField = new JPasswordField(15);
-    private final JLabel passwordErrorField = new JLabel();
+    private JPanel buttons;
+
+    private JTextArea listingsArea;
+
+    private JScrollPane listingsScroll;
 
     /**
      * A window with a title and a JButton.
@@ -42,71 +35,38 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
         this.savedViewModel = savedViewModel;
         this.savedViewModel.addPropertyChangeListener(this);
 
-        JLabel title = new JLabel("Login Screen");
+        setLayout(new GridBagLayout());
+
+        JLabel title = new JLabel("Profile View");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        LabelTextPanel usernameInfo = new LabelTextPanel(
-                new JLabel("Username"), usernameInputField);
-        LabelTextPanel passwordInfo = new LabelTextPanel(
-                new JLabel("Password"), passwordInputField);
+        buttons = new JPanel();
+        JButton back = new JButton("Back");
+        buttons.add(back);
+        JButton logOut = new JButton("Log Out");
+        buttons.add(logOut);
 
-
-        usernameInputField.addKeyListener(
-                new KeyListener() {
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        SavedState currentState = savedViewModel.getState();
-                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                            currentState.setUsername(usernameInputField.getText());
-                        } else {
-                            currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
+        back.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(back)) {
+                            savedController.displayHome();
                         }
-                        savedViewModel.setState(currentState);
                     }
+                }
+        );
 
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-                    }
-                });
-
-        passwordInputField.addKeyListener(
-                new KeyListener() {
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        SavedState currentState = savedViewModel.getState();
-                        char[] password = passwordInputField.getPassword();
-                        String text_pass = "";
-                        for(char character: password) {
-                            text_pass += character;
+        logOut.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(logOut)) {
+                            savedController.logOut();
                         }
-                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                            currentState.setPassword(text_pass);
-                        } else {
-                            currentState.setPassword(text_pass + e.getKeyChar());
-                        }
-                        savedViewModel.setState(currentState);
                     }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-                    }
-                });
-
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+                }
+        );
 
         this.add(title);
-        this.add(usernameInfo);
-        this.add(usernameErrorField);
-        this.add(passwordInfo);
-        this.add(passwordErrorField);
     }
 
     /**
@@ -118,16 +78,37 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        SavedState state = (SavedState) evt.getNewValue();
-        setFields(state);
-        if (state.getUsernameError() != null) {
-            JOptionPane.showMessageDialog(this, state.getUsernameError());
-        }
-    }
+        GridBagConstraints c = new GridBagConstraints();
 
-    private void setFields(SavedState state) {
-        usernameInputField.setText(state.getUsername());
-        passwordInputField.setText(state.getPassword());
+        System.out.println(savedViewModel.getState().getUsername());
+        JLabel userGreeting = new JLabel("Hello " + savedViewModel.getState().getUsername() + "!");
+
+        JLabel listings = new JLabel("Below are your saved listings:");
+        //    scroll pane for listings
+        //    Create a JTextArea
+        listingsArea = new JTextArea(20, 20);
+        listingsArea.setEditable(false); // if you want to make it read-only
+        listingsArea.setText("Listings would go here...\n");
+        //    Create a JScrollPane and add the JTextArea to it
+        listingsScroll = new JScrollPane(listingsArea);
+        listingsScroll.setPreferredSize(new Dimension(200, 200));  // Set a preferred size for the JScrollPane
+
+
+        //     Set constraints for JScrollPane
+        c.gridx = 20;  // Change to desired column
+        c.gridy = 1;  // Change to desired row
+        c.gridwidth = 1;  // Spans across 1 column
+        c.gridheight = 3;  // Spans across 3 rows
+        c.fill = GridBagConstraints.BOTH;  // The component should be resized both horizontally and vertically
+        c.weightx = 1.0;  // The extra space should be distributed to this column
+        c.weighty = 1.0;  // The extra space should be distributed to this row
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.add(userGreeting);
+        this.add(listings);
+        add(listingsScroll, c);
+        this.add(buttons);
     }
 
 }

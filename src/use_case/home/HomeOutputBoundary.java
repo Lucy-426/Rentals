@@ -1,5 +1,7 @@
 package use_case.home;
 
+import interface_adapter.saved.SavedState;
+
 public interface HomeOutputBoundary {
     void prepareSuccessView(HomeOutputData homeOutputData);
 
@@ -7,7 +9,7 @@ public interface HomeOutputBoundary {
 
     void displayLoginView();
 
-    void displayProfile();
+    void displayProfile(SavedState savedState);
 
     void logOut();
 

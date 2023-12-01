@@ -1,6 +1,7 @@
 package interface_adapter.saved;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import use_case.listing.ListingOutputBoundary;
 import use_case.listing.ListingOutputData;
@@ -32,5 +33,24 @@ public class SavedPresenter implements SavedOutputBoundary {
     @Override
     public void prepareFailView(String error) {
 
+    }
+
+    @Override
+    public void displayHome() {
+        HomeSearchState homeSearchState = homeSearchViewModel.getState();
+        this.homeSearchViewModel.setState(homeSearchState);
+        homeSearchViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView(homeSearchViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void logOut() {
+        HomeSearchState homeSearchState = homeSearchViewModel.getState();
+        homeSearchState.setLoggedIn(false);
+        this.homeSearchViewModel.setState(homeSearchState);
+        this.homeSearchViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView(homeSearchViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 }

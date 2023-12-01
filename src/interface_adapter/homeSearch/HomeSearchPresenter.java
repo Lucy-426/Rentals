@@ -52,8 +52,9 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
 
-    public void displayProfile() {
-        this.savedViewModel.setState(new SavedState());
+    public void displayProfile(SavedState savedState) {
+        this.savedViewModel.setState(savedState);
+        System.out.println("home: " + savedState.getUsername());
         savedViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(savedViewModel.getViewName());
         viewManagerModel.firePropertyChanged();

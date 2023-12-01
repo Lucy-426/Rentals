@@ -2,6 +2,7 @@ package use_case.home;
 
 import data_access.HomeSearchDataAccessInterface;
 import entity.PropertyFactory;
+import interface_adapter.saved.SavedState;
 
 public class HomeInteractor implements HomeInputBoundary {
 
@@ -45,7 +46,7 @@ public class HomeInteractor implements HomeInputBoundary {
         homePresenter.displayLoginView();
     }
 
-    public void displayProfile() { homePresenter.displayProfile(); }
+    public void displayProfile(SavedState savedState) { homePresenter.displayProfile(savedState); }
 
     public void logOut() { homePresenter.logOut(); }
 }
