@@ -18,25 +18,18 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
     private JButton back;
 
     private ArrayList<JButton> listingButtons = new ArrayList<>();
-
     private final ListingViewModel listingViewModel;
     private final ListingController listingController;
 
+    // Labels for the property attributes
     private JLabel id = new JLabel();
-
     private JLabel city = new JLabel();
     private JLabel address = new JLabel();
-
     private JLabel numRooms = new JLabel();
-
     private JLabel price = new JLabel();
-
     private JLabel numBaths = new JLabel();
-
     private JLabel walkScore = new JLabel();
-
     private JLabel furnished = new JLabel();
-
     private JLabel listingType = new JLabel();
 
 
@@ -56,8 +49,8 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         c.fill = GridBagConstraints.HORIZONTAL;
         address.setFont(new Font("Arial", 1, 30));
         address.setSize(200, 60);
-         c.gridx = 0;
-         c.gridy = 0;
+        c.gridx = 0;
+        c.gridy = 0;
         this.add(address, c);
 
         c.gridx = 0;

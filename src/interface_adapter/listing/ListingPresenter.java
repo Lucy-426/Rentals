@@ -1,7 +1,6 @@
 package interface_adapter.listing;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.homeSearch.HomeSearchViewModel;
 import use_case.listing.ListingOutputBoundary;
 import use_case.listing.ListingOutputData;
 

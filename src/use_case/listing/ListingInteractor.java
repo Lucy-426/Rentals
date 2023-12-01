@@ -1,7 +1,6 @@
 package use_case.listing;
 
 import entity.Property;
-import entity.PropertyFactory;
 import use_case.home.HomeSearchDataAccessInterface;
 
 public class ListingInteractor implements ListingInputBoundary{

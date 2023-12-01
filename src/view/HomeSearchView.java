@@ -13,7 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class HomeSearchView extends JPanel implements ActionListener, PropertyChangeListener {

@@ -13,8 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
