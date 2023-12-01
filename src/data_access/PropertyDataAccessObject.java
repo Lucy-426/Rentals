@@ -195,13 +195,12 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
             if ((id == null) || id.equals("all") || id.equals(entry.getValue().getID())) {
                 if ((city == null) || city.equals("all") || city.equals(entry.getValue().getCity())) {
                     if ((address == null) || address.equals("all") || address.equals(entry.getValue().getAddress())) {
-                        if ((numRooms == null) || numRooms.equals("all") || numRooms.equals(entry.getValue().getNumRooms())) {
+                        if (numRoomsCheck(entry.getValue())) {
                             if (priceRangeCheck(entry.getValue())) {
-                                if ((numBaths == null) || numBaths.equals("all") || numBaths.equals(entry.getValue().getNumBaths())) {
-                                    if ((walkScore == null) || walkScore.equals("all") || walkScore.equals(entry.getValue().getWalkScore())) {
+                                if (numBathsCheck(entry.getValue())) {
+                                    if (walkscoreCheck(entry.getValue())) {
                                         if ((furnished == null) || furnished.equals("all") || furnished.equals(entry.getValue().getFurnished())) {
                                             if (listingTypeCheck(entry.getValue())) {
-//                                            if ((listingType == null) || listingType.equals("all") || listingType.equals(entry.getValue().getListingType())) {
                                                 filtered_properties.put(entry.getKey(), entry.getValue());
                                             }
                                         }
@@ -250,6 +249,46 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
             return !property.getListingType().contains("House") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
         } else {
             return (listingType.equals("all") || property.getListingType().contains(listingType));
+        }
+    }
+
+//TODO: make helper methods for city, numRooms, numBaths, address, walkscore
+    private boolean numRoomsCheck(Property property) {
+        String helperNumRooms = inputProperty.getNumRooms();
+
+        if (helperNumRooms == null || helperNumRooms.equals("all")) {
+            return true;
+        } else if (helperNumRooms.equals("5+")) {
+            return Integer.valueOf(property.getNumRooms()) >= 5;
+        } else {
+            return Integer.valueOf(helperNumRooms).equals(Integer.valueOf(property.getNumRooms()));
+        }
+    }
+
+    private boolean numBathsCheck(Property property) {
+        String helperNumBaths = inputProperty.getNumBaths();
+
+        if (helperNumBaths == null || helperNumBaths.equals("all")) {
+            return true;
+        } else if (helperNumBaths.equals("4+")) {
+            return Integer.valueOf(property.getNumBaths()) >= 4;
+        } else {
+            return Integer.valueOf(helperNumBaths).equals(Integer.valueOf(property.getNumBaths()));
+        }
+    }
+
+
+    private boolean walkscoreCheck (Property property) {
+        String helperWalkscore = inputProperty.getWalkScore();
+        if (helperWalkscore == null || helperWalkscore.equals("all")) {
+            return true;
+        } else if (helperWalkscore.equals("1-3")) {
+            return Integer.valueOf(property.getWalkScore()) <= 3 && Integer.valueOf(property.getWalkScore()) >= 1;
+        } else if (helperWalkscore.equals("3-6")) {
+            return Integer.valueOf(property.getWalkScore()) >= 3 && Integer.valueOf(property.getWalkScore()) <= 6;
+        } else {
+//            don't need < 10 because properties always have walkscore less than 10
+            return Integer.valueOf(property.getWalkScore()) >= 6;
         }
     }
 
