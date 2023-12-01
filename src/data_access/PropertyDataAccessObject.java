@@ -18,16 +18,14 @@ import java.util.*;
 public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final File csvFile;
 
-    private File filteredcsvFile;
-
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
-    private final Map<String, Property> filtered_properties = new HashMap<>();
+    private Map<String, Property> filtered_properties;
 
     // Root URL - can later adapt so that for various functions, we attach ending (i.e. .../property/detail)
     private static final String API_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0/";
-    private static final String API_TOKEN = "a29ec8d3d48c6a36e4ce59f96a94606a";
+    private static final String API_TOKEN = "bdc142f975386786593145e4c20e19e3";
 
     // The cities that we are getting listings from
     private static final Pair<String, String> SF_CA = new Pair<>("37.656305","-122.417006");
@@ -83,6 +81,28 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
             // Once all the cities' data have been loaded,
             // save (write all the data) to csv
             this.save();
+        } else {
+            try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+                String header = reader.readLine();
+
+                assert header.equals("id,city,address,numRooms,priceRange,numBaths,walkScore,furnished,listingType");
+
+                String row;
+                while ((row = reader.readLine()) != null) {
+                    String[] col = row.split(",");
+                    String id = String.valueOf(col[headers.get("id")]);
+                    String city = String.valueOf(col[headers.get("city")]);
+                    String address = String.valueOf(col[headers.get("address")]);
+                    String rooms = String.valueOf(col[headers.get("numRooms")]);
+                    String price = String.valueOf(col[headers.get("priceRange")]);
+                    String baths = String.valueOf(col[headers.get("numBaths")]);
+                    String walkscore = String.valueOf(col[headers.get("walkScore")]);
+                    String furnished = String.valueOf(col[headers.get("furnished")]);
+                    String listingType = String.valueOf(col[headers.get("listingType")]);
+                    Property property = propertyFactory.create(id, city, address, rooms, price, baths, walkscore, furnished, listingType);
+                    properties.put(property.getID(), property);
+                }
+            }
         }
 
     }
@@ -156,8 +176,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 //    TODO: test the filter method
     @Override
     public void filter() {
-//        filtered_properties.putAll(properties);
-
+        filtered_properties = new HashMap<>();
         String id = inputProperty.getID();
         String city = inputProperty.getCity();
         String address = inputProperty.getAddress();
@@ -193,10 +212,10 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     }
                 }
             }
-            System.out.println("we've filtered");
-            filteredcsvFile = new File("./filtered_properties.csv");
-            saveFilteredProperties();
         }
+        System.out.println("we've filtered");
+        System.out.println(filtered_properties.entrySet());
+
     }
 
 
@@ -223,11 +242,14 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 //    helper method to check if inputproperty listing type filter word is found in csv property listing type
     private boolean listingTypeCheck(Property property) {
         String listingType = inputProperty.getListingType();
-        if (listingType.equals("other")) {
+        if (listingType == null) {
+            return true;
+        }
+        else if (listingType.equals("other")) {
 //            return true if "House", "Townhouse", "Apartment" not in the csv property
             return !property.getListingType().contains("House") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
         } else {
-            return (listingType == null || listingType.equals("all") || property.getListingType().contains(listingType));
+            return (listingType.equals("all") || property.getListingType().contains(listingType));
         }
     }
 
@@ -256,26 +278,19 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
     }
 
-    // Writing the input data to a csv file
-    private void saveFilteredProperties() {
-        BufferedWriter writer;
-        try {
-            writer = new BufferedWriter(new FileWriter(filteredcsvFile));
-            writer.write(String.join(",", headers.keySet()));
-            writer.newLine();
-
-            // Go through properties and format attributes to csv file columns
-            for (Property property : filtered_properties.values()) {
-                String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(), property.getPriceRange(),
-                        property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType()
-                );
-                writer.write(line);
-                writer.newLine();
-            }
-
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    @Override
+    public HashMap<String, String> getFilteredProperties() {
+        HashMap <String, String> displayProperties = new HashMap<>();
+        for (HashMap.Entry<String, Property> entry : filtered_properties.entrySet()) {
+            displayProperties.put(entry.getKey(), entry.getValue().getAddress());
         }
+        return displayProperties;
     }
+
+    @Override
+    public Property getProperty(String id) {
+        return properties.get(id);
+    }
+
+
 }
