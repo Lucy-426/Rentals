@@ -197,9 +197,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         System.out.println("we've filtered");
         filteredcsvFile =  new File("./filtered_properties.csv");
         saveFilteredProperties();
-        for (Property property : filtered_properties.values()){
-            property.setRecListings(recommendedListings());
-        }
+
     }
 
     // Writing the Property object inside of properties to the csv file
@@ -251,49 +249,29 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
     // if filters use listings from filter
     // if no filter pull from cities
-    public Map<String, Property> recommendedListings(){
+    public void recommendedListings(){
         Map<String, Property> recommendedListings = new HashMap<>();
-        String id = inputProperty.getID();
-        String city = inputProperty.getCity();
-        String address = inputProperty.getAddress();
-        String numRooms = inputProperty.getNumRooms();
-        String priceRange = inputProperty.getPriceRange();
-        String numBaths = inputProperty.getNumBaths();
-        String walkScore = inputProperty.getWalkScore();
-        String furnished = inputProperty.getFurnished();
-        String listingType = inputProperty.getListingType();
 
         // maximum three recommendations
         int count = 0;
-        // if there were no filters inputted, then the recommended listings will come from the same city
-        // of the current listing being viewed
-        if (id.equals("all") && city.equals("all") && address.equals("all") && numRooms.equals("all") &&
-        priceRange.equals("all") && numBaths.equals("all") && walkScore.equals("all") && furnished.equals("all")
-        && listingType.equals("all")){
-            Map<String, Property> cityRecommendations = new HashMap<>();
 
-            // put all listings with the same city into the city recommendations for all initially listed properties
-            for (Property property : properties.values()){
-                String cityRec = property.getCity();
-                for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
-                    if (cityRec.equals(entry.getValue().getCity())) {
-                        cityRecommendations.put(entry.getKey(), entry.getValue());
-                    }
-                }
-            }
-            // pass through the first 3 recommended listings from the cityRecommendations list
-            for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
-                if (count < 3) {
-                    recommendedListings.put(entry.getKey(), entry.getValue());
-                    count += 1;
-                } else{
-                    break;
-                }
-            }
+        // make a list with relevant properties based on the city of the listing
+        Map<String, Property> cityRecommendations = new HashMap<>();
 
-        // else the recommended listings will come from the previous filters and the subsequent filtered list
-        } else {
+        // for each property in the filtered list, generate another list that contains listings in the same city
+        for (Property property : filtered_properties.values()){
+            // first, get the city of the property
+            String cityRec = property.getCity();
+            // then compare to each of the other entries in the filtered list and if it is the same city,
+            // put it in the recommended list
             for (Map.Entry<String, Property> entry : filtered_properties.entrySet()) {
+                if (cityRec.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID())) {
+                    cityRecommendations.put(entry.getKey(), entry.getValue());
+                }
+            }
+
+            for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
+                // pass through the first 3 recommended listings from the cityRecommendations list
                 if (count < 3) {
                     recommendedListings.put(entry.getKey(), entry.getValue());
                     count += 1;
@@ -301,8 +279,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     break;
                 }
             }
+            property.setRecListings(recommendedListings);
         }
 
-        return recommendedListings;
     }
 }

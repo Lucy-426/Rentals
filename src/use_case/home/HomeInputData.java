@@ -1,5 +1,10 @@
 package use_case.home;
 
+import entity.Property;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class HomeInputData {
     private final String id;
     private final String city;
@@ -17,6 +22,8 @@ public class HomeInputData {
 
     private final String listingType;
 
+    private final Map<String, Property> recListings;
+
     public HomeInputData(String id, String city, String address, String numRooms, String priceRange,
                          String numBaths, String walkScore, String furnished, String listingType) {
         this.id = id;
@@ -28,6 +35,7 @@ public class HomeInputData {
         this.walkScore = walkScore;
         this.furnished = furnished;
         this.listingType = listingType;
+        this.recListings = new HashMap<>();
     }
 
     public String getId() { return id; }
@@ -62,4 +70,7 @@ public class HomeInputData {
         return listingType;
     }
 
+    public Map<String, Property> getRecListings() {
+        return recListings;
+    }
 }

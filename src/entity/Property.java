@@ -35,7 +35,7 @@ public class Property {
         this.walkScore = walkScore;
         this.furnished = furnished;
         this.listingType = listingType;
-        recListings = new HashMap<>();
+        this.recListings = new HashMap<>();
     }
 
     public String getID() { return id; }
