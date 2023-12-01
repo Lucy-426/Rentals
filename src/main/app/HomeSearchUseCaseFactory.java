@@ -1,6 +1,6 @@
 package main.app;
 
-import data_access.HomeSearchDataAccessInterface;
+import use_case.home.HomeSearchDataAccessInterface;
 import data_access.InMemoryDataAccessObject;
 import data_access.MapDataAccessObject;
 import data_access.PropertyDataAccessObject;

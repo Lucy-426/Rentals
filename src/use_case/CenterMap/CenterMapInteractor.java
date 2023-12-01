@@ -1,15 +1,14 @@
 package use_case.CenterMap;
 
-import data_access.MapDataAccessObject;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 public class CenterMapInteractor implements CenterMapInputBoundary {
 
-    final MapDataAccessObject mapDataAccessObject;
+    final CenterMapDataAccessInterface mapDataAccessObject;
 
     final CenterMapOutputBoundary centerMapPresenter;
 
-    public CenterMapInteractor(MapDataAccessObject mapDataAccessObject, CenterMapOutputBoundary centerMapPresenter) {
+    public CenterMapInteractor(CenterMapDataAccessInterface mapDataAccessObject, CenterMapOutputBoundary centerMapPresenter) {
         this.mapDataAccessObject = mapDataAccessObject;
         this.centerMapPresenter = centerMapPresenter;
     }
