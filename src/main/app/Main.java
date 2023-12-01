@@ -5,7 +5,6 @@ import entity.PropertyFactory;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.listing.ListingViewModel;
-import use_case.home.HomeSearchDataAccessInterface;
 import view.HomeSearchView;
 import view.ListingView;
 import view.ViewManager;

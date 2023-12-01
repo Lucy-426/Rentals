@@ -19,6 +19,8 @@ public class ListingPresenter implements ListingOutputBoundary{
     @Override
     public void prepareSuccessView(ListingOutputData listingOutputData) {
         ListingState listingState = listingViewModel.getState();
+        listingState.setId(listingOutputData.getId());
+        listingState.setCity(listingOutputData.getCity());
         listingState.setAddress(listingOutputData.getAddress());
         listingState.setNumRooms(listingOutputData.getNumRooms());
         listingState.setPrice(listingOutputData.getPrice());

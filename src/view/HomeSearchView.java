@@ -297,8 +297,6 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     public void actionPerformed(ActionEvent evt) {
         for (JButton button : listingButtons) {
             if (evt.getSource() == button) {
-                // TODO: change input for this execute?
-                System.out.println(button.getName());
                 listingController.execute(button.getName());
             }
         }
