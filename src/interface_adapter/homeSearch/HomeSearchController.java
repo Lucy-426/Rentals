@@ -25,5 +25,7 @@ public class HomeSearchController {
         homeInteractor.displayLoginView();
     }
 
+    public void displayProfile() { homeInteractor.displayProfile(); }
+
     public void logOut() { homeInteractor.logOut(); }
 }

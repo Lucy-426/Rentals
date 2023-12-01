@@ -3,6 +3,8 @@ package interface_adapter.homeSearch;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.saved.SavedState;
+import interface_adapter.saved.SavedViewModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
 import use_case.home.HomeOutputBoundary;
@@ -18,13 +20,16 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
 
     private LoginViewModel loginViewModel;
 
+    private SavedViewModel savedViewModel;
+
     // TODO: link listing view model?
     public HomeSearchPresenter(HomeSearchViewModel homesearchViewModel, ViewManagerModel viewManagerModel,
-                               SignupViewModel signupViewModel, LoginViewModel loginViewModel) {
+                               SignupViewModel signupViewModel, LoginViewModel loginViewModel, SavedViewModel savedViewModel) {
         this.homesearchViewModel = homesearchViewModel;
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
         this.loginViewModel = loginViewModel;
+        this.savedViewModel = savedViewModel;
     }
     @Override
     public void prepareSuccessView(HomeOutputData homeOutputData) {
@@ -44,6 +49,13 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
         this.loginViewModel.setState(new LoginState());
         loginViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(loginViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
+    public void displayProfile() {
+        this.savedViewModel.setState(new SavedState());
+        savedViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView(savedViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 

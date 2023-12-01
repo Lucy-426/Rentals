@@ -321,7 +321,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     new ActionListener() {
                         public void actionPerformed(ActionEvent evt) {
                             if (evt.getSource().equals(profile)) {
-                                homesearchController.displaySignupView();
+                                homesearchController.displayProfile();
                             }
                         }
                     }

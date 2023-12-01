@@ -5,11 +5,9 @@ import entity.CommonUserFactory;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.saved.SavedViewModel;
 import interface_adapter.signup.SignupViewModel;
-import view.HomeSearchView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,15 +42,22 @@ public class Main {
         HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         LoginViewModel loginViewModel = new LoginViewModel();
+        SavedViewModel savedViewModel = new SavedViewModel();
 
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel, signupViewModel, loginViewModel);
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel, signupViewModel,
+                loginViewModel, savedViewModel);
         views.add(homeSearchView, homeSearchView.viewName);
 
-        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, signupViewModel, userDataAccessObject);
+        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, signupViewModel,
+                userDataAccessObject);
         views.add(signupView, signupView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, signupViewModel, userDataAccessObject);
+        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, signupViewModel,
+                userDataAccessObject);
         views.add(loginView, loginView.viewName);
+
+        SavedView savedView = ProfileUseCaseFactory.create(viewManagerModel, homesearchViewModel, savedViewModel);
+        views.add(savedView, savedView.viewName);
 
         viewManagerModel.setActiveView(homeSearchView.viewName);
         viewManagerModel.firePropertyChanged();

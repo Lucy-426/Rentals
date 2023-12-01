@@ -7,5 +7,7 @@ public interface HomeInputBoundary {
 
     void displayLoginView();
 
+    void displayProfile();
+
     void logOut();
 }
