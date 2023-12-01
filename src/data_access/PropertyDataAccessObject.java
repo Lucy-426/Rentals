@@ -253,24 +253,35 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     // if no filter pull from cities
     public Map<String, Property> recommendedListings(){
         Map<String, Property> recommendedListings = new HashMap<>();
+        String id = inputProperty.getID();
+        String city = inputProperty.getCity();
+        String address = inputProperty.getAddress();
+        String numRooms = inputProperty.getNumRooms();
+        String priceRange = inputProperty.getPriceRange();
+        String numBaths = inputProperty.getNumBaths();
+        String walkScore = inputProperty.getWalkScore();
+        String furnished = inputProperty.getFurnished();
+        String listingType = inputProperty.getListingType();
 
         // maximum three recommendations
         int count = 0;
         // if there were no filters inputted, then the recommended listings will come from the same city
         // of the current listing being viewed
-        if (filtered_properties.isEmpty()){
+        if (id.equals("all") && city.equals("all") && address.equals("all") && numRooms.equals("all") &&
+        priceRange.equals("all") && numBaths.equals("all") && walkScore.equals("all") && furnished.equals("all")
+        && listingType.equals("all")){
             Map<String, Property> cityRecommendations = new HashMap<>();
 
-            // put all listings with the same city into the city recommendations
+            // put all listings with the same city into the city recommendations for all initially listed properties
             for (Property property : properties.values()){
-                String city = property.getCity();
+                String cityRec = property.getCity();
                 for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
-                    if (city.equals(entry.getValue().getCity())) {
+                    if (cityRec.equals(entry.getValue().getCity())) {
                         cityRecommendations.put(entry.getKey(), entry.getValue());
                     }
                 }
             }
-            // pass through the first 3 recommended listings
+            // pass through the first 3 recommended listings from the cityRecommendations list
             for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
                 if (count < 3) {
                     recommendedListings.put(entry.getKey(), entry.getValue());
@@ -280,7 +291,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                 }
             }
 
-        // else the recommended listings will come from the previous filters
+        // else the recommended listings will come from the previous filters and the subsequent filtered list
         } else {
             for (Map.Entry<String, Property> entry : filtered_properties.entrySet()) {
                 if (count < 3) {
