@@ -32,10 +32,10 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private static final Pair<String, String> SF_CA = new Pair<>("37.656305","-122.417006");
     private static final Pair<String, String> MINNEAPOLIS_MN = new Pair<>("44.996091", "-93.364628");
     private static final Pair<String, String> LA_CA = new Pair<>("34.029082", "-118.25947");
-    private static final Pair<String, String> PHILADELPHIA_PA = new Pair<>("39.993614", "-75.150923");
-    private static final Pair<String, String> DETROIT_MI = new Pair<>("42.352656", "-83.088938");
-    private static final Pair<String, String> ATLANTA_GA = new Pair<>("33.785802", "-84.41739");
-    private static final Pair<String, String> BUFFALO_NY = new Pair<>("42.926907", "-78.815458");
+//    private static final Pair<String, String> PHILADELPHIA_PA = new Pair<>("39.993614", "-75.150923");
+//    private static final Pair<String, String> DETROIT_MI = new Pair<>("42.352656", "-83.088938");
+//    private static final Pair<String, String> ATLANTA_GA = new Pair<>("33.785802", "-84.41739");
+//    private static final Pair<String, String> BUFFALO_NY = new Pair<>("42.926907", "-78.815458");
 
     // a list that will contain all the cities above
     private static final ArrayList<Pair> cities = new ArrayList<>();
@@ -49,10 +49,10 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         cities.add(SF_CA);
         cities.add(MINNEAPOLIS_MN);
         cities.add(LA_CA);
-        cities.add(PHILADELPHIA_PA);
-        cities.add(DETROIT_MI);
-        cities.add(ATLANTA_GA);
-        cities.add(BUFFALO_NY);
+//        cities.add(PHILADELPHIA_PA);
+//        cities.add(DETROIT_MI);
+//        cities.add(ATLANTA_GA);
+//        cities.add(BUFFALO_NY);
 
         csvFile = new File(csvPath);
         headers.put("id", 0);

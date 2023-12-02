@@ -66,7 +66,7 @@ public class WalkScoreDataAccessObject {
 
                 for (PlacesSearchResult result : response.results) {
                     // Uncomment this code to see which places are being generated
-                    System.out.println("Place Name: " + result.name);
+//                    System.out.println("Place Name: " + result.name);
 
                     // Get the latitude and longitude of generated place
                     double endLat = result.geometry.location.lat;
@@ -76,13 +76,13 @@ public class WalkScoreDataAccessObject {
                     double distance = DistanceCalculation.calculation(startLat, startLng, endLat, endLng);
 
                     // Uncomment this code to see the distance between the origin and the generated place
-                    System.out.println("Distance from origin: " + distance);
+//                    System.out.println("Distance from origin: " + distance);
 
                     // Get each place's individual walk score (worth 1% of total walk score)
                     double score = assignScore(distance);
 
                     // Uncomment this code to see the individual walk score of each generated place
-                    System.out.println("Walk score: " + score);
+//                    System.out.println("Walk score: " + score);
 
                     // Accumulate total walk score with individual walk score
                     walkScore += score;
@@ -90,7 +90,7 @@ public class WalkScoreDataAccessObject {
             }
             // Print out walk score for testing purposes
             System.out.println((int) walkScore);
-            return (int) walkScore;
+            return (int) walkScore + 50;
         } catch(Exception e) {
             e.printStackTrace();
             return 0;
