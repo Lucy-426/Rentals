@@ -28,7 +28,10 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
+
     private Map<String, Property> filtered_properties;
+
+    private final Map<String, Pair> coordinates = new HashMap<>();
 
     private final WalkScoreDataAccessObject walkScoreCalculator = new WalkScoreDataAccessObject();
 
@@ -168,6 +171,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     double lat = Double.parseDouble(latitude);
                     String longitude = JsonPath.read(propertyJson, "$.location.longitude");
                     double lon = Double.parseDouble(longitude);
+
+                    coordinates.put(id, new Pair(lat, lon));
 
                     // TODO: Still need to fix this because it takes too long to run so no memory error happens
                     String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
