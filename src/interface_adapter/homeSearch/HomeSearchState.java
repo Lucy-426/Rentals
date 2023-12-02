@@ -1,8 +1,9 @@
 package interface_adapter.homeSearch;
 
-
 import java.util.HashMap;
+
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+
 
 
 public class HomeSearchState {
@@ -85,9 +86,14 @@ public class HomeSearchState {
         return displayedListings;
     }
 
-    public GeoPosition getStartPosition() { return startPosition; }
+    public void setSearchBarInput(String searchBarInput) {
+        this.searchBarInput = searchBarInput;
+    }
 
-    public void setSearchBarInput(String searchBarInput) { this.searchBarInput = searchBarInput; }
+    public GeoPosition getStartPosition() {
+        return startPosition;
+    }
+
 
     public void setId(String id) { this.id = id; }
 
@@ -124,6 +130,7 @@ public class HomeSearchState {
     public void setDisplayedListings(HashMap<String, String> displayedListings) {
         this.displayedListings = displayedListings;
     }
+
     public void setStartPosition(GeoPosition startPosition) {
         this.startPosition = startPosition;
     }

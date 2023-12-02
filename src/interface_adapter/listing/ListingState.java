@@ -1,5 +1,7 @@
 package interface_adapter.listing;
 
+import java.util.HashMap;
+
 public class ListingState {
 
     private String id;
@@ -19,6 +21,8 @@ public class ListingState {
 
     private String listingType;
 
+    private HashMap<String, String> recommendations;
+
 
     public ListingState(ListingState copy) {
         this.id = copy.id;
@@ -30,6 +34,7 @@ public class ListingState {
         this.walkScore = copy.walkScore;
         this.furnished = copy.furnished;
         this.listingType = copy.listingType;
+        this.recommendations = copy.recommendations;
 
     }
 
@@ -63,6 +68,10 @@ public class ListingState {
     }
     public String getListingType() {
         return listingType;
+    }
+
+    public HashMap<String, String> getRecommendations() {
+        return recommendations;
     }
 
     public void setId(String id) {
@@ -99,5 +108,9 @@ public class ListingState {
 
     public void setListingType(String listingType) {
         this.listingType = listingType;
+    }
+
+    public void setRecommendations(HashMap<String, String> recommendations) {
+        this.recommendations = recommendations;
     }
 }

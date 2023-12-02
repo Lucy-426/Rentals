@@ -18,6 +18,16 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
     private JButton back;
 
     private ArrayList<JButton> listingButtons = new ArrayList<>();
+
+    private JPanel buttonsPanel;
+    private JScrollPane listingScroll;
+
+    private JButton recommendation1 = new JButton();
+
+    private JButton recommendation2 = new JButton();
+
+    private JButton recommendation3 = new JButton();
+
     private final ListingViewModel listingViewModel;
     private final ListingController listingController;
 
@@ -121,24 +131,21 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         this.add(furnished, c);
         c.insets = new Insets(0, 0, 0, 0);
 
-        JPanel buttonsPanel = new JPanel();
+        buttonsPanel = new JPanel();
         GridLayout gridlayout = new GridLayout(3, 1);
         buttonsPanel.setLayout(gridlayout);
 
-        // TODO: fix to actual listings
-        JButton listing1 = new JButton("Listing 1");
-        listing1.addActionListener(this);
-        JButton listing2 = new JButton("Listing 2");
-        listing2.addActionListener(this);
-        JButton listing3 = new JButton("Listing 3");
-        listing3.addActionListener(this);
-        listingButtons.add(listing1);
-        listingButtons.add(listing2);
-        listingButtons.add(listing3);
+        recommendation1.addActionListener(this);
+        recommendation2.addActionListener(this);
+        recommendation3.addActionListener(this);
+        listingButtons.add(recommendation1);
+        listingButtons.add(recommendation2);
+        listingButtons.add(recommendation3);
 
         for (JButton button : listingButtons) {
             buttonsPanel.add(button);
         }
+
         c.gridy = 9;
         this.add(new JLabel("\n"), c);
 
@@ -150,7 +157,7 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         this.add(recommendations, c);
         c.insets = new Insets(0, 0, 0, 0);
 
-        JScrollPane listingScroll = new JScrollPane(buttonsPanel);
+        listingScroll = new JScrollPane(buttonsPanel);
         listingScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         c.gridy = 11;
         c.gridheight = 4;
@@ -177,8 +184,7 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
     public void actionPerformed(ActionEvent e) {
         for (JButton button : listingButtons) {
             if (e.getSource() == button) {
-                // TODO: add functionality
-                System.out.println("listing button");
+                listingController.execute(button.getName());
             }
         }
     }
@@ -195,6 +201,16 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         walkScore.setText(state.getWalkScore());
         furnished.setText(state.getFurnished());
         listingType.setText(state.getListingType());
+
+        ArrayList<String> buttonNames = new ArrayList<>(state.getRecommendations().values());
+        ArrayList<String> idNames = new ArrayList<>(state.getRecommendations().keySet());
+
+        recommendation1.setText(buttonNames.get(0));
+        recommendation1.setName(idNames.get(0));
+        recommendation2.setText(buttonNames.get(1));
+        recommendation2.setName(idNames.get(1));
+        recommendation3.setText(buttonNames.get(2));
+        recommendation3.setName(idNames.get(2));
 
     }
 }
