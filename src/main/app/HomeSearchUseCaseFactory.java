@@ -3,12 +3,17 @@ package main.app;
 import interface_adapter.listing.ListingController;
 import interface_adapter.listing.ListingPresenter;
 import interface_adapter.listing.ListingViewModel;
+
+import data_access.MapDataAccessObject;
 import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
 import interface_adapter.homeSearch.HomeSearchController;
 import interface_adapter.homeSearch.HomeSearchPresenter;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.CenterMap.CenterMapController;
+import interface_adapter.CenterMap.CenterMapPresenter;
+import use_case.CenterMap.*;
 import use_case.home.*;
 import use_case.listing.ListingInputBoundary;
 import use_case.listing.ListingInteractor;
@@ -26,8 +31,9 @@ public class HomeSearchUseCaseFactory {
     public static HomeSearchView create(PropertyDataAccessObject propertyDataAccessObject, ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
         try {
             HomeSearchController homeSearchController = createHomeSearchUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel);
+            CenterMapController centerMapController = createCenterMapUseCase(viewManagerModel, homeSearchViewModel);
             ListingController listingController = createListingUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel, listingViewModel);
-            return new HomeSearchView(homeSearchController, listingController, homeSearchViewModel);
+            return new HomeSearchView(homeSearchController, listingController, centerMapController, homeSearchViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open property data file.");
         }
@@ -58,5 +64,15 @@ public class HomeSearchUseCaseFactory {
         ListingInputBoundary listingInteractor = new ListingInteractor(propertyDataAccessObject, listingOutputBoundary);
 
         return new ListingController(listingInteractor, homeSearchViewModel, viewManagerModel);
+
+    }
+
+    private static CenterMapController createCenterMapUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) throws IOException {
+        CenterMapOutputBoundary centerMapOutputBoundary = new CenterMapPresenter(homeSearchViewModel, viewManagerModel);
+
+        MapDataAccessObject centerMapDataAccessObject = new MapDataAccessObject();
+        CenterMapInputBoundary centerMapInteractor = new CenterMapInteractor(centerMapDataAccessObject, centerMapOutputBoundary);
+
+        return new CenterMapController(centerMapInteractor);
     }
 }
