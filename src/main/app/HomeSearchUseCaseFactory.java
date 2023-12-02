@@ -1,13 +1,17 @@
 package main.app;
 
-import data_access.HomeSearchDataAccessInterface;
+import use_case.home.HomeSearchDataAccessInterface;
 import data_access.InMemoryDataAccessObject;
+import data_access.MapDataAccessObject;
 import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
 import interface_adapter.homeSearch.HomeSearchController;
 import interface_adapter.homeSearch.HomeSearchPresenter;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.CenterMap.CenterMapController;
+import interface_adapter.CenterMap.CenterMapPresenter;
+import use_case.CenterMap.*;
 import use_case.home.*;
 import view.HomeSearchView;
 
@@ -21,7 +25,8 @@ public class HomeSearchUseCaseFactory {
     public static HomeSearchView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) {
         try {
             HomeSearchController homeSearchController = createHomeSearchUseCase(viewManagerModel, homeSearchViewModel);
-            return new HomeSearchView(homeSearchController, homeSearchViewModel);
+            CenterMapController centerMapController = createCenterMapUseCase(viewManagerModel, homeSearchViewModel);
+            return new HomeSearchView(homeSearchController, homeSearchViewModel, centerMapController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open property data file.");
         }
@@ -40,5 +45,14 @@ public class HomeSearchUseCaseFactory {
 
         return new HomeSearchController(homeInteractor);
 
+    }
+
+    private static CenterMapController createCenterMapUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) throws IOException {
+        CenterMapOutputBoundary centerMapOutputBoundary = new CenterMapPresenter(homeSearchViewModel, viewManagerModel);
+
+        MapDataAccessObject centerMapDataAccessObject = new MapDataAccessObject();
+        CenterMapInputBoundary centerMapInteractor = new CenterMapInteractor(centerMapDataAccessObject, centerMapOutputBoundary);
+
+        return new CenterMapController(centerMapInteractor);
     }
 }

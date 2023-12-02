@@ -4,6 +4,9 @@ import interface_adapter.homeSearch.HomeSearchController;
 import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 
+import interface_adapter.CenterMap.CenterMapController;
+import org.jdesktop.swingx.JXMapKit;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,6 +21,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     public final String viewName = "home search";
 
     private final HomeSearchViewModel homesearchViewModel;
+
+    public final JXMapKit jxMapKit = new JXMapKit();
 
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
@@ -39,14 +44,13 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     private final HomeSearchController homesearchController;
 
-    public HomeSearchView(HomeSearchController controller, HomeSearchViewModel viewModel) {
+    private final CenterMapController centerMapController;
+
+    public HomeSearchView(HomeSearchController controller, HomeSearchViewModel viewModel, CenterMapController centerMapController) {
         this.homesearchController = controller;
         this.homesearchViewModel = viewModel;
+        this.centerMapController = centerMapController;
         homesearchViewModel.addPropertyChangeListener(this);
-
-//        for formatting
-        setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
 
         JLabel title = new JLabel(homesearchViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -83,6 +87,12 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         listingType.addActionListener(this);
 
 
+//        for formatting
+        setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.WEST;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(searchBar);
@@ -145,6 +155,15 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         // Add the JScrollPane to the panel
         add(listingsScroll, c);
 
+        // Displaying interactive map
+        jxMapKit.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
+        jxMapKit.setDataProviderCreditShown(true);
+        jxMapKit.setZoom(5);
+        jxMapKit.setAddressLocationShown(true);
+        jxMapKit.setAddressLocation(homesearchViewModel.startPosition);
+
+        this.add(jxMapKit);
+
 
         homeSearchBar.addKeyListener(
                 new KeyListener() {
@@ -175,6 +194,9 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                                     homesearchViewModel.getState().getNumRooms(), homesearchViewModel.getState().getPriceRange(),
                                     homesearchViewModel.getState().getNumBaths(), homesearchViewModel.getState().getWalkScore(),
                                     homesearchViewModel.getState().getFurnished(), homesearchViewModel.getState().getListingType());
+
+                            centerMapController.execute(homesearchViewModel.getState().getAddress());
+                            jxMapKit.setAddressLocation(homesearchViewModel.getState().getStartPosition());
                         }
                     }
                 }
