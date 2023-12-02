@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+
+
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.
 
@@ -91,6 +93,7 @@ public class HomeSearchState {
     public GeoPosition getStartPosition() {
         return startPosition;
     }
+
 
     public void setId(String id) { this.id = id; }
 

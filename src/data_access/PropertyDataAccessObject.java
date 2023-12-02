@@ -1,10 +1,8 @@
 package data_access;
 
 import com.jayway.jsonpath.JsonPath;
-import com.teamdev.jxbrowser.js.Json;
 import entity.Property;
 import entity.PropertyFactory;
-import use_case.home.HomeSearchDataAccessInterface;
 import kotlin.Pair;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -188,30 +186,22 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     public void filter() {
         filtered_properties = new HashMap<>();
         String id = inputProperty.getID();
-        String city = inputProperty.getCity();
         String address = inputProperty.getAddress();
-        String numRooms = inputProperty.getNumRooms();
-//      This attribute isn't used because I use it in my pricerangecheck helper method
-        String priceRange = inputProperty.getPriceRange();
-        String numBaths = inputProperty.getNumBaths();
-        String walkScore = inputProperty.getWalkScore();
         String furnished = inputProperty.getFurnished();
-        String listingType = inputProperty.getListingType();
 
 
 //      goes over the copy of the list of properties made from csv files and
 //      removes each id:property if it doesn't match the input property object attributes (user information)
         for (Map.Entry<String, Property> entry : properties.entrySet()) {
             if ((id == null) || id.equals("all") || id.equals(entry.getValue().getID())) {
-                if ((city == null) || city.equals("all") || city.equals(entry.getValue().getCity())) {
-                    if ((address == null) || address.equals("all") || address.equals(entry.getValue().getAddress())) {
-                        if ((numRooms == null) || numRooms.equals("all") || numRooms.equals(entry.getValue().getNumRooms())) {
+                if (cityCheck(entry.getValue())) {
+                    if (addressCheck(entry.getValue())) {
+                        if (numRoomsCheck(entry.getValue())) {
                             if (priceRangeCheck(entry.getValue())) {
-                                if ((numBaths == null) || numBaths.equals("all") || numBaths.equals(entry.getValue().getNumBaths())) {
-                                    if ((walkScore == null) || walkScore.equals("all") || walkScore.equals(entry.getValue().getWalkScore())) {
+                                if (numBathsCheck(entry.getValue())) {
+                                    if (walkscoreCheck(entry.getValue())) {
                                         if ((furnished == null) || furnished.equals("all") || furnished.equals(entry.getValue().getFurnished())) {
                                             if (listingTypeCheck(entry.getValue())) {
-//                                            if ((listingType == null) || listingType.equals("all") || listingType.equals(entry.getValue().getListingType())) {
                                                 filtered_properties.put(entry.getKey(), entry.getValue());
                                             }
                                         }
@@ -223,40 +213,103 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                 }
             }
         }
+        System.out.println("we've filtered");
+        System.out.println(filtered_properties.entrySet());
+        recommendedListings();
     }
 
 
-
-//    helper method to find if the pricerange of inputproperty fits with the csv property
     private boolean priceRangeCheck(Property property) {
         String helperPriceRange = inputProperty.getPriceRange();
+        String propertyPriceRange = property.getPriceRange();
 
-//        compares the values of inputProperty price range to the property given as parameter.
-//        Here I assume that the given property has a fixed price and not a range.
-        if (helperPriceRange == null || helperPriceRange.equals("all")) {
+        if (helperPriceRange == null || helperPriceRange.equals("all") || helperPriceRange.isEmpty()) {
             return true;
         } else if (helperPriceRange.equals("<100000")) {
-            return Integer.valueOf(property.getPriceRange()) <= 100000;
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && Integer.valueOf(propertyPriceRange.trim()) <= 100000;
         } else if (helperPriceRange.equals("100000-300000")) {
-            return 1000000 <= Integer.valueOf(property.getPriceRange()) && Integer.valueOf(property.getPriceRange()) <= 300000;
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 100000 <= Integer.valueOf(propertyPriceRange.trim()) && Integer.valueOf(propertyPriceRange.trim()) <= 300000;
         } else if (helperPriceRange.equals("300000-500000")) {
-            return 3000000 <= Integer.valueOf(property.getPriceRange()) && Integer.valueOf(property.getPriceRange()) <= 500000;
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 300000 <= Integer.valueOf(propertyPriceRange.trim()) && Integer.valueOf(propertyPriceRange.trim()) <= 500000;
         } else {
-            return 5000000 <= Integer.valueOf(property.getPriceRange());
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 500000 <= Integer.valueOf(propertyPriceRange.trim());
         }
     }
 
-//    helper method to check if inputproperty listing type filter word is found in csv property listing type
+
+    //    helper method to check if input property listing type filter word is found in csv property listing type
     private boolean listingTypeCheck(Property property) {
         String listingType = inputProperty.getListingType();
-        if (listingType == null) {
+        if (listingType == null || listingType.equals("all")) {
             return true;
         }
         else if (listingType.equals("other")) {
 //            return true if "House", "Townhouse", "Apartment" not in the csv property
-            return !property.getListingType().contains("House") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
+            return !property.getListingType().contains("Residence") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
+        } else if (listingType.equals("House")){
+            return (property.getListingType().contains("Residence"));
         } else {
-            return (listingType.equals("all") || property.getListingType().contains(listingType));
+            return (property.getListingType().contains(listingType));
+        }
+    }
+
+    private boolean numRoomsCheck(Property property) {
+        String helperNumRooms = inputProperty.getNumRooms();
+        String propertyNumRooms = property.getNumRooms();
+
+        if (helperNumRooms == null || helperNumRooms.equals("all") || helperNumRooms.isEmpty()) {
+            return true;
+        } else if (helperNumRooms.equals("5+")) {
+            return propertyNumRooms != null && !propertyNumRooms.trim().isEmpty() && Integer.valueOf(propertyNumRooms.trim()) >= 5;
+        } else {
+            return propertyNumRooms != null && !propertyNumRooms.trim().isEmpty() && Integer.valueOf(helperNumRooms).equals(Integer.valueOf(propertyNumRooms));
+        }
+    }
+
+    private boolean numBathsCheck(Property property) {
+        String helperNumBaths = inputProperty.getNumBaths();
+        String propertyNumBaths = property.getNumBaths();
+
+        if (helperNumBaths == null || helperNumBaths.equals("all") || helperNumBaths.isEmpty()) {
+            return true;
+        } else if (helperNumBaths.equals("4+")) {
+            return propertyNumBaths != null && !propertyNumBaths.trim().isEmpty() && Integer.valueOf(propertyNumBaths.trim()) >= 4;
+        } else {
+            return propertyNumBaths != null && !propertyNumBaths.trim().isEmpty() && Integer.valueOf(helperNumBaths).equals(Integer.valueOf(propertyNumBaths));
+        }
+    }
+
+
+    private boolean walkscoreCheck (Property property) {
+        String helperWalkscore = inputProperty.getWalkScore();
+        if (helperWalkscore == null || helperWalkscore.equals("all")) {
+            return true;
+        } else if (helperWalkscore.equals("10-30")) {
+            return Integer.valueOf(property.getWalkScore()) <= 30 && Integer.valueOf(property.getWalkScore()) >= 10;
+        } else if (helperWalkscore.equals("30-60")) {
+            return Integer.valueOf(property.getWalkScore()) >= 30 && Integer.valueOf(property.getWalkScore()) <= 60;
+        } else {
+//            don't need < 10 because properties always have walkscore less than 10
+            return Integer.valueOf(property.getWalkScore()) >= 60;
+        }
+    }
+
+    private boolean cityCheck(Property property) {
+        String helperCity = inputProperty.getCity();
+        if (helperCity == null) {
+            return true;
+        } else {
+            return (property.getCity().contains(helperCity.toUpperCase()));
+        }
+    }
+
+//    after inputting a city then deleting it with other filters the same, after pressing search button it recognizes it as an empty address and makes address attribute be empty string. This makes the list of properties empty
+    private boolean addressCheck(Property property) {
+        String helperAddress = inputProperty.getAddress();
+        if (helperAddress == null || helperAddress.isEmpty()) {
+            return true;
+        } else {
+            return (property.getAddress().contains(helperAddress.toUpperCase()));
         }
     }
 
@@ -300,4 +353,49 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
 
+    public void recommendedListings(){
+
+        Map<String, Property> recommendedListings = new HashMap<>();
+        // make a list with relevant properties based on the city of the listing
+        Map<String, Property> cityRecommendations = new HashMap<>();
+
+        // for each property in the filtered list, generate another list that contains listings in the same city
+        for (Property property : filtered_properties.values()){
+            // maximum three recommendations
+            int count = 0;
+            recommendedListings.clear();
+            cityRecommendations.clear();
+            //System.out.println(property);
+            // first, get the city of the property
+            String cityRec = property.getCity();
+            // then compare to each of the other entries in the filtered list and if it is the same city,
+            // put it in the recommended list
+            for (Map.Entry<String, Property> entry : filtered_properties.entrySet()) {
+                if (cityRec.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID())) {
+                    cityRecommendations.put(entry.getKey(), entry.getValue());
+                }
+            }
+            //System.out.println(cityRecommendations.size());
+            if (cityRecommendations.size() < 3){
+                for (Map.Entry<String, Property> entry : properties.entrySet()){
+                    if (cityRec.equals(entry.getValue().getCity())){
+                        cityRecommendations.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            //System.out.println(cityRecommendations.size());
+            for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
+                // pass through the first 3 recommended listings from the cityRecommendations list
+                if (count < 3) {
+                    recommendedListings.put(entry.getKey(), entry.getValue());
+                    count += 1;
+                } else{
+                    break;
+                }
+            }
+            property.setRecListings(recommendedListings);
+            //System.out.println(recommendedListings);
+        }
+
+    }
 }

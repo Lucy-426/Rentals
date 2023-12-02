@@ -3,6 +3,10 @@ package main.app;
 import interface_adapter.listing.ListingController;
 import interface_adapter.listing.ListingPresenter;
 import interface_adapter.listing.ListingViewModel;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/develop
 import data_access.MapDataAccessObject;
 import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
@@ -30,6 +34,7 @@ public class HomeSearchUseCaseFactory {
     public static HomeSearchView create(PropertyDataAccessObject propertyDataAccessObject, ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
         try {
             HomeSearchController homeSearchController = createHomeSearchUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel);
+
             ListingController listingController = createListingUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel, listingViewModel);
             CenterMapController centerMapController = createCenterMapUseCase(viewManagerModel, homeSearchViewModel);
             return new HomeSearchView(homeSearchController, listingController, homeSearchViewModel, centerMapController);
@@ -64,6 +69,10 @@ public class HomeSearchUseCaseFactory {
         ListingInputBoundary listingInteractor = new ListingInteractor(propertyDataAccessObject, listingOutputBoundary);
 
         return new ListingController(listingInteractor, homeSearchViewModel, viewManagerModel);
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/develop
     }
 
     private static CenterMapController createCenterMapUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel) throws IOException {

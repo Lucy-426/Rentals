@@ -22,14 +22,12 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     public final String viewName = "Search";
 
-    private final HomeSearchViewModel homesearchViewModel;
-
     public final JXMapKit jxMapKit = new JXMapKit();
 
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
 
-    private JButton update;
+    private final HomeSearchViewModel homeSearchViewModel;
 
 //    filters
     private JComboBox<String> numRooms;
@@ -47,7 +45,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
 
     // Controllers
-    private final HomeSearchController homesearchController;
+    private final HomeSearchController homeSearchController;
 
     private final ListingController listingController;
 
@@ -55,55 +53,56 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     public HomeSearchView(HomeSearchController homeController, ListingController listingController, HomeSearchViewModel viewModel,
                           CenterMapController centerMapController) {
-        this.homesearchController = homeController;
+        this.homeSearchController = homeController;
         this.listingController = listingController;
-        this.homesearchViewModel = viewModel;
+        this.homeSearchViewModel = viewModel;
         this.centerMapController = centerMapController;
-        homesearchViewModel.addPropertyChangeListener(this);
+        homeSearchViewModel.addPropertyChangeListener(this);
 
         // for formatting
         setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
 
-        JLabel title = new JLabel(homesearchViewModel.TITLE_LABEL);
+        JLabel title = new JLabel(homeSearchViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel searchBar = new LabelTextPanel(
-                new JLabel(homesearchViewModel.SEARCH_BAR_LABEL), homeSearchBar);
+                new JLabel(homeSearchViewModel.SEARCH_BAR_LABEL), homeSearchBar);
         searchButton = new JButton("Search");
         // Add action listener to the search button
         searchButton.addActionListener(this);
 
         // filter for number of rooms
-        numRooms = new JComboBox<>(homesearchViewModel.numRoomStrings);
+        numRooms = new JComboBox<>(homeSearchViewModel.numRoomStrings);
         numRooms.setSelectedIndex(0);
         numRooms.addActionListener(this);
 
-        priceRange = new JComboBox<>(homesearchViewModel.priceRangeStrings);
+        priceRange = new JComboBox<>(homeSearchViewModel.priceRangeStrings);
         priceRange.setSelectedIndex(0);
         priceRange.addActionListener(this);
 
-        numBaths = new JComboBox<>(homesearchViewModel.numBathsStrings);
+        numBaths = new JComboBox<>(homeSearchViewModel.numBathsStrings);
         numBaths.setSelectedIndex(0);
         numBaths.addActionListener(this);
 
-        walkScore = new JComboBox<>(homesearchViewModel.walkScoreStrings);
+        walkScore = new JComboBox<>(homeSearchViewModel.walkScoreStrings);
         walkScore.setSelectedIndex(0);
         walkScore.addActionListener(this);
 
-        furnished = new JComboBox<>(homesearchViewModel.furnishedStrings);
+        furnished = new JComboBox<>(homeSearchViewModel.furnishedStrings);
         furnished.setSelectedIndex(0);
         furnished.addActionListener(this);
 
-        listingType = new JComboBox<>(homesearchViewModel.listingTypeStrings);
+        listingType = new JComboBox<>(homeSearchViewModel.listingTypeStrings);
         listingType.setSelectedIndex(0);
         listingType.addActionListener(this);
 
 
         // for formatting
+        GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.WEST;
+
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(searchBar);
@@ -168,7 +167,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         jxMapKit.setDataProviderCreditShown(true);
         jxMapKit.setZoom(5);
         jxMapKit.setAddressLocationShown(true);
-        jxMapKit.setAddressLocation(homesearchViewModel.startPosition);
+        jxMapKit.setAddressLocation(homeSearchViewModel.startPosition);
 
         this.add(jxMapKit);
 
@@ -177,9 +176,13 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                 new KeyListener() {
                     @Override
                     public void keyTyped (KeyEvent e) {
-                        HomeSearchState currentState = homesearchViewModel.getState();
-                        currentState.setSearchBarInput(homeSearchBar.getText() + e.getKeyChar());
-                        homesearchViewModel.setState(currentState);
+                        HomeSearchState currentState = homeSearchViewModel.getState();
+                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                            currentState.setSearchBarInput(homeSearchBar.getText());
+                        } else {
+                            currentState.setSearchBarInput(homeSearchBar.getText() + e.getKeyChar());
+                        }
+                        homeSearchViewModel.setState(currentState);
                     }
 
                     @Override
@@ -198,30 +201,30 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == searchButton) {
                             // Determine whether search bar input is a city, address, or listing ID
-                            String input = homesearchViewModel.getState().getSearchBarInput();
+                            String input = homeSearchViewModel.getState().getSearchBarInput();
                             if (input == null) {} // if nothing was typed in the search bar
                             else if (input.matches("[0-9]+")) {
-                                HomeSearchState currentState = homesearchViewModel.getState();
-                                currentState.setId(homesearchViewModel.getState().getSearchBarInput());
-                                homesearchViewModel.setState(currentState);
+                                HomeSearchState currentState = homeSearchViewModel.getState();
+                                currentState.setId(homeSearchViewModel.getState().getSearchBarInput());
+                                homeSearchViewModel.setState(currentState);
                             } else if (input.matches("[a-zA-Z\\s]+")) {
-                                HomeSearchState currentState = homesearchViewModel.getState();
-                                currentState.setCity(homesearchViewModel.getState().getSearchBarInput());
-                                homesearchViewModel.setState(currentState);
+                                HomeSearchState currentState = homeSearchViewModel.getState();
+                                currentState.setCity(homeSearchViewModel.getState().getSearchBarInput());
+                                homeSearchViewModel.setState(currentState);
                             } else if (input.matches(".+")) {
-                                HomeSearchState currentState = homesearchViewModel.getState();
-                                currentState.setAddress(homesearchViewModel.getState().getSearchBarInput());
-                                homesearchViewModel.setState(currentState);
+                                HomeSearchState currentState = homeSearchViewModel.getState();
+                                currentState.setAddress(homeSearchViewModel.getState().getSearchBarInput());
+                                homeSearchViewModel.setState(currentState);
                             }
 
-                            homesearchController.execute(homesearchViewModel.getState().getId(),
-                                    homesearchViewModel.getState().getCity(), homesearchViewModel.getState().getAddress(),
-                                    homesearchViewModel.getState().getNumRooms(), homesearchViewModel.getState().getPriceRange(),
-                                    homesearchViewModel.getState().getNumBaths(), homesearchViewModel.getState().getWalkScore(),
-                                    homesearchViewModel.getState().getFurnished(), homesearchViewModel.getState().getListingType());
+                            homeSearchController.execute(homeSearchViewModel.getState().getId(),
+                                    homeSearchViewModel.getState().getCity(), homeSearchViewModel.getState().getAddress(),
+                                    homeSearchViewModel.getState().getNumRooms(), homeSearchViewModel.getState().getPriceRange(),
+                                    homeSearchViewModel.getState().getNumBaths(), homeSearchViewModel.getState().getWalkScore(),
+                                    homeSearchViewModel.getState().getFurnished(), homeSearchViewModel.getState().getListingType());
 
-                            centerMapController.execute(homesearchViewModel.getState().getAddress());
-                            jxMapKit.setAddressLocation(homesearchViewModel.getState().getStartPosition());
+                            centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
+                            jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
                         }
                     }
                 }
@@ -232,11 +235,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == numRooms) {
-                            HomeSearchState currentState = homesearchViewModel.getState();
+                            HomeSearchState currentState = homeSearchViewModel.getState();
                             JComboBox cb = (JComboBox) e.getSource();
                             String numRooms = (String) cb.getSelectedItem();
                             currentState.setNumRooms(numRooms);
-                            homesearchViewModel.setState(currentState);
+                            homeSearchViewModel.setState(currentState);
                         }
                     }
                 }
@@ -247,11 +250,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == priceRange) {
-                            HomeSearchState currentState = homesearchViewModel.getState();
+                            HomeSearchState currentState = homeSearchViewModel.getState();
                             JComboBox cb = (JComboBox) e.getSource();
                             String priceRange = (String) cb.getSelectedItem();
                             currentState.setPriceRange(priceRange);
-                            homesearchViewModel.setState(currentState);
+                            homeSearchViewModel.setState(currentState);
                         }
                     }
                 }
@@ -262,11 +265,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == numBaths) {
-                            HomeSearchState currentState = homesearchViewModel.getState();
+                            HomeSearchState currentState = homeSearchViewModel.getState();
                             JComboBox cb = (JComboBox) e.getSource();
                             String numBaths = (String) cb.getSelectedItem();
                             currentState.setNumBaths(numBaths);
-                            homesearchViewModel.setState(currentState);
+                            homeSearchViewModel.setState(currentState);
                         }
                     }
                 }
@@ -277,11 +280,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == walkScore) {
-                            HomeSearchState currentState = homesearchViewModel.getState();
+                            HomeSearchState currentState = homeSearchViewModel.getState();
                             JComboBox cb = (JComboBox) e.getSource();
                             String walkScore = (String) cb.getSelectedItem();
                             currentState.setWalkScore(walkScore);
-                            homesearchViewModel.setState(currentState);
+                            homeSearchViewModel.setState(currentState);
                         }
                     }
                 }
@@ -292,11 +295,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == furnished) {
-                            HomeSearchState currentState = homesearchViewModel.getState();
+                            HomeSearchState currentState = homeSearchViewModel.getState();
                             JComboBox cb = (JComboBox) e.getSource();
                             String furnished = (String) cb.getSelectedItem();
                             currentState.setFurnished(furnished);
-                            homesearchViewModel.setState(currentState);
+                            homeSearchViewModel.setState(currentState);
                         }
                     }
                 }
@@ -307,11 +310,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource() == listingType) {
-                            HomeSearchState currentState = homesearchViewModel.getState();
+                            HomeSearchState currentState = homeSearchViewModel.getState();
                             JComboBox cb = (JComboBox) e.getSource();
                             String listingType = (String) cb.getSelectedItem();
                             currentState.setListingType(listingType);
-                            homesearchViewModel.setState(currentState);
+                            homeSearchViewModel.setState(currentState);
                         }
                     }
                 }
@@ -329,10 +332,10 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         // Updates the home page to add buttons according to the filtered listings
-        if (!(homesearchViewModel.getState().getDisplayedListings() == null)) {
+        if (!(homeSearchViewModel.getState().getDisplayedListings() == null)) {
             listingButtons = new ArrayList<>();
-            for (String id : homesearchViewModel.getState().getDisplayedListings().keySet()) {
-                JButton listingButton = new JButton(homesearchViewModel.getState().getDisplayedListings().get(id));
+            for (String id : homeSearchViewModel.getState().getDisplayedListings().keySet()) {
+                JButton listingButton = new JButton(homeSearchViewModel.getState().getDisplayedListings().get(id));
                 listingButton.setName(id);
                 listingButton.addActionListener(this);
                 listingButtons.add(listingButton);

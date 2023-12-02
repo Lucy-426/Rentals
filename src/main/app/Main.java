@@ -7,6 +7,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
+
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.listing.ListingViewModel;
