@@ -30,11 +30,6 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("id: " + homeInputData.getId());
         System.out.println("city: " + homeInputData.getCity());
         System.out.println("address: " + homeInputData.getAddress());
-        if (!(homeInputData.getAddress()==null) && homeInputData.getAddress().isEmpty()) {
-            System.out.println("address: is an empty string");
-        } else {
-            System.out.println("address: " + homeInputData.getAddress());
-        }
         System.out.println("rooms: " + homeInputData.getNumRooms());
         System.out.println("price range: " + homeInputData.getPriceRange());
         System.out.println("bathrooms: " + homeInputData.getNumBaths());

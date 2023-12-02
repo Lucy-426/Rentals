@@ -205,6 +205,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                             // Determine whether search bar input is a city, address, or listing ID
                             String input = homeSearchViewModel.getState().getSearchBarInput();
                             if (input == null) {} // if nothing was typed in the search bar
+                            else if (input.trim().isEmpty()) {} // if search bar is empty
                             else if (input.matches("[0-9]+")) {
                                 HomeSearchState currentState = homeSearchViewModel.getState();
                                 currentState.setId(homeSearchViewModel.getState().getSearchBarInput());
