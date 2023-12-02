@@ -225,7 +225,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                                     homeSearchViewModel.getState().getNumBaths(), homeSearchViewModel.getState().getWalkScore(),
                                     homeSearchViewModel.getState().getFurnished(), homeSearchViewModel.getState().getListingType());
 
-                            centerMapController.execute(homeSearchViewModel.getState().getAddress());
+                            centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
                             jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
                         }
                     }
