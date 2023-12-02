@@ -22,7 +22,7 @@ public interface HomeSearchDataAccessInterface {
     with the latitude/longitude coordinates*/
     Set<Waypoint> getCoordinates(HashMap<String, String> properties);
 
-    double getLat(String address);
+    double getLat(String id);
 
-    double getLong(String address);
+    double getLong(String id);
 }
