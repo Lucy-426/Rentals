@@ -9,7 +9,6 @@ import java.util.Set;
 
 public interface HomeSearchDataAccessInterface {
 
-    // TODO: change this?
     void save(Property property);
 
     void filter();
@@ -25,4 +24,8 @@ public interface HomeSearchDataAccessInterface {
     double getLat(String id);
 
     double getLong(String id);
+
+    void makeRecommendations(Property property);
+
+    HashMap<String, String> getRecommendedProperties();
 }

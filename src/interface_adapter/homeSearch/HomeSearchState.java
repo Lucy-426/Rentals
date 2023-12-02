@@ -1,11 +1,11 @@
 package interface_adapter.homeSearch;
 
-
 import java.util.HashMap;
 import java.util.Set;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
+
 
 
 public class HomeSearchState {
@@ -94,6 +94,7 @@ public class HomeSearchState {
         return displayedListings;
     }
 
+
     public Set<Waypoint> getWaypoints() {
         return waypoints;
     }
@@ -102,7 +103,9 @@ public class HomeSearchState {
 
     // Setter methods
 
-    public void setSearchBarInput(String searchBarInput) { this.searchBarInput = searchBarInput; }
+    public void setSearchBarInput(String searchBarInput) {
+        this.searchBarInput = searchBarInput;
+    }
 
     public void setId(String id) { this.id = id; }
 

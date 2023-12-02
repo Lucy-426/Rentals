@@ -27,6 +27,8 @@ public class ListingPresenter implements ListingOutputBoundary{
         listingState.setWalkScore(listingOutputData.getWalkScore());
         listingState.setFurnished(listingOutputData.getFurnished());
         listingState.setListingType(listingOutputData.getListingType());
+        listingState.setRecommendations(listingOutputData.getRecommendations());
+
         this.listingViewModel.setState(listingState);
         listingViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(listingViewModel.getViewName());

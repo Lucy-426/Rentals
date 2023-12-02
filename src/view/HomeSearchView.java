@@ -31,7 +31,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
 
-    private JButton update;
+    private final HomeSearchViewModel homeSearchViewModel;
 
 //    filters
     private JComboBox<String> numRooms;
@@ -49,21 +49,18 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
 
     // Controllers
-    private final HomeSearchController homesearchController;
+    private final HomeSearchController homeSearchController;
 
     private final ListingController listingController;
 
     private final CenterMapController centerMapController;
 
-    private final HomeSearchViewModel homeSearchViewModel;
-
-
-    public HomeSearchView(HomeSearchController homeController, ListingController listingController, CenterMapController centerMapController, HomeSearchViewModel homeSearchViewModel) {
-        this.homesearchController = homeController;
+    public HomeSearchView(HomeSearchController homeController, ListingController listingController, HomeSearchViewModel viewModel,
+                          CenterMapController centerMapController) {
+        this.homeSearchController = homeController;
         this.listingController = listingController;
+        this.homeSearchViewModel = viewModel;
         this.centerMapController = centerMapController;
-        this.homeSearchViewModel = homeSearchViewModel;
-
         homeSearchViewModel.addPropertyChangeListener(this);
 
         // for formatting
@@ -104,6 +101,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         listingType.addActionListener(this);
 
 
+        // for formatting
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
@@ -233,7 +231,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                                 homeSearchViewModel.setState(currentState);
                             }
 
-                            homesearchController.execute(homeSearchViewModel.getState().getId(),
+                            homeSearchController.execute(homeSearchViewModel.getState().getId(),
                                     homeSearchViewModel.getState().getCity(), homeSearchViewModel.getState().getAddress(),
                                     homeSearchViewModel.getState().getNumRooms(), homeSearchViewModel.getState().getPriceRange(),
                                     homeSearchViewModel.getState().getNumBaths(), homeSearchViewModel.getState().getWalkScore(),

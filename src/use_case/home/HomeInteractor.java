@@ -29,21 +29,6 @@ public class HomeInteractor implements HomeInputBoundary {
                 homeInputData.getWalkScore(), homeInputData.getFurnished(), homeInputData.getListingType());
         homeDataAccessObject.save(property);
 
-        System.out.println("id: " + homeInputData.getId());
-        System.out.println("city: " + homeInputData.getCity());
-        System.out.println("address: " + homeInputData.getAddress());
-        if (!(homeInputData.getAddress()==null) && homeInputData.getAddress().isEmpty()) {
-            System.out.println("address: is an empty string");
-        } else {
-            System.out.println("address: " + homeInputData.getAddress());
-        }
-        System.out.println("rooms: " + homeInputData.getNumRooms());
-        System.out.println("price range: " + homeInputData.getPriceRange());
-        System.out.println("bathrooms: " + homeInputData.getNumBaths());
-        System.out.println("walk score: " + homeInputData.getWalkScore());
-        System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
-        System.out.println("listing type: " + homeInputData.getListingType());
-
         homeDataAccessObject.filter();
         HashMap<String, String> displayedProperties = homeDataAccessObject.getFilteredProperties();
         Set<Waypoint> waypoints = homeDataAccessObject.getCoordinates(displayedProperties);

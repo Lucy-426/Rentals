@@ -1,5 +1,7 @@
 package use_case.listing;
 
+import java.util.HashMap;
+
 public class ListingOutputData {
 
     private final String id;
@@ -19,8 +21,11 @@ public class ListingOutputData {
 
     private final String listingType;
 
+    private final HashMap<String, String> recommendations;
+
     public ListingOutputData(String id, String city, String address, String numRooms, String price,
-                             String numBaths, String walkScore, String furnished, String listingType) {
+                             String numBaths, String walkScore, String furnished, String listingType,
+                             HashMap<String, String> recommendations) {
         this.id = id;
         this.city = city;
         this.address = address;
@@ -30,6 +35,7 @@ public class ListingOutputData {
         this.walkScore = walkScore;
         this.furnished = furnished;
         this.listingType = listingType;
+        this.recommendations = recommendations;
     }
 
     public String getId() {
@@ -60,4 +66,7 @@ public class ListingOutputData {
         return listingType;
     }
 
+    public HashMap<String, String> getRecommendations() {
+        return recommendations;
+    }
 }
