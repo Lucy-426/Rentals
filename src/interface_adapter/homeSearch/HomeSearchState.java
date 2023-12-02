@@ -2,6 +2,8 @@ package interface_adapter.homeSearch;
 
 import java.util.HashMap;
 
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.
 
@@ -25,6 +27,7 @@ public class HomeSearchState {
     private String listingType;
 
     private HashMap<String, String> displayedListings;
+    private GeoPosition startPosition;
 
     public HomeSearchState(HomeSearchState copy) {
         searchBarInput = copy.searchBarInput;
@@ -38,6 +41,7 @@ public class HomeSearchState {
         furnished = copy.furnished;
         listingType = copy.listingType;
         displayedListings = copy.displayedListings;
+        startPosition = copy.startPosition;
     }
     public HomeSearchState() {}
 
@@ -84,6 +88,10 @@ public class HomeSearchState {
         this.searchBarInput = searchBarInput;
     }
 
+    public GeoPosition getStartPosition() {
+        return startPosition;
+    }
+
     public void setId(String id) { this.id = id; }
 
     public void setCity(String city) { this.city = city; }
@@ -118,5 +126,9 @@ public class HomeSearchState {
 
     public void setDisplayedListings(HashMap<String, String> displayedListings) {
         this.displayedListings = displayedListings;
+    }
+
+    public void setStartPosition(GeoPosition startPosition) {
+        this.startPosition = startPosition;
     }
 }

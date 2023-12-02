@@ -1,6 +1,8 @@
 package interface_adapter.homeSearch;
 
 import interface_adapter.ViewModel;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+import view.HomeSearchView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -19,6 +21,8 @@ public class HomeSearchViewModel extends ViewModel {
     public final String[] furnishedStrings = {"all", "furnished", "not furnished"};
 
     public final String[] listingTypeStrings = {"all", "House", "Townhouse", "Apartment", "other"};
+
+    public GeoPosition startPosition = new GeoPosition(40.6964726,-74.2172355);
 
 
 

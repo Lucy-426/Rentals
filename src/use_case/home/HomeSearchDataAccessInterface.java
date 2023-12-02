@@ -12,4 +12,5 @@ public interface HomeSearchDataAccessInterface {
     HashMap<String, String> getFilteredProperties();
 
     Property getProperty(String id);
+
 }
