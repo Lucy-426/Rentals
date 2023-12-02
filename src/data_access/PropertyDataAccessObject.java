@@ -1,10 +1,8 @@
 package data_access;
 
 import com.jayway.jsonpath.JsonPath;
-import com.teamdev.jxbrowser.js.Json;
 import entity.Property;
 import entity.PropertyFactory;
-import use_case.home.HomeSearchDataAccessInterface;
 import kotlin.Pair;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -217,7 +215,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
         System.out.println("we've filtered");
         System.out.println(filtered_properties.entrySet());
-
+        recommendedListings();
     }
 
 
@@ -239,7 +237,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
 
-    //    helper method to check if inputproperty listing type filter word is found in csv property listing type
+    //    helper method to check if input property listing type filter word is found in csv property listing type
     private boolean listingTypeCheck(Property property) {
         String listingType = inputProperty.getListingType();
         if (listingType == null || listingType.equals("all")) {
@@ -355,4 +353,49 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
 
+    public void recommendedListings(){
+
+        Map<String, Property> recommendedListings = new HashMap<>();
+        // make a list with relevant properties based on the city of the listing
+        Map<String, Property> cityRecommendations = new HashMap<>();
+
+        // for each property in the filtered list, generate another list that contains listings in the same city
+        for (Property property : filtered_properties.values()){
+            // maximum three recommendations
+            int count = 0;
+            recommendedListings.clear();
+            cityRecommendations.clear();
+            //System.out.println(property);
+            // first, get the city of the property
+            String cityRec = property.getCity();
+            // then compare to each of the other entries in the filtered list and if it is the same city,
+            // put it in the recommended list
+            for (Map.Entry<String, Property> entry : filtered_properties.entrySet()) {
+                if (cityRec.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID())) {
+                    cityRecommendations.put(entry.getKey(), entry.getValue());
+                }
+            }
+            //System.out.println(cityRecommendations.size());
+            if (cityRecommendations.size() < 3){
+                for (Map.Entry<String, Property> entry : properties.entrySet()){
+                    if (cityRec.equals(entry.getValue().getCity())){
+                        cityRecommendations.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            //System.out.println(cityRecommendations.size());
+            for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
+                // pass through the first 3 recommended listings from the cityRecommendations list
+                if (count < 3) {
+                    recommendedListings.put(entry.getKey(), entry.getValue());
+                    count += 1;
+                } else{
+                    break;
+                }
+            }
+            property.setRecListings(recommendedListings);
+            //System.out.println(recommendedListings);
+        }
+
+    }
 }
