@@ -32,14 +32,11 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     // The cities that we are getting listings from
     private static final Pair<String, String> SF_CA = new Pair<>("37.656305","-122.417006");
     private static final Pair<String, String> MINNEAPOLIS_MN = new Pair<>("44.996091", "-93.364628");
-    private static final Pair<String, String> BOSTON_MA = new Pair<>("42.348866", "-71.064589");
     private static final Pair<String, String> LA_CA = new Pair<>("34.029082", "-118.25947");
-    private static final Pair<String, String> CHICAGO_IL = new Pair<>("41.825105", "-87.663623");
-    private static final Pair<String, String> MIAMI_FL = new Pair<>("25.765623", "-80.505745");
-    private static final Pair<String, String> PHILADELPHIA_PA = new Pair<>("39.993614", "-75.150923");
-    private static final Pair<String, String> DETROIT_MI = new Pair<>("42.352656", "-83.088938");
-    private static final Pair<String, String> ATLANTA_GA = new Pair<>("33.785802", "-84.41739");
-    private static final Pair<String, String> BUFFALO_NY = new Pair<>("42.926907", "-78.815458");
+//    private static final Pair<String, String> PHILADELPHIA_PA = new Pair<>("39.993614", "-75.150923");
+//    private static final Pair<String, String> DETROIT_MI = new Pair<>("42.352656", "-83.088938");
+//    private static final Pair<String, String> ATLANTA_GA = new Pair<>("33.785802", "-84.41739");
+//    private static final Pair<String, String> BUFFALO_NY = new Pair<>("42.926907", "-78.815458");
 
     // a list that will contain all the cities above
     private static final ArrayList<Pair> cities = new ArrayList<>();
@@ -54,14 +51,11 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         // saving all the cities from above to a list
         cities.add(SF_CA);
         cities.add(MINNEAPOLIS_MN);
-        cities.add(BOSTON_MA);
         cities.add(LA_CA);
-        cities.add(CHICAGO_IL);
-        cities.add(MIAMI_FL);
-        cities.add(PHILADELPHIA_PA);
-        cities.add(DETROIT_MI);
-        cities.add(ATLANTA_GA);
-        cities.add(BUFFALO_NY);
+//        cities.add(PHILADELPHIA_PA);
+//        cities.add(DETROIT_MI);
+//        cities.add(ATLANTA_GA);
+//        cities.add(BUFFALO_NY);
 
         csvFile = new File(csvPath);
         headers.put("id", 0);
@@ -78,6 +72,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         if(csvFile.length() == 0) {
             for (Pair city: cities) {
                 load(city);
+                System.out.println(city);
             }
 
             // Once all the cities' data have been loaded,
@@ -131,6 +126,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
             // for each property in the listing, filter out the fields that we need and create the property
             JSONArray rawPropertiesData = responseBody.getJSONArray("property");
+            System.out.println(rawPropertiesData.length());
             for (int i = 0; i < rawPropertiesData.length(); i++) {
                 String propertyJson = rawPropertiesData.getJSONObject(i).toString();
 
@@ -162,6 +158,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
                     // TODO: Still need to fix this because it takes too long to run so no memory error happens
                     String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
+                    System.out.println(i);
 
                     List<String> givenList = Arrays.asList("Yes", "No");
                     Random rand = new Random();
