@@ -10,7 +10,7 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
 
     private ViewManagerModel viewManagerModel;
 
-    // TODO: link listing view model?
+
     public HomeSearchPresenter(HomeSearchViewModel homesearchViewModel, ViewManagerModel viewManagerModel) {
         this.homesearchViewModel = homesearchViewModel;
         this.viewManagerModel = viewManagerModel;
@@ -18,9 +18,14 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
     @Override
     public void prepareSuccessView(HomeOutputData homeOutputData) {
         HomeSearchState homeSearchState = homesearchViewModel.getState();
+        homeSearchState.setDisplayedListings(homeOutputData.getDisplayedProperties());
+        homesearchViewModel.setState(homeSearchState);
+        homesearchViewModel.firePropertyChanged();
+
         viewManagerModel.setActiveView(homesearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 
 
     }
+
 }

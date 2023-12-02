@@ -1,7 +1,6 @@
 package interface_adapter.listing;
 
 import interface_adapter.ViewModel;
-import interface_adapter.listing.ListingState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -10,7 +9,7 @@ public class ListingViewModel extends ViewModel {
 
     public static final String TITLE_LABEL = "Listing View";
     public static final String BACK_BUTTON_LABEL = "Back";
-    public ListingViewModel(String viewName) {
+    public ListingViewModel() {
         super("Listing");
     }
 

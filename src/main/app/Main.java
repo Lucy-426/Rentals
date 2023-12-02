@@ -1,15 +1,27 @@
 package main.app;
 
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.JXMapViewer;
+import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.Waypoint;
+
+import data_access.PropertyDataAccessObject;
+import entity.PropertyFactory;
+
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.listing.ListingViewModel;
 import view.HomeSearchView;
+import view.ListingView;
 import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
@@ -27,8 +39,21 @@ public class Main {
         new ViewManager(views, cardLayout, viewManagerModel);
 
         HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel);
+        ListingViewModel listingViewModel = new ListingViewModel();
+
+        PropertyDataAccessObject propertyDataAccessObject;
+        try {
+            propertyDataAccessObject = new PropertyDataAccessObject("./properties.csv", new PropertyFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         views.add(homeSearchView, homeSearchView.viewName);
+
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
+        views.add(listingView, listingView.viewName);
 
         viewManagerModel.setActiveView(homeSearchView.viewName);
         viewManagerModel.firePropertyChanged();

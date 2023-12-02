@@ -17,6 +17,7 @@ public class HomeInputData {
 
     private final String listingType;
 
+
     public HomeInputData(String id, String city, String address, String numRooms, String priceRange,
                          String numBaths, String walkScore, String furnished, String listingType) {
         this.id = id;
@@ -61,5 +62,4 @@ public class HomeInputData {
     public String getListingType() {
         return listingType;
     }
-
 }
