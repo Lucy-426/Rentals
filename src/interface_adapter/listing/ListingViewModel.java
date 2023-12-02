@@ -1,7 +1,6 @@
 package interface_adapter.listing;
 
 import interface_adapter.ViewModel;
-import interface_adapter.listing.ListingState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

@@ -1,5 +1,14 @@
 package main.app;
 
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.JXMapViewer;
+import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.Waypoint;
+
+import data_access.PropertyDataAccessObject;
+import entity.PropertyFactory;
+
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.listing.ListingViewModel;
@@ -26,25 +35,31 @@ public class Main {
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
-
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
-
 
         HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
         ListingViewModel listingViewModel = new ListingViewModel();
 
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel, listingViewModel);
+        PropertyDataAccessObject propertyDataAccessObject;
+        try {
+            propertyDataAccessObject = new PropertyDataAccessObject("./properties.csv", new PropertyFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         views.add(homeSearchView, homeSearchView.viewName);
 
-        ListingView listingView = HomeSearchUseCaseFactory.createListingView(viewManagerModel, homesearchViewModel, listingViewModel);
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         views.add(listingView, listingView.viewName);
 
         viewManagerModel.setActiveView(homeSearchView.viewName);
         viewManagerModel.firePropertyChanged();
 
-
         application.pack();
+        application.setMinimumSize(new Dimension(1000, 600));
         application.setVisible(true);
     }
 }

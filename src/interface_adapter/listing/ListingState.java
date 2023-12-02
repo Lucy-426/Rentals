@@ -2,6 +2,9 @@ package interface_adapter.listing;
 
 public class ListingState {
 
+    private String id;
+
+    private String city;
     private String address;
 
     private String numRooms;
@@ -18,6 +21,8 @@ public class ListingState {
 
 
     public ListingState(ListingState copy) {
+        this.id = copy.id;
+        this.city = copy.city;
         this.address = copy.address;
         this.numRooms = copy.numRooms;
         this.price = copy.price;
@@ -29,6 +34,14 @@ public class ListingState {
     }
 
     public ListingState() {}
+
+    public String getId() {
+        return id;
+    }
+
+    public String getCity() {
+        return city;
+    }
 
     public String getAddress(){
         return address;
@@ -50,6 +63,14 @@ public class ListingState {
     }
     public String getListingType() {
         return listingType;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public void setAddress(String address){

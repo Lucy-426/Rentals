@@ -3,6 +3,8 @@ package use_case.home;
 import entity.Property;
 import entity.PropertyFactory;
 
+import java.util.HashMap;
+
 public class HomeInteractor implements HomeInputBoundary {
 
     final HomeSearchDataAccessInterface homeDataAccessObject;
@@ -19,8 +21,6 @@ public class HomeInteractor implements HomeInputBoundary {
     }
     @Override
     public void execute(HomeInputData homeInputData) {
-        // TODO: change input/output data so it's not hard coded, and
-        //  also change so it doesn't create a property but rather passes it to a filter
 
         Property property = propertyFactory.create(homeInputData.getId(), homeInputData.getCity(), homeInputData.getAddress(),
                 homeInputData.getNumRooms(), homeInputData.getPriceRange(), homeInputData.getNumBaths(),
@@ -30,6 +30,11 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("id: " + homeInputData.getId());
         System.out.println("city: " + homeInputData.getCity());
         System.out.println("address: " + homeInputData.getAddress());
+        if (!(homeInputData.getAddress()==null) && homeInputData.getAddress().isEmpty()) {
+            System.out.println("address: is an empty string");
+        } else {
+            System.out.println("address: " + homeInputData.getAddress());
+        }
         System.out.println("rooms: " + homeInputData.getNumRooms());
         System.out.println("price range: " + homeInputData.getPriceRange());
         System.out.println("bathrooms: " + homeInputData.getNumBaths());
@@ -37,12 +42,10 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
         System.out.println("listing type: " + homeInputData.getListingType());
 
-        // TODO: filtering step goes here, output data should be the filtered properties
-        // homeDataAccessObject.filter();
-        HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
-        // homePresenter.prepareSuccessView(homeOutputData);
-        // TODO: change homeoutputdata? maybe create listing from home input data?
-        homePresenter.prepareListingView(homeOutputData);
+        homeDataAccessObject.filter();
+        HashMap<String, String> displayedProperties = homeDataAccessObject.getFilteredProperties();
+        HomeOutputData homeOutputData = new HomeOutputData(displayedProperties);
+        homePresenter.prepareSuccessView(homeOutputData);
     }
 
 }

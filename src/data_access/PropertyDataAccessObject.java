@@ -1,6 +1,7 @@
 package data_access;
 
 import com.jayway.jsonpath.JsonPath;
+import com.teamdev.jxbrowser.js.Json;
 import entity.Property;
 import entity.PropertyFactory;
 import use_case.home.HomeSearchDataAccessInterface;
@@ -11,6 +12,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import use_case.home.HomeSearchDataAccessInterface;
 
 import java.io.*;
 import java.util.*;
@@ -18,16 +20,16 @@ import java.util.*;
 public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final File csvFile;
 
-    private File filteredcsvFile;
-
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
-    private final Map<String, Property> filtered_properties = new HashMap<>();
+    private Map<String, Property> filtered_properties;
+
+    private final WalkScoreDataAccessObject walkScoreCalculator = new WalkScoreDataAccessObject();
 
     // Root URL - can later adapt so that for various functions, we attach ending (i.e. .../property/detail)
     private static final String API_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0/";
-    private static final String API_TOKEN = "a29ec8d3d48c6a36e4ce59f96a94606a";
+    private static final String API_TOKEN = "bdc142f975386786593145e4c20e19e3";
 
     // The cities that we are getting listings from
     private static final Pair<String, String> SF_CA = new Pair<>("37.656305","-122.417006");
@@ -83,8 +85,29 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
             // Once all the cities' data have been loaded,
             // save (write all the data) to csv
             this.save();
+        } else {
+            try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+                String header = reader.readLine();
+
+                assert header.equals("id,city,address,numRooms,priceRange,numBaths,walkScore,furnished,listingType");
+
+                String row;
+                while ((row = reader.readLine()) != null) {
+                    String[] col = row.split(",");
+                    String id = String.valueOf(col[headers.get("id")]);
+                    String city = String.valueOf(col[headers.get("city")]);
+                    String address = String.valueOf(col[headers.get("address")]);
+                    String rooms = String.valueOf(col[headers.get("numRooms")]);
+                    String price = String.valueOf(col[headers.get("priceRange")]);
+                    String baths = String.valueOf(col[headers.get("numBaths")]);
+                    String walkscore = String.valueOf(col[headers.get("walkScore")]);
+                    String furnished = String.valueOf(col[headers.get("furnished")]);
+                    String listingType = String.valueOf(col[headers.get("listingType")]);
+                    Property property = propertyFactory.create(id, city, address, rooms, price, baths, walkscore, furnished, listingType);
+                    properties.put(property.getID(), property);
+                }
+            }
         }
-        recommendedListings();
 
     }
 
@@ -134,7 +157,13 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     String numBaths_before = JsonPath.read(propertyJson, "$.building.rooms[?(@.bathstotal != '')].bathstotal").toString();
                     String numBaths = numBaths_before.substring(1, numBaths_before.length() - 1);
 
-                    String walkScore = "0"; //TODO: This is to be filled in based on calculations that Janna is working on
+                    String latitude = JsonPath.read(propertyJson, "$.location.latitude");
+                    double lat = Double.parseDouble(latitude);
+                    String longitude = JsonPath.read(propertyJson, "$.location.longitude");
+                    double lon = Double.parseDouble(longitude);
+
+                    // TODO: Still need to fix this because it takes too long to run so no memory error happens
+                    String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
 
                     List<String> givenList = Arrays.asList("Yes", "No");
                     Random rand = new Random();
@@ -147,7 +176,6 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
                     // Save the property to list of properties
                     properties.put(newProperty.getID(), newProperty);
-                    System.out.println(properties);
                 }
             }
         } catch (IOException | JSONException e) {
@@ -158,32 +186,24 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 //    TODO: test the filter method
     @Override
     public void filter() {
-//        filtered_properties.putAll(properties);
-
+        filtered_properties = new HashMap<>();
         String id = inputProperty.getID();
-        String city = inputProperty.getCity();
         String address = inputProperty.getAddress();
-        String numRooms = inputProperty.getNumRooms();
-        String priceRange = inputProperty.getPriceRange();
-        String numBaths = inputProperty.getNumBaths();
-        String walkScore = inputProperty.getWalkScore();
         String furnished = inputProperty.getFurnished();
-        String listingType = inputProperty.getListingType();
+
 
 //      goes over the copy of the list of properties made from csv files and
 //      removes each id:property if it doesn't match the input property object attributes (user information)
-        for (Map.Entry<String,Property> entry : properties.entrySet()) {
+        for (Map.Entry<String, Property> entry : properties.entrySet()) {
             if ((id == null) || id.equals("all") || id.equals(entry.getValue().getID())) {
-                if ((city == null) || city.equals("all") || city.equals(entry.getValue().getCity())) {
-                    if ((address == null) || address.equals("all") || address.equals(entry.getValue().getAddress())) {
-                        if ((numRooms == null) || numRooms.equals("all") || numRooms.equals(entry.getValue().getNumRooms())) {
-                            // TODO: change price range filter
-                            if ((priceRange == null) || priceRange.equals("all") || priceRange.equals(entry.getValue().getPriceRange())) {
-                                if ((numBaths == null) || numBaths.equals("all") || numBaths.equals(entry.getValue().getNumBaths())) {
-                                    if ((walkScore == null) || walkScore.equals("all") || walkScore.equals(entry.getValue().getWalkScore())) {
+                if (cityCheck(entry.getValue())) {
+                    if (addressCheck(entry.getValue())) {
+                        if (numRoomsCheck(entry.getValue())) {
+                            if (priceRangeCheck(entry.getValue())) {
+                                if (numBathsCheck(entry.getValue())) {
+                                    if (walkscoreCheck(entry.getValue())) {
                                         if ((furnished == null) || furnished.equals("all") || furnished.equals(entry.getValue().getFurnished())) {
-                                            // TODO: change listing type filter
-                                            if ((listingType == null) || listingType.equals("all") || listingType.equals(entry.getValue().getListingType())) {
+                                            if (listingTypeCheck(entry.getValue())) {
                                                 filtered_properties.put(entry.getKey(), entry.getValue());
                                             }
                                         }
@@ -195,11 +215,106 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                 }
             }
         }
-
         System.out.println("we've filtered");
-        filteredcsvFile =  new File("./filtered_properties.csv");
-        saveFilteredProperties();
+        System.out.println(filtered_properties.entrySet());
+
     }
+
+
+    private boolean priceRangeCheck(Property property) {
+        String helperPriceRange = inputProperty.getPriceRange();
+        String propertyPriceRange = property.getPriceRange();
+
+        if (helperPriceRange == null || helperPriceRange.equals("all") || helperPriceRange.isEmpty()) {
+            return true;
+        } else if (helperPriceRange.equals("<100000")) {
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && Integer.valueOf(propertyPriceRange.trim()) <= 100000;
+        } else if (helperPriceRange.equals("100000-300000")) {
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 100000 <= Integer.valueOf(propertyPriceRange.trim()) && Integer.valueOf(propertyPriceRange.trim()) <= 300000;
+        } else if (helperPriceRange.equals("300000-500000")) {
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 300000 <= Integer.valueOf(propertyPriceRange.trim()) && Integer.valueOf(propertyPriceRange.trim()) <= 500000;
+        } else {
+            return propertyPriceRange != null && !propertyPriceRange.trim().isEmpty() && 500000 <= Integer.valueOf(propertyPriceRange.trim());
+        }
+    }
+
+
+    //    helper method to check if inputproperty listing type filter word is found in csv property listing type
+    private boolean listingTypeCheck(Property property) {
+        String listingType = inputProperty.getListingType();
+        if (listingType == null || listingType.equals("all")) {
+            return true;
+        }
+        else if (listingType.equals("other")) {
+//            return true if "House", "Townhouse", "Apartment" not in the csv property
+            return !property.getListingType().contains("Residence") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
+        } else if (listingType.equals("House")){
+            return (property.getListingType().contains("Residence"));
+        } else {
+            return (property.getListingType().contains(listingType));
+        }
+    }
+
+    private boolean numRoomsCheck(Property property) {
+        String helperNumRooms = inputProperty.getNumRooms();
+        String propertyNumRooms = property.getNumRooms();
+
+        if (helperNumRooms == null || helperNumRooms.equals("all") || helperNumRooms.isEmpty()) {
+            return true;
+        } else if (helperNumRooms.equals("5+")) {
+            return propertyNumRooms != null && !propertyNumRooms.trim().isEmpty() && Integer.valueOf(propertyNumRooms.trim()) >= 5;
+        } else {
+            return propertyNumRooms != null && !propertyNumRooms.trim().isEmpty() && Integer.valueOf(helperNumRooms).equals(Integer.valueOf(propertyNumRooms));
+        }
+    }
+
+    private boolean numBathsCheck(Property property) {
+        String helperNumBaths = inputProperty.getNumBaths();
+        String propertyNumBaths = property.getNumBaths();
+
+        if (helperNumBaths == null || helperNumBaths.equals("all") || helperNumBaths.isEmpty()) {
+            return true;
+        } else if (helperNumBaths.equals("4+")) {
+            return propertyNumBaths != null && !propertyNumBaths.trim().isEmpty() && Integer.valueOf(propertyNumBaths.trim()) >= 4;
+        } else {
+            return propertyNumBaths != null && !propertyNumBaths.trim().isEmpty() && Integer.valueOf(helperNumBaths).equals(Integer.valueOf(propertyNumBaths));
+        }
+    }
+
+
+    private boolean walkscoreCheck (Property property) {
+        String helperWalkscore = inputProperty.getWalkScore();
+        if (helperWalkscore == null || helperWalkscore.equals("all")) {
+            return true;
+        } else if (helperWalkscore.equals("10-30")) {
+            return Integer.valueOf(property.getWalkScore()) <= 30 && Integer.valueOf(property.getWalkScore()) >= 10;
+        } else if (helperWalkscore.equals("30-60")) {
+            return Integer.valueOf(property.getWalkScore()) >= 30 && Integer.valueOf(property.getWalkScore()) <= 60;
+        } else {
+//            don't need < 10 because properties always have walkscore less than 10
+            return Integer.valueOf(property.getWalkScore()) >= 60;
+        }
+    }
+
+    private boolean cityCheck(Property property) {
+        String helperCity = inputProperty.getCity();
+        if (helperCity == null) {
+            return true;
+        } else {
+            return (property.getCity().contains(helperCity.toUpperCase()));
+        }
+    }
+
+//    after inputting a city then deleting it with other filters the same, after pressing search button it recognizes it as an empty address and makes address attribute be empty string. This makes the list of properties empty
+    private boolean addressCheck(Property property) {
+        String helperAddress = inputProperty.getAddress();
+        if (helperAddress == null || helperAddress.isEmpty()) {
+            return true;
+        } else {
+            return (property.getAddress().contains(helperAddress.toUpperCase()));
+        }
+    }
+
 
     // Writing the Property object inside of properties to the csv file
     private void save() {
@@ -225,75 +340,19 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
     }
 
-    // Writing the input data to a csv file
-    private void saveFilteredProperties() {
-        BufferedWriter writer;
-        try {
-            writer = new BufferedWriter(new FileWriter(filteredcsvFile));
-            writer.write(String.join(",", headers.keySet()));
-            writer.newLine();
-
-            // Go through properties and format attributes to csv file columns
-            for (Property property : filtered_properties.values()) {
-                String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(), property.getPriceRange(),
-                        property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType()
-                );
-                writer.write(line);
-                writer.newLine();
-            }
-
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    @Override
+    public HashMap<String, String> getFilteredProperties() {
+        HashMap <String, String> displayProperties = new HashMap<>();
+        for (HashMap.Entry<String, Property> entry : filtered_properties.entrySet()) {
+            displayProperties.put(entry.getKey(), entry.getValue().getAddress());
         }
+        return displayProperties;
     }
 
-    // if filters use listings from filter
-    // if no filter pull from cities
-
-    public void recommendedListings(){
-
-        Map<String, Property> recommendedListings = new HashMap<>();
-        // make a list with relevant properties based on the city of the listing
-        Map<String, Property> cityRecommendations = new HashMap<>();
-
-        // for each property in the filtered list, generate another list that contains listings in the same city
-        for (Property property : filtered_properties.values()){
-            // maximum three recommendations
-            int count = 0;
-            recommendedListings.clear();
-            cityRecommendations.clear();
-            //System.out.println(property);
-            // first, get the city of the property
-            String cityRec = property.getCity();
-            // then compare to each of the other entries in the filtered list and if it is the same city,
-            // put it in the recommended list
-            for (Map.Entry<String, Property> entry : filtered_properties.entrySet()) {
-                if (cityRec.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID())) {
-                    cityRecommendations.put(entry.getKey(), entry.getValue());
-                }
-            }
-            System.out.println(cityRecommendations.size());
-            if (cityRecommendations.size() < 3){
-                for (Map.Entry<String, Property> entry : properties.entrySet()){
-                    if (cityRec.equals(entry.getValue().getCity())){
-                        cityRecommendations.put(entry.getKey(), entry.getValue());
-                    }
-                }
-            }
-            System.out.println(cityRecommendations.size());
-            for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
-                // pass through the first 3 recommended listings from the cityRecommendations list
-                if (count < 3) {
-                    recommendedListings.put(entry.getKey(), entry.getValue());
-                    count += 1;
-                } else{
-                    break;
-                }
-            }
-            property.setRecListings(recommendedListings);
-            System.out.println(recommendedListings);
-        }
-
+    @Override
+    public Property getProperty(String id) {
+        return properties.get(id);
     }
+
+
 }
