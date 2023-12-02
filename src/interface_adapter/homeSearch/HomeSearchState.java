@@ -1,6 +1,7 @@
 package interface_adapter.homeSearch;
 
 import interface_adapter.saved.SavedState;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.
@@ -26,6 +27,7 @@ public class HomeSearchState {
     private boolean loggedIn = false;
 
     private SavedState savedState = null;
+    private GeoPosition startPosition;
 
     public HomeSearchState(HomeSearchState copy) {
         id = copy.id;
@@ -39,6 +41,7 @@ public class HomeSearchState {
         listingType = copy.listingType;
         loggedIn = copy.loggedIn;
         savedState = copy.savedState;
+        startPosition = copy.startPosition;
     }
     public HomeSearchState() {}
     public String getId() { return id; }
@@ -76,6 +79,9 @@ public class HomeSearchState {
     public boolean getLoggedIn() { return loggedIn; }
 
     public SavedState getSavedState() { return savedState; }
+    public GeoPosition getStartPosition() {
+        return startPosition;
+    }
 
     public void setId(String id) { this.id = id; }
 
@@ -112,4 +118,8 @@ public class HomeSearchState {
     public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }
 
     public void setSavedState(SavedState savedState) { this.savedState = savedState; }
+
+    public void setStartPosition(GeoPosition startPosition) {
+        this.startPosition = startPosition;
+    }
 }

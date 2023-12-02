@@ -1,6 +1,5 @@
 package use_case.home;
 
-import data_access.HomeSearchDataAccessInterface;
 import entity.PropertyFactory;
 import interface_adapter.saved.SavedState;
 

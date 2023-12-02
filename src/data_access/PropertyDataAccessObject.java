@@ -1,6 +1,7 @@
 package data_access;
 
 import com.jayway.jsonpath.JsonPath;
+import com.teamdev.jxbrowser.js.Json;
 import entity.Property;
 import entity.PropertyFactory;
 import kotlin.Pair;
@@ -10,6 +11,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import use_case.home.HomeSearchDataAccessInterface;
 
 import java.io.*;
 import java.util.*;
@@ -20,6 +22,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
+
+    private final WalkScoreDataAccessObject walkScoreCalculator = new WalkScoreDataAccessObject();
 
     // Root URL - can later adapt so that for various functions, we attach ending (i.e. .../property/detail)
     private static final String API_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0/";
@@ -149,7 +153,13 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     String numBaths_before = JsonPath.read(propertyJson, "$.building.rooms[?(@.bathstotal != '')].bathstotal").toString();
                     String numBaths = numBaths_before.substring(1, numBaths_before.length() - 1);
 
-                    String walkScore = "0"; //TODO: This is to be filled in based on calculations that Janna is working on
+                    String latitude = JsonPath.read(propertyJson, "$.location.latitude");
+                    double lat = Double.parseDouble(latitude);
+                    String longitude = JsonPath.read(propertyJson, "$.location.longitude");
+                    double lon = Double.parseDouble(longitude);
+
+                    // TODO: Still need to fix this because it takes too long to run so no memory error happens
+                    String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
 
                     List<String> givenList = Arrays.asList("Yes", "No");
                     Random rand = new Random();

@@ -28,10 +28,10 @@ public class Main {
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
-
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
+<<<<<<< HEAD
         UserDataAccessObject userDataAccessObject;
         try {
             userDataAccessObject = new UserDataAccessObject("./users.csv", new CommonUserFactory());
@@ -46,6 +46,10 @@ public class Main {
 
         HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel, signupViewModel,
                 loginViewModel, savedViewModel);
+=======
+        HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel);
+>>>>>>> 63d9dc09f84c58d492abb7920d77c7c459d22549
         views.add(homeSearchView, homeSearchView.viewName);
 
         SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, signupViewModel,
@@ -63,6 +67,7 @@ public class Main {
         viewManagerModel.firePropertyChanged();
 
         application.pack();
+        application.setMinimumSize(new Dimension(1000, 600));
         application.setVisible(true);
     }
 }
