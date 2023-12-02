@@ -27,8 +27,6 @@ public class HomeInteractor implements HomeInputBoundary {
                 homeInputData.getWalkScore(), homeInputData.getFurnished(), homeInputData.getListingType());
         homeDataAccessObject.save(property);
 
-<<<<<<< HEAD
-=======
         System.out.println("id: " + homeInputData.getId());
         System.out.println("city: " + homeInputData.getCity());
         System.out.println("address: " + homeInputData.getAddress());
@@ -44,7 +42,6 @@ public class HomeInteractor implements HomeInputBoundary {
         System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
         System.out.println("listing type: " + homeInputData.getListingType());
 
->>>>>>> origin/develop
         homeDataAccessObject.filter();
         HashMap<String, String> displayedProperties = homeDataAccessObject.getFilteredProperties();
         HomeOutputData homeOutputData = new HomeOutputData(displayedProperties);
