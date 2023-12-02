@@ -369,25 +369,31 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     @Override
     public Set<Waypoint> getCoordinates(HashMap<String, String> properties) {
         Set<Waypoint> waypoints = new HashSet<>();
-        for (String address : properties.values()) {
-            double latitude = getLat(address);
-            double longitude = getLong(address);
-            waypoints.add(new DefaultWaypoint(latitude, longitude));
+        for (String id : properties.keySet()) {
+            System.out.println("IDs in properties");
+            System.out.println(id);
+//            double latitude = (double) coordinates.get(id).getFirst();
+//            double longitude = (double) coordinates.get(id).getSecond();
+//            waypoints.add(new DefaultWaypoint(latitude, longitude));
+        }
+        System.out.println(coordinates.isEmpty());
+        for (String id : coordinates.keySet()) {
+            System.out.println("IDs in coordinates");
+            System.out.println(id);
         }
         return waypoints;
     }
 
     @Override
-    public double getLat(String address) {
+    public double getLat(String id) {
         try {
-            PlacesSearchResponse placesSearchResponse = PlacesApi.textSearchQuery(
-                    new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build(),
-                    address).await();
-
-            PlacesSearchResult result = placesSearchResponse.results[0];
-            LatLng location = result.geometry.location;
-            return location.lat;
-
+            if (coordinates.containsKey(id)) {
+                return (double) coordinates.get(id).getFirst();
+            } else {
+                System.out.println(id + " does not exist");
+                System.out.println(coordinates.get(id).getFirst());
+                return 0;
+            }
         } catch(Exception e) {
             e.printStackTrace();
             return 0;
@@ -395,16 +401,14 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
     @Override
-    public double getLong(String address) {
+    public double getLong(String id) {
         try {
-            PlacesSearchResponse placesSearchResponse = PlacesApi.textSearchQuery(
-                    new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build(),
-                    address).await();
-
-            PlacesSearchResult result = placesSearchResponse.results[0];
-            LatLng location = result.geometry.location;
-            return location.lng;
-
+            if (coordinates.containsKey(id)) {
+                return (double) coordinates.get(id).getSecond();
+            } else {
+                System.out.println(id + " does not exist");
+                return 0;
+            }
         } catch(Exception e) {
             e.printStackTrace();
             return 0;
