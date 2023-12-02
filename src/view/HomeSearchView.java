@@ -7,6 +7,8 @@ import interface_adapter.listing.ListingController;
 
 import interface_adapter.CenterMap.CenterMapController;
 import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.mapviewer.Waypoint;
+import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +25,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     public final String viewName = "Search";
 
     public final JXMapKit jxMapKit = new JXMapKit();
+
+    public final WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<>();
 
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
@@ -164,6 +168,16 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         // Add the JScrollPane to the panel
         this.add(listingsScroll, c);
 
+        // Creating constraints for the map
+        GridBagConstraints mc = new GridBagConstraints();
+        mc.gridx = 1;
+        mc.gridy = 0;
+        mc.gridwidth = 1;
+        mc.gridheight = 3;
+        mc.fill = GridBagConstraints.BOTH;
+        mc.weightx = 1;
+        mc.weighty = 1;
+
         // Displaying interactive map
         jxMapKit.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
         jxMapKit.setDataProviderCreditShown(true);
@@ -171,7 +185,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         jxMapKit.setAddressLocationShown(true);
         jxMapKit.setAddressLocation(homeSearchViewModel.startPosition);
 
-        this.add(jxMapKit);
+        this.add(jxMapKit, mc);
 
 
         homeSearchBar.addKeyListener(
@@ -224,6 +238,10 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                                     homeSearchViewModel.getState().getNumRooms(), homeSearchViewModel.getState().getPriceRange(),
                                     homeSearchViewModel.getState().getNumBaths(), homeSearchViewModel.getState().getWalkScore(),
                                     homeSearchViewModel.getState().getFurnished(), homeSearchViewModel.getState().getListingType());
+
+                            jxMapKit.getMainMap().repaint();
+                            waypointPainter.setWaypoints(homeSearchViewModel.getState().getWaypoints());
+                            jxMapKit.getMainMap().setOverlayPainter(waypointPainter);
 
                             centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
                             jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
