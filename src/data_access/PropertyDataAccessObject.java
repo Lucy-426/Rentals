@@ -1,5 +1,10 @@
 package data_access;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.PlacesApi;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.PlacesSearchResponse;
+import com.google.maps.model.PlacesSearchResult;
 import com.jayway.jsonpath.JsonPath;
 import entity.Property;
 import entity.PropertyFactory;
@@ -7,6 +12,8 @@ import kotlin.Pair;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
+import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +54,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private PropertyFactory propertyFactory;
 
     private Property inputProperty;
+
+    private final String MAPS_API_KEY = "AIzaSyAMz9doGhcdEYjPoXY3Cv4TCd58-eHDubU";
 
     public PropertyDataAccessObject(String csvPath, PropertyFactory propertyFactory) throws IOException {
         this.propertyFactory = propertyFactory;
@@ -350,6 +359,51 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     @Override
     public Property getProperty(String id) {
         return properties.get(id);
+    }
+
+    @Override
+    public Set<Waypoint> getCoordinates(HashMap<String, String> properties) {
+        Set<Waypoint> waypoints = new HashSet<>();
+        for (String address : properties.values()) {
+            double latitude = getLat(address);
+            double longitude = getLong(address);
+            waypoints.add(new DefaultWaypoint(latitude, longitude));
+        }
+        return waypoints;
+    }
+
+    @Override
+    public double getLat(String address) {
+        try {
+            PlacesSearchResponse placesSearchResponse = PlacesApi.textSearchQuery(
+                    new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build(),
+                    address).await();
+
+            PlacesSearchResult result = placesSearchResponse.results[0];
+            LatLng location = result.geometry.location;
+            return location.lat;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public double getLong(String address) {
+        try {
+            PlacesSearchResponse placesSearchResponse = PlacesApi.textSearchQuery(
+                    new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build(),
+                    address).await();
+
+            PlacesSearchResult result = placesSearchResponse.results[0];
+            LatLng location = result.geometry.location;
+            return location.lng;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
 
