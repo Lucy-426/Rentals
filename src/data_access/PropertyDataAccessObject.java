@@ -250,17 +250,20 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
     // if filters use listings from filter
     // if no filter pull from cities
+
     public void recommendedListings(){
+
         Map<String, Property> recommendedListings = new HashMap<>();
-
-        // maximum three recommendations
-        int count = 0;
-
         // make a list with relevant properties based on the city of the listing
         Map<String, Property> cityRecommendations = new HashMap<>();
 
         // for each property in the filtered list, generate another list that contains listings in the same city
         for (Property property : filtered_properties.values()){
+            // maximum three recommendations
+            int count = 0;
+            recommendedListings.clear();
+            cityRecommendations.clear();
+            //System.out.println(property);
             // first, get the city of the property
             String cityRec = property.getCity();
             // then compare to each of the other entries in the filtered list and if it is the same city,
@@ -270,7 +273,15 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     cityRecommendations.put(entry.getKey(), entry.getValue());
                 }
             }
-
+            System.out.println(cityRecommendations.size());
+            if (cityRecommendations.size() < 3){
+                for (Map.Entry<String, Property> entry : properties.entrySet()){
+                    if (cityRec.equals(entry.getValue().getCity())){
+                        cityRecommendations.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            System.out.println(cityRecommendations.size());
             for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
                 // pass through the first 3 recommended listings from the cityRecommendations list
                 if (count < 3) {
@@ -280,9 +291,9 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     break;
                 }
             }
-            property.setRecListings(properties);
+            property.setRecListings(recommendedListings);
+            System.out.println(recommendedListings);
         }
-        System.out.println(properties);
 
     }
 }
