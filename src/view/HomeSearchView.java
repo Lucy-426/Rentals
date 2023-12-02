@@ -156,7 +156,11 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     @Override
                     public void keyTyped (KeyEvent e) {
                         HomeSearchState currentState = homesearchViewModel.getState();
-                        currentState.setSearchBarInput(homeSearchBar.getText() + e.getKeyChar());
+                        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                            currentState.setSearchBarInput(homeSearchBar.getText());
+                        } else {
+                            currentState.setSearchBarInput(homeSearchBar.getText() + e.getKeyChar());
+                        }
                         homesearchViewModel.setState(currentState);
                     }
 
