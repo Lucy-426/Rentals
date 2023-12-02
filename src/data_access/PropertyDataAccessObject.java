@@ -84,6 +84,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
             // save (write all the data) to csv
             this.save();
         }
+        recommendedListings();
 
     }
 
@@ -146,6 +147,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
                     // Save the property to list of properties
                     properties.put(newProperty.getID(), newProperty);
+                    System.out.println(properties);
                 }
             }
         } catch (IOException | JSONException e) {
@@ -197,7 +199,6 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         System.out.println("we've filtered");
         filteredcsvFile =  new File("./filtered_properties.csv");
         saveFilteredProperties();
-
     }
 
     // Writing the Property object inside of properties to the csv file
@@ -279,8 +280,9 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     break;
                 }
             }
-            property.setRecListings(recommendedListings);
+            property.setRecListings(properties);
         }
+        System.out.println(properties);
 
     }
 }
