@@ -89,7 +89,6 @@ public class WalkScoreDataAccessObject {
                 }
             }
             // Print out walk score for testing purposes
-            System.out.println((int) walkScore);
             return (int) walkScore + 50;
         } catch(Exception e) {
             e.printStackTrace();

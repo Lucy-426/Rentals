@@ -14,4 +14,8 @@ public interface HomeSearchDataAccessInterface {
 
     Property getProperty(String id);
 
+    void makeRecommendations(Property property);
+
+    HashMap<String, String> getRecommendedProperties();
+
 }
