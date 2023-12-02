@@ -1,5 +1,6 @@
 package entity;
 
+
 public class Property {
     private final String id;
 
@@ -61,4 +62,5 @@ public class Property {
     public String getListingType() {
         return listingType;
     }
+
 }

@@ -2,7 +2,6 @@ package interface_adapter.homeSearch;
 
 import interface_adapter.ViewModel;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
-import view.HomeSearchView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

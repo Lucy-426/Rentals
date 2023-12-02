@@ -3,6 +3,8 @@ package use_case.listing;
 import entity.Property;
 import use_case.home.HomeSearchDataAccessInterface;
 
+import java.util.HashMap;
+
 public class ListingInteractor implements ListingInputBoundary{
 
     final HomeSearchDataAccessInterface homeSearchDataAccessObject;
@@ -19,8 +21,12 @@ public class ListingInteractor implements ListingInputBoundary{
 
         Property property = homeSearchDataAccessObject.getProperty(listingInputData.getId());
 
+        homeSearchDataAccessObject.makeRecommendations(property);
+        HashMap<String, String> recommendations = homeSearchDataAccessObject.getRecommendedProperties();
+
         ListingOutputData listingOutputData = new ListingOutputData(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(),
-                property.getPriceRange(), property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType());
+                property.getPriceRange(), property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType(),
+                recommendations);
         listingPresenter.prepareSuccessView(listingOutputData);
 
     }

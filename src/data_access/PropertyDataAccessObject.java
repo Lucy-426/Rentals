@@ -1,10 +1,8 @@
 package data_access;
 
 import com.jayway.jsonpath.JsonPath;
-import com.teamdev.jxbrowser.js.Json;
 import entity.Property;
 import entity.PropertyFactory;
-import use_case.home.HomeSearchDataAccessInterface;
 import kotlin.Pair;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,7 +21,9 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
-    private Map<String, Property> filtered_properties;
+    private Map<String, Property> filteredProperties;
+
+    private Map<String, Property> recommendedProperties;
 
     private final WalkScoreDataAccessObject walkScoreCalculator = new WalkScoreDataAccessObject();
 
@@ -32,16 +32,13 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private static final String API_TOKEN = "bdc142f975386786593145e4c20e19e3";
 
     // The cities that we are getting listings from
-    private static final Pair<String, String> SF_CA = new Pair<>("37.656305","-122.417006");
+    private static final Pair<String, String> SF_CA = new Pair<>("37.656305", "-122.417006");
     private static final Pair<String, String> MINNEAPOLIS_MN = new Pair<>("44.996091", "-93.364628");
-    private static final Pair<String, String> BOSTON_MA = new Pair<>("42.348866", "-71.064589");
     private static final Pair<String, String> LA_CA = new Pair<>("34.029082", "-118.25947");
-    private static final Pair<String, String> CHICAGO_IL = new Pair<>("41.825105", "-87.663623");
-    private static final Pair<String, String> MIAMI_FL = new Pair<>("25.765623", "-80.505745");
-    private static final Pair<String, String> PHILADELPHIA_PA = new Pair<>("39.993614", "-75.150923");
-    private static final Pair<String, String> DETROIT_MI = new Pair<>("42.352656", "-83.088938");
-    private static final Pair<String, String> ATLANTA_GA = new Pair<>("33.785802", "-84.41739");
-    private static final Pair<String, String> BUFFALO_NY = new Pair<>("42.926907", "-78.815458");
+//    private static final Pair<String, String> PHILADELPHIA_PA = new Pair<>("39.993614", "-75.150923");
+//    private static final Pair<String, String> DETROIT_MI = new Pair<>("42.352656", "-83.088938");
+//    private static final Pair<String, String> ATLANTA_GA = new Pair<>("33.785802", "-84.41739");
+//    private static final Pair<String, String> BUFFALO_NY = new Pair<>("42.926907", "-78.815458");
 
     // a list that will contain all the cities above
     private static final ArrayList<Pair> cities = new ArrayList<>();
@@ -56,14 +53,11 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         // saving all the cities from above to a list
         cities.add(SF_CA);
         cities.add(MINNEAPOLIS_MN);
-        cities.add(BOSTON_MA);
         cities.add(LA_CA);
-        cities.add(CHICAGO_IL);
-        cities.add(MIAMI_FL);
-        cities.add(PHILADELPHIA_PA);
-        cities.add(DETROIT_MI);
-        cities.add(ATLANTA_GA);
-        cities.add(BUFFALO_NY);
+//        cities.add(PHILADELPHIA_PA);
+//        cities.add(DETROIT_MI);
+//        cities.add(ATLANTA_GA);
+//        cities.add(BUFFALO_NY);
 
         csvFile = new File(csvPath);
         headers.put("id", 0);
@@ -77,8 +71,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         headers.put("listingType", 8);
 
         // go through each city and load in the data for the listings in that city
-        if(csvFile.length() == 0) {
-            for (Pair city: cities) {
+        if (csvFile.length() == 0) {
+            for (Pair city : cities) {
                 load(city);
             }
 
@@ -183,10 +177,10 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
     }
 
-//    TODO: test the filter method
+    //    TODO: test the filter method
     @Override
     public void filter() {
-        filtered_properties = new HashMap<>();
+        filteredProperties = new HashMap<>();
         String id = inputProperty.getID();
         String address = inputProperty.getAddress();
         String furnished = inputProperty.getFurnished();
@@ -204,7 +198,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                                     if (walkscoreCheck(entry.getValue())) {
                                         if ((furnished == null) || furnished.equals("all") || furnished.equals(entry.getValue().getFurnished())) {
                                             if (listingTypeCheck(entry.getValue())) {
-                                                filtered_properties.put(entry.getKey(), entry.getValue());
+                                                filteredProperties.put(entry.getKey(), entry.getValue());
                                             }
                                         }
                                     }
@@ -215,8 +209,6 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                 }
             }
         }
-        System.out.println("we've filtered");
-        System.out.println(filtered_properties.entrySet());
 
     }
 
@@ -239,16 +231,15 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
 
-    //    helper method to check if inputproperty listing type filter word is found in csv property listing type
+    //    helper method to check if input property listing type filter word is found in csv property listing type
     private boolean listingTypeCheck(Property property) {
         String listingType = inputProperty.getListingType();
         if (listingType == null || listingType.equals("all")) {
             return true;
-        }
-        else if (listingType.equals("other")) {
+        } else if (listingType.equals("other")) {
 //            return true if "House", "Townhouse", "Apartment" not in the csv property
-            return !property.getListingType().contains("Residence") &&  !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
-        } else if (listingType.equals("House")){
+            return !property.getListingType().contains("Residence") && !property.getListingType().contains("Townhouse") && !property.getListingType().contains("Apartment");
+        } else if (listingType.equals("House")) {
             return (property.getListingType().contains("Residence"));
         } else {
             return (property.getListingType().contains(listingType));
@@ -281,8 +272,7 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
     }
 
-
-    private boolean walkscoreCheck (Property property) {
+    private boolean walkscoreCheck(Property property) {
         String helperWalkscore = inputProperty.getWalkScore();
         if (helperWalkscore == null || helperWalkscore.equals("all")) {
             return true;
@@ -305,7 +295,9 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
     }
 
-//    after inputting a city then deleting it with other filters the same, after pressing search button it recognizes it as an empty address and makes address attribute be empty string. This makes the list of properties empty
+    //    after inputting a city then deleting it with other filters the same, after pressing search button
+//    it recognizes it as an empty address and makes address attribute be empty string.
+//    This makes the list of properties empty
     private boolean addressCheck(Property property) {
         String helperAddress = inputProperty.getAddress();
         if (helperAddress == null || helperAddress.isEmpty()) {
@@ -342,8 +334,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
     @Override
     public HashMap<String, String> getFilteredProperties() {
-        HashMap <String, String> displayProperties = new HashMap<>();
-        for (HashMap.Entry<String, Property> entry : filtered_properties.entrySet()) {
+        HashMap<String, String> displayProperties = new HashMap<>();
+        for (HashMap.Entry<String, Property> entry : filteredProperties.entrySet()) {
             displayProperties.put(entry.getKey(), entry.getValue().getAddress());
         }
         return displayProperties;
@@ -355,4 +347,44 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
 
+    @Override
+    public void makeRecommendations(Property property) {
+        recommendedProperties = new HashMap<>();
+        String city = property.getCity();
+
+        // make a hashmap and add properties with the same city to it
+        HashMap<String, Property> cityRecommendations = new HashMap<>();
+        for (Map.Entry<String, Property> entry : filteredProperties.entrySet()) {
+            if (city.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID())) {
+                cityRecommendations.put(entry.getKey(), entry.getValue());
+            }
+        }
+        if (cityRecommendations.size() < 3) {
+            for (Map.Entry<String, Property> entry : properties.entrySet()) {
+                if ((city.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID()))) {
+                    cityRecommendations.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        int count = 0;
+        for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
+            // pass through the first 3 recommended listings from cityRecommendations
+            if (count < 3) {
+                recommendedProperties.put(entry.getKey(), entry.getValue());
+                count += 1;
+            } else {
+                break;
+            }
+        }
+
+    }
+
+    @Override
+    public HashMap<String, String> getRecommendedProperties() {
+        HashMap<String, String> recommendations = new HashMap<>();
+        for (HashMap.Entry<String, Property> entry : recommendedProperties.entrySet()) {
+            recommendations.put(entry.getKey(), entry.getValue().getAddress());
+        }
+        return recommendations;
+    }
 }

@@ -3,7 +3,6 @@ package main.app;
 import interface_adapter.listing.ListingController;
 import interface_adapter.listing.ListingPresenter;
 import interface_adapter.listing.ListingViewModel;
-
 import data_access.MapDataAccessObject;
 import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
@@ -31,9 +30,11 @@ public class HomeSearchUseCaseFactory {
     public static HomeSearchView create(PropertyDataAccessObject propertyDataAccessObject, ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
         try {
             HomeSearchController homeSearchController = createHomeSearchUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel);
-            CenterMapController centerMapController = createCenterMapUseCase(viewManagerModel, homeSearchViewModel);
+
             ListingController listingController = createListingUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel, listingViewModel);
-            return new HomeSearchView(homeSearchController, listingController, centerMapController, homeSearchViewModel);
+            CenterMapController centerMapController = createCenterMapUseCase(viewManagerModel, homeSearchViewModel);
+            return new HomeSearchView(homeSearchController, listingController, homeSearchViewModel, centerMapController);
+
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open property data file.");
         }
