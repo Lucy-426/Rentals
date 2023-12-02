@@ -1,10 +1,14 @@
 package interface_adapter.homeSearch;
 
+
+import java.util.HashMap;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+
 
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.
 
+    private String searchBarInput;
     private String id;
 
     private String city;
@@ -23,9 +27,11 @@ public class HomeSearchState {
 
     private String listingType;
 
+    private HashMap<String, String> displayedListings;
     private GeoPosition startPosition;
 
     public HomeSearchState(HomeSearchState copy) {
+        searchBarInput = copy.searchBarInput;
         id = copy.id;
         city = copy.city;
         address = copy.address;
@@ -35,9 +41,14 @@ public class HomeSearchState {
         walkScore = copy.walkScore;
         furnished = copy.furnished;
         listingType = copy.listingType;
+        displayedListings = copy.displayedListings;
         startPosition = copy.startPosition;
     }
     public HomeSearchState() {}
+
+    public String getSearchBarInput() {
+        return searchBarInput;
+    }
     public String getId() { return id; }
 
     public String getCity() { return city; }
@@ -70,9 +81,13 @@ public class HomeSearchState {
         return listingType;
     }
 
-    public GeoPosition getStartPosition() {
-        return startPosition;
+    public HashMap<String, String> getDisplayedListings() {
+        return displayedListings;
     }
+
+    public GeoPosition getStartPosition() { return startPosition; }
+
+    public void setSearchBarInput(String searchBarInput) { this.searchBarInput = searchBarInput; }
 
     public void setId(String id) { this.id = id; }
 
@@ -106,6 +121,9 @@ public class HomeSearchState {
         this.listingType = listingType;
     }
 
+    public void setDisplayedListings(HashMap<String, String> displayedListings) {
+        this.displayedListings = displayedListings;
+    }
     public void setStartPosition(GeoPosition startPosition) {
         this.startPosition = startPosition;
     }

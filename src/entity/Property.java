@@ -1,5 +1,8 @@
 package entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Property {
     private final String id;
 
@@ -19,6 +22,8 @@ public class Property {
 
     private final String listingType;
 
+    private final Map<String, Property> recListings;
+
     public Property(String id, String city, String address, String numRooms, String priceRange,
                     String numBaths, String walkScore, String furnished, String listingType) {
         this.id = id;
@@ -30,6 +35,7 @@ public class Property {
         this.walkScore = walkScore;
         this.furnished = furnished;
         this.listingType = listingType;
+        this.recListings = new HashMap<>();
     }
 
     public String getID() { return id; }
@@ -60,5 +66,13 @@ public class Property {
 
     public String getListingType() {
         return listingType;
+    }
+
+    public Map<String, Property> getRecListings() {
+        return recListings;
+    }
+
+    public void setRecListings(Map<String, Property> fromFilteredListings){
+        recListings.putAll(fromFilteredListings);
     }
 }
