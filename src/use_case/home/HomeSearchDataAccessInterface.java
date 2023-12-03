@@ -19,7 +19,9 @@ public interface HomeSearchDataAccessInterface {
 
     /*Converting set of properties into set of its corresponding waypoints
     with the latitude/longitude coordinates*/
-    Set<Waypoint> getCoordinates(HashMap<String, String> properties);
+    Set<Waypoint> getCoordinates(HashMap<Waypoint, String> properties);
+
+    HashMap<Waypoint, String> getWaypointToID(HashMap<String, String> properties);
 
     double getLat(String id);
 
