@@ -79,10 +79,7 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
         c.gridy = 0;
         this.add(title, c);
 
-        listingsScroll = new JScrollPane(buttonsPanel);
-        this.add(listingsScroll);
-
-        // Updates the profile page to add buttons according to the filtered listings
+        // Updates the profile page to add buttons according to the saved listings
         Map<String, Property> savedListings = userSignupDataAccessInterface.getUserProperties(savedViewModel.getState().getUsername());
         if (!(savedListings == null)) {
             listingButtons = new ArrayList<>();
@@ -98,7 +95,6 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
         for (JButton button : listingButtons) {
             buttonsPanel.add(button);
         }
-        this.remove(listingsScroll);
         listingsScroll = new JScrollPane(buttonsPanel);
         listingsScroll.setPreferredSize(new Dimension(400, 200));
         c.gridx = 0;
@@ -178,12 +174,17 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
                 listingButton.addActionListener(this);
                 listingButtons.add(listingButton);
             }
+
+            buttonsPanel = new JPanel();
+            buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+            for (JButton button : listingButtons) {
+                buttonsPanel.add(button);
+            }
+        } else {
+            buttonsPanel = new JPanel();
+            buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         }
-        buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-        for (JButton button : listingButtons) {
-            buttonsPanel.add(button);
-        }
+
         this.remove(listingsScroll);
         listingsScroll = new JScrollPane(buttonsPanel);
         listingsScroll.setPreferredSize(new Dimension(400, 200));

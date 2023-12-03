@@ -65,6 +65,11 @@ public class SavedPresenter implements SavedOutputBoundary {
         homeSearchState.setLoggedIn(false);
         this.homeSearchViewModel.setState(homeSearchState);
         this.homeSearchViewModel.firePropertyChanged();
+        ListingState listingState = listingViewModel.getState();
+        listingState.setLoggedIn(false);
+        listingState.setUsername("");
+        this.listingViewModel.setState(listingState);
+        this.listingViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(homeSearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
