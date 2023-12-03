@@ -28,7 +28,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     public final WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<>();
 
-    private static final double DISTANCE_THRESHOLD = 0.001;
+    private static final double distanceThreshold = 0.001;
 
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
@@ -353,7 +353,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
                 // Check if any waypoint was clicked
                 for (Waypoint waypoint : homeSearchViewModel.getState().getWaypoints()) {
-                    if (isCloseEnough(waypoint.getPosition(), clickedPosition, DISTANCE_THRESHOLD)) {
+                    if (isCloseEnough(waypoint.getPosition(), clickedPosition, distanceThreshold)) {
                         String id = waypointIDMap.get(waypoint);
                         listingController.execute(id);
                     }
