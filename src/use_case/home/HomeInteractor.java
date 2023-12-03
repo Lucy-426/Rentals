@@ -1,7 +1,10 @@
 package use_case.home;
 
+import entity.Property;
 import entity.PropertyFactory;
 import interface_adapter.saved.SavedState;
+
+import java.util.HashMap;
 
 public class HomeInteractor implements HomeInputBoundary {
 
@@ -19,21 +22,15 @@ public class HomeInteractor implements HomeInputBoundary {
     }
     @Override
     public void execute(HomeInputData homeInputData) {
-        // TODO: change input/output data so it's not hard coded, and
-        //  also change so it doesn't create a property but rather passes it to a filter
 
-        // homeDataAccessObject.save(property);
+        Property property = propertyFactory.create(homeInputData.getId(), homeInputData.getCity(), homeInputData.getAddress(),
+                homeInputData.getNumRooms(), homeInputData.getPriceRange(), homeInputData.getNumBaths(),
+                homeInputData.getWalkScore(), homeInputData.getFurnished(), homeInputData.getListingType());
+        homeDataAccessObject.save(property);
 
-        System.out.println("searching for: " + homeInputData.getId() + " " + homeInputData.getCity() + " " +
-                homeInputData.getAddress());
-        System.out.println("rooms: " + homeInputData.getNumRooms());
-        System.out.println("price range: " + homeInputData.getPriceRange());
-        System.out.println("bathrooms: " + homeInputData.getNumBaths());
-        System.out.println("walk score: " + homeInputData.getWalkScore());
-        System.out.println("furnished/not furnished: " + homeInputData.getFurnished());
-        System.out.println("listing type: " + homeInputData.getListingType());
-
-        HomeOutputData homeOutputData = new HomeOutputData("address", "2", "1000-1500", "1", "1-3", "furnished", "apartment");
+        homeDataAccessObject.filter();
+        HashMap<String, String> displayedProperties = homeDataAccessObject.getFilteredProperties();
+        HomeOutputData homeOutputData = new HomeOutputData(displayedProperties);
         homePresenter.prepareSuccessView(homeOutputData);
     }
 

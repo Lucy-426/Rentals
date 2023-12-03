@@ -34,6 +34,10 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
     @Override
     public void prepareSuccessView(HomeOutputData homeOutputData) {
         HomeSearchState homeSearchState = homesearchViewModel.getState();
+        homeSearchState.setDisplayedListings(homeOutputData.getDisplayedProperties());
+        homesearchViewModel.setState(homeSearchState);
+        homesearchViewModel.firePropertyChanged();
+
         viewManagerModel.setActiveView(homesearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
@@ -54,7 +58,6 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
 
     public void displayProfile(SavedState savedState) {
         this.savedViewModel.setState(savedState);
-        System.out.println("home: " + savedState.getUsername());
         savedViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(savedViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
@@ -68,4 +71,5 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
         viewManagerModel.setActiveView(homesearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
+
 }

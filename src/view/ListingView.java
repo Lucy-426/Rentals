@@ -1,7 +1,7 @@
 package view;
 
-import entity.Listing;
 import interface_adapter.listing.ListingController;
+import interface_adapter.listing.ListingState;
 import interface_adapter.listing.ListingViewModel;
 
 import javax.swing.*;
@@ -10,305 +10,207 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 public class ListingView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public final String viewname = "Listing";
-    private final JButton back;
+    public final String viewName = "Listing";
+    private JButton back;
+
+    private ArrayList<JButton> listingButtons = new ArrayList<>();
+
+    private JPanel buttonsPanel;
+    private JScrollPane listingScroll;
+
+    private JButton recommendation1 = new JButton();
+
+    private JButton recommendation2 = new JButton();
+
+    private JButton recommendation3 = new JButton();
 
     private final ListingViewModel listingViewModel;
     private final ListingController listingController;
 
-    public ListingView(ListingController listingController, ListingViewModel listingViewModel){
-        this.listingController = listingController;
-        this.listingViewModel = listingViewModel;
-        JLabel title = new JLabel(ListingViewModel.TITLE_LABEL);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JPanel buttons = new JPanel();
-        back = new JButton(ListingViewModel.BACK_BUTTON_LABEL);
-        buttons.add(back);
+    // Labels for the property attributes
+    private JLabel id = new JLabel();
+    private JLabel city = new JLabel();
+    private JLabel address = new JLabel();
+    private JLabel numRooms = new JLabel();
+    private JLabel price = new JLabel();
+    private JLabel numBaths = new JLabel();
+    private JLabel walkScore = new JLabel();
+    private JLabel furnished = new JLabel();
+    private JLabel listingType = new JLabel();
 
-        JFrame application = new JFrame("Listing View");
-        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        CardLayout cardLayout = new CardLayout();
+    public ListingView(ListingController controller, ListingViewModel viewModel) {
+        this.listingController = controller;
+        this.listingViewModel = viewModel;
+        listingViewModel.addPropertyChangeListener(this);
 
-        // The various View objects. Only one view is visible at a time.
-        JPanel views = new JPanel(cardLayout);
-        application.add(views);
 
-        application.pack();
-        application.setVisible(true);
-
-        Listing propTest = new Listing("Apartment",60, 350, 8, 3, 2,
-                300, true, false, "John Smith 4373294732");
-
-        JPanel panel = new JPanel();
-        GridBagLayout gridbag = new GridBagLayout();
+        setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 0.5;
-        panel.setLayout(gridbag);
-        JLabel name = new JLabel("Listing View");
-        name.setFont(new Font("Arial", 1, 30));
-        c.insets = new Insets(0,20,0,20);
+
+        back = new JButton(ListingViewModel.BACK_BUTTON_LABEL);
+        back.addActionListener(this);
+
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        address.setFont(new Font("Arial", 1, 30));
+        address.setSize(200, 60);
         c.gridx = 0;
         c.gridy = 0;
-        panel.add(name, c);
-        Font subText = new Font("Arial", 1, 25);
-        JLabel detailTitle = new JLabel("Details:");
-        detailTitle.setFont(subText);
+        this.add(address, c);
+
         c.gridx = 0;
         c.gridy = 1;
-        panel.add(detailTitle, c);
-        Font normalText = new Font("Arial", 0, 15);
-        JLabel rentalType = new JLabel("Rental Type: " + propTest.getRentalType());
-        rentalType.setFont(normalText);
-        c.weighty = 0.3;
-        c.gridx = 0;
+        c.gridwidth = 0;
+        this.add(new JLabel("ID: "), c);
+        c.insets = new Insets(0, 20, 0, 0);
+        this.add(id, c);
+        c.insets = new Insets(0, 0, 0, 0);
+
         c.gridy = 2;
-        panel.add(rentalType, c);
-        JLabel daysAgo = new JLabel("Posted " + propTest.getDaysListedAgo() + " days ago");
-        daysAgo.setFont(normalText);
-        c.weighty = 0.3;
-        c.gridx = 0;
+        this.add(new JLabel("\n"), c);
+
         c.gridy = 3;
-        panel.add(daysAgo, c);
-        JLabel price = new JLabel("Price (USD): $" + propTest.getPrice() + "/month");
-        price.setFont(normalText);
-        c.weighty = 0.3;
-        c.gridx = 0;
+        this.add(new JLabel("City: "), c);
+        c.insets = new Insets(0, 35, 0, 0);
+        this.add(city, c);
+        c.insets = new Insets(0, 0, 0, 0);
+
         c.gridy = 4;
-        panel.add(price, c);
-        JLabel walkScore = new JLabel("Walk Score: " + propTest.getWalkScore());
-        walkScore.setFont(normalText);
-        c.weighty = 0.3;
-        c.gridx = 0;
+        this.add(new JLabel("\n"), c);
+
         c.gridy = 5;
-        panel.add(walkScore, c);
-        JLabel squareFeet = new JLabel("Square Feet: " + propTest.getSquareFeet());
-        squareFeet.setFont(normalText);
-        c.weighty = 0.3;
-        c.gridx = 0;
+        this.add(new JLabel("Price (USD): $"), c);
+        c.insets = new Insets(0, 85, 0, 0);
+        this.add(price, c);
+        c.insets = new Insets(0, 0, 0, 0);
+
         c.gridy = 6;
-        panel.add(squareFeet, c);
-        JLabel numBed = new JLabel("Number of Bedrooms: " + propTest.getNumBed());
-        numBed.setFont(normalText);
-        c.ipadx = 20;
-        c.weighty = 0.3;
-        c.gridx = 1;
-        c.gridy = 2;
-        panel.add(numBed, c);
-        JLabel numBath = new JLabel("Number of Bathrooms: " + propTest.getNumBath());
-        numBath.setFont(normalText);
-        c.ipadx = 20;
-        c.weighty = 0.3;
-        c.gridx = 1;
-        c.gridy = 3;
-        panel.add(numBath, c);
-        JLabel furnished = new JLabel("Furnished: " + propTest.isFurnished());
-        furnished.setFont(normalText);
-        c.weighty = 0.3;
-        c.gridx = 1;
-        c.gridy = 4;
-        panel.add(furnished, c);
-        JLabel parking = new JLabel("Parking: " + propTest.isParking());
-        parking.setFont(normalText);
-        c.weighty = 0.3;
-        c.gridx = 1;
-        c.gridy = 5;
-        panel.add(parking, c);
-        JLabel contact = new JLabel("Contact: " + propTest.getContact());
-        contact.setFont(normalText);
-        c.insets = new Insets(0,20,0,20);
-        c.gridx = 2;
-        c.gridy = 0;
-        panel.add(contact, c);
-        JLabel recommendations = new JLabel("You may also like: ");
-        recommendations.setFont(new Font("Arial", 0, 20));
-        c.ipadx = 20;
-        c.gridx = 2;
+        this.add(new JLabel("\n"), c);
+
+        c.gridy = 7;
+        this.add(new JLabel("Listing type: "), c);
+        c.gridy = 8;
+        this.add(listingType, c);
+
         c.gridy = 1;
-        panel.add(recommendations,c);
+        c.insets = new Insets(0, 300, 0, 0);
+        this.add(new JLabel("Bedrooms: "), c);
+        c.insets = new Insets(0, 370, 0, 0);
+        this.add(numRooms, c);
 
-        JPanel button1test = new JPanel();
-        GridLayout gridlayout = new GridLayout(3,1);
-        button1test.setLayout(gridlayout);
-
-        JButton listing1 = new JButton("Listing 1");
-        c.gridx = 2;
         c.gridy = 2;
+        this.add(new JLabel("\n"), c);
+
+        c.gridy = 3;
+        c.insets = new Insets(0, 300, 0, 0);
+        this.add(new JLabel("Bathrooms: "), c);
+        c.insets = new Insets(0, 375, 0, 0);
+        this.add(numBaths, c);
+
+        c.gridy = 4;
+        this.add(new JLabel("\n"), c);
+
+        c.gridy = 5;
+        c.insets = new Insets(0, 300, 0, 0);
+        this.add(new JLabel("Walk Score: "), c);
+        c.insets = new Insets(0, 375, 0, 0);
+        this.add(walkScore, c);
+
+        c.gridy = 6;
+        this.add(new JLabel("\n"), c);
+
+        c.gridy = 7;
+        c.insets = new Insets(0, 300, 0, 0);
+        this.add(new JLabel("Furnished: "), c);
+        c.insets = new Insets(0, 370, 0, 0);
+        this.add(furnished, c);
+        c.insets = new Insets(0, 0, 0, 0);
+
+        buttonsPanel = new JPanel();
+        GridLayout gridlayout = new GridLayout(3, 1);
+        buttonsPanel.setLayout(gridlayout);
+
+        recommendation1.addActionListener(this);
+        recommendation2.addActionListener(this);
+        recommendation3.addActionListener(this);
+        listingButtons.add(recommendation1);
+        listingButtons.add(recommendation2);
+        listingButtons.add(recommendation3);
+
+        for (JButton button : listingButtons) {
+            buttonsPanel.add(button);
+        }
+
+        c.gridy = 9;
+        this.add(new JLabel("\n"), c);
+
+        JLabel recommendations = new JLabel("You may also like: ");
+        recommendations.setFont(new Font("Arial", 1, 15));
+        c.gridx = 0;
+        c.gridy = 10;
+        c.insets = new Insets(0, 125, 0, 0);
+        this.add(recommendations, c);
+        c.insets = new Insets(0, 0, 0, 0);
+
+        listingScroll = new JScrollPane(buttonsPanel);
+        listingScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        c.gridy = 11;
         c.gridheight = 4;
         c.ipady = 60;
-        JButton listing2 = new JButton("Listing 2");
-        JButton listing3 = new JButton("Listing 3");
-        button1test.add(listing1);
-        button1test.add(listing2);
-        button1test.add(listing3);
-        JScrollPane listingScroll = new JScrollPane(button1test);
-        listingScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        panel.add(listingScroll, c);
+        this.add(listingScroll, c);
+
+        this.add(back);
 
 
-        JButton button = new JButton("Back");
-        c.gridx = 2;
-        c.gridy = 7;
-        c.ipady = 30;
-        panel.add(button, c);
-
-        application.add(panel);
+        back.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource() == back) {
+                            listingController.switchView();
+                        }
+                    }
+                }
+        );
 
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        for (JButton button : listingButtons) {
+            if (e.getSource() == button) {
+                listingController.execute(button.getName());
+            }
+        }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        ListingState state = listingViewModel.getState();
+        id.setText(state.getId());
+        city.setText(state.getCity());
+        address.setText(state.getAddress());
+        numRooms.setText(state.getNumRooms());
+        price.setText(state.getPrice());
+        numBaths.setText(state.getNumBaths());
+        walkScore.setText(state.getWalkScore());
+        furnished.setText(state.getFurnished());
+        listingType.setText(state.getListingType());
+
+        ArrayList<String> buttonNames = new ArrayList<>(state.getRecommendations().values());
+        ArrayList<String> idNames = new ArrayList<>(state.getRecommendations().keySet());
+
+        recommendation1.setText(buttonNames.get(0));
+        recommendation1.setName(idNames.get(0));
+        recommendation2.setText(buttonNames.get(1));
+        recommendation2.setName(idNames.get(1));
+        recommendation3.setText(buttonNames.get(2));
+        recommendation3.setName(idNames.get(2));
 
     }
-
-//    public static void main(String[] args) {
-//        // Build the main program window, the main panel containing the
-//        // various cards, and the layout, and stitch them together.
-//
-//        // The main application window.
-//        JFrame application = new JFrame("Listing View");
-//        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//
-//        CardLayout cardLayout = new CardLayout();
-//
-//        // The various View objects. Only one view is visible at a time.
-//        JPanel views = new JPanel(cardLayout);
-//        application.add(views);
-//
-//        application.pack();
-//        application.setVisible(true);
-//
-//        Property propTest = new Property("Apartment",60, 350, 8, 3, 2,
-//                300, true, false, "John Smith 4373294732");
-//
-//        JPanel panel = new JPanel();
-//        GridBagLayout gridbag = new GridBagLayout();
-//        GridBagConstraints c = new GridBagConstraints();
-//        c.fill = GridBagConstraints.BOTH;
-//        c.weightx = 0.5;
-//        panel.setLayout(gridbag);
-//        JLabel title = new JLabel("Listing View");
-//        title.setFont(new Font("Arial", 1, 30));
-//        c.insets = new Insets(0,20,0,20);
-//        c.gridx = 0;
-//        c.gridy = 0;
-//        panel.add(title, c);
-//        Font subText = new Font("Arial", 1, 25);
-//        JLabel detailTitle = new JLabel("Details:");
-//        detailTitle.setFont(subText);
-//        c.gridx = 0;
-//        c.gridy = 1;
-//        panel.add(detailTitle, c);
-//        Font normalText = new Font("Arial", 0, 15);
-//        JLabel rentalType = new JLabel("Rental Type: " + propTest.getRentalType());
-//        rentalType.setFont(normalText);
-//        c.weighty = 0.3;
-//        c.gridx = 0;
-//        c.gridy = 2;
-//        panel.add(rentalType, c);
-//        JLabel daysAgo = new JLabel("Posted " + propTest.getDaysListedAgo() + " days ago");
-//        daysAgo.setFont(normalText);
-//        c.weighty = 0.3;
-//        c.gridx = 0;
-//        c.gridy = 3;
-//        panel.add(daysAgo, c);
-//        JLabel price = new JLabel("Price (USD): $" + propTest.getPrice() + "/month");
-//        price.setFont(normalText);
-//        c.weighty = 0.3;
-//        c.gridx = 0;
-//        c.gridy = 4;
-//        panel.add(price, c);
-//        JLabel walkScore = new JLabel("Walk Score: " + propTest.getWalkScore());
-//        walkScore.setFont(normalText);
-//        c.weighty = 0.3;
-//        c.gridx = 0;
-//        c.gridy = 5;
-//        panel.add(walkScore, c);
-//        JLabel squareFeet = new JLabel("Square Feet: " + propTest.getSquareFeet());
-//        squareFeet.setFont(normalText);
-//        c.weighty = 0.3;
-//        c.gridx = 0;
-//        c.gridy = 6;
-//        panel.add(squareFeet, c);
-//        JLabel numBed = new JLabel("Number of Bedrooms: " + propTest.getNumBed());
-//        numBed.setFont(normalText);
-//        c.ipadx = 20;
-//        c.weighty = 0.3;
-//        c.gridx = 1;
-//        c.gridy = 2;
-//        panel.add(numBed, c);
-//        JLabel numBath = new JLabel("Number of Bathrooms: " + propTest.getNumBath());
-//        numBath.setFont(normalText);
-//        c.ipadx = 20;
-//        c.weighty = 0.3;
-//        c.gridx = 1;
-//        c.gridy = 3;
-//        panel.add(numBath, c);
-//        JLabel furnished = new JLabel("Furnished: " + propTest.isFurnished());
-//        furnished.setFont(normalText);
-//        c.weighty = 0.3;
-//        c.gridx = 1;
-//        c.gridy = 4;
-//        panel.add(furnished, c);
-//        JLabel parking = new JLabel("Parking: " + propTest.isParking());
-//        parking.setFont(normalText);
-//        c.weighty = 0.3;
-//        c.gridx = 1;
-//        c.gridy = 5;
-//        panel.add(parking, c);
-//        JLabel contact = new JLabel("Contact: " + propTest.getContact());
-//        contact.setFont(normalText);
-//        c.insets = new Insets(0,20,0,20);
-//        c.gridx = 2;
-//        c.gridy = 0;
-//        panel.add(contact, c);
-//        JLabel recommendations = new JLabel("You may also like: ");
-//        recommendations.setFont(new Font("Arial", 0, 20));
-//        c.ipadx = 20;
-//        c.gridx = 2;
-//        c.gridy = 1;
-//        panel.add(recommendations,c);
-//
-//        JPanel button1test = new JPanel();
-//        GridLayout gridlayout = new GridLayout(3,1);
-//        button1test.setLayout(gridlayout);
-//
-//        JButton listing1 = new JButton("Listing 1");
-//        c.gridx = 2;
-//        c.gridy = 2;
-//        c.gridheight = 4;
-//        c.ipady = 60;
-//        JButton listing2 = new JButton("Listing 2");
-//        JButton listing3 = new JButton("Listing 3");
-////        c.gridx = 2;
-////        c.gridy = 4;
-////        c.gridheight = 2;
-//        button1test.add(listing1);
-//        button1test.add(listing2);
-//        button1test.add(listing3);
-////        panel.add(button1test);
-//        JScrollPane listingScroll = new JScrollPane(button1test);
-//        listingScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        panel.add(listingScroll, c);
-//
-//
-////        panel.add(listingScroll, c);
-////        listingScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//
-//        JButton button = new JButton("Back");
-//        c.gridx = 2;
-//        c.gridy = 7;
-//        c.ipady = 30;
-//        panel.add(button, c);
-//
-//        application.add(panel);
-//    }
 }

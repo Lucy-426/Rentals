@@ -2,11 +2,15 @@ package main.app;
 
 import data_access.UserDataAccessObject;
 import entity.CommonUserFactory;
+import data_access.PropertyDataAccessObject;
+import entity.PropertyFactory;
+
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.saved.SavedViewModel;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.listing.ListingViewModel;
 import view.*;
 
 import javax.swing.*;
@@ -14,7 +18,7 @@ import java.awt.*;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
@@ -31,7 +35,6 @@ public class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
-<<<<<<< HEAD
         UserDataAccessObject userDataAccessObject;
         try {
             userDataAccessObject = new UserDataAccessObject("./users.csv", new CommonUserFactory());
@@ -42,15 +45,22 @@ public class Main {
         HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         LoginViewModel loginViewModel = new LoginViewModel();
+        ListingViewModel listingViewModel = new ListingViewModel();
         SavedViewModel savedViewModel = new SavedViewModel();
 
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel, signupViewModel,
-                loginViewModel, savedViewModel);
-=======
-        HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(viewManagerModel, homesearchViewModel);
->>>>>>> 63d9dc09f84c58d492abb7920d77c7c459d22549
+        PropertyDataAccessObject propertyDataAccessObject;
+        try {
+            propertyDataAccessObject = new PropertyDataAccessObject("./properties.csv", new PropertyFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel,
+                signupViewModel, loginViewModel, savedViewModel);
         views.add(homeSearchView, homeSearchView.viewName);
+
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
+        views.add(listingView, listingView.viewName);
 
         SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, signupViewModel,
                 userDataAccessObject);
@@ -62,6 +72,7 @@ public class Main {
 
         SavedView savedView = ProfileUseCaseFactory.create(viewManagerModel, homesearchViewModel, savedViewModel);
         views.add(savedView, savedView.viewName);
+
 
         viewManagerModel.setActiveView(homeSearchView.viewName);
         viewManagerModel.firePropertyChanged();

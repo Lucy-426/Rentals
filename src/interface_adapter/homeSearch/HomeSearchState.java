@@ -1,11 +1,16 @@
 package interface_adapter.homeSearch;
 
 import interface_adapter.saved.SavedState;
+import java.util.HashMap;
+
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+
+
 
 public class HomeSearchState {
     // Because of the previous copy constructor, the default constructor must be explicit.
 
+    private String searchBarInput;
     private String id;
 
     private String city;
@@ -27,9 +32,13 @@ public class HomeSearchState {
     private boolean loggedIn = false;
 
     private SavedState savedState = null;
+
+    private HashMap<String, String> displayedListings;
+
     private GeoPosition startPosition;
 
     public HomeSearchState(HomeSearchState copy) {
+        searchBarInput = copy.searchBarInput;
         id = copy.id;
         city = copy.city;
         address = copy.address;
@@ -41,9 +50,14 @@ public class HomeSearchState {
         listingType = copy.listingType;
         loggedIn = copy.loggedIn;
         savedState = copy.savedState;
+        displayedListings = copy.displayedListings;
         startPosition = copy.startPosition;
     }
     public HomeSearchState() {}
+
+    public String getSearchBarInput() {
+        return searchBarInput;
+    }
     public String getId() { return id; }
 
     public String getCity() { return city; }
@@ -79,9 +93,19 @@ public class HomeSearchState {
     public boolean getLoggedIn() { return loggedIn; }
 
     public SavedState getSavedState() { return savedState; }
+
+    public HashMap<String, String> getDisplayedListings() {
+        return displayedListings;
+    }
+
+    public void setSearchBarInput(String searchBarInput) {
+        this.searchBarInput = searchBarInput;
+    }
+
     public GeoPosition getStartPosition() {
         return startPosition;
     }
+
 
     public void setId(String id) { this.id = id; }
 
@@ -118,6 +142,10 @@ public class HomeSearchState {
     public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }
 
     public void setSavedState(SavedState savedState) { this.savedState = savedState; }
+
+    public void setDisplayedListings(HashMap<String, String> displayedListings) {
+        this.displayedListings = displayedListings;
+    }
 
     public void setStartPosition(GeoPosition startPosition) {
         this.startPosition = startPosition;

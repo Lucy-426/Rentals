@@ -1,14 +1,22 @@
 package interface_adapter.homeSearch;
 
 import interface_adapter.saved.SavedState;
+import interface_adapter.ViewManagerModel;
 import use_case.home.HomeInputBoundary;
 import use_case.home.HomeInputData;
 
 public class HomeSearchController {
     final HomeInputBoundary homeInteractor;
 
-    public HomeSearchController(HomeInputBoundary homeInteractor) {
+    final HomeSearchViewModel homeSearchViewModel;
+
+    final ViewManagerModel viewManagerModel;
+
+    public HomeSearchController(HomeInputBoundary homeInteractor, HomeSearchViewModel homeSearchViewModel,
+                                ViewManagerModel viewManagerModel) {
         this.homeInteractor = homeInteractor;
+        this.homeSearchViewModel = homeSearchViewModel;
+        this.viewManagerModel = viewManagerModel;
     }
 
     public void execute(String id, String city, String address, String numRooms, String priceRange,
@@ -29,4 +37,5 @@ public class HomeSearchController {
     public void displayProfile(SavedState savedState) { homeInteractor.displayProfile(savedState); }
 
     public void logOut() { homeInteractor.logOut(); }
+
 }

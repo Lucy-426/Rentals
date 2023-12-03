@@ -13,5 +13,4 @@ public interface HomeOutputBoundary {
 
     void logOut();
 
-    //TODO: add prepareFailView
 }

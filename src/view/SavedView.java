@@ -80,7 +80,6 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
     public void propertyChange(PropertyChangeEvent evt) {
         GridBagConstraints c = new GridBagConstraints();
 
-        System.out.println(savedViewModel.getState().getUsername());
         JLabel userGreeting = new JLabel("Hello " + savedViewModel.getState().getUsername() + "!");
 
         JLabel listings = new JLabel("Below are your saved listings:");

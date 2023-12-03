@@ -1,24 +1,32 @@
 package use_case.listing;
 
-import entity.PropertyFactory;
-import use_case.home.HomeOutputBoundary;
+import entity.Property;
+import use_case.home.HomeSearchDataAccessInterface;
+
+import java.util.HashMap;
 
 public class ListingInteractor implements ListingInputBoundary{
-    final ListingOutputBoundary listingPresenter;
-    final PropertyFactory propertyFactory;
 
-    public ListingInteractor(ListingOutputBoundary listingOutputBoundary, PropertyFactory propertyFactory) {
+    final HomeSearchDataAccessInterface homeSearchDataAccessObject;
+    final ListingOutputBoundary listingPresenter;
+
+    public ListingInteractor(HomeSearchDataAccessInterface homeSearchDataAccessInterface, ListingOutputBoundary listingOutputBoundary) {
+        this.homeSearchDataAccessObject = homeSearchDataAccessInterface;
         this.listingPresenter = listingOutputBoundary;
-        this.propertyFactory = propertyFactory;
     }
 
 
     @Override
     public void execute(ListingInputData listingInputData) {
 
+        Property property = homeSearchDataAccessObject.getProperty(listingInputData.getId());
 
-        ListingOutputData listingOutputData = new ListingOutputData("Apartment",60, 350, 8, 3, 2,
-                300, true, false, "John Smith 4373294732");
+        homeSearchDataAccessObject.makeRecommendations(property);
+        HashMap<String, String> recommendations = homeSearchDataAccessObject.getRecommendedProperties();
+
+        ListingOutputData listingOutputData = new ListingOutputData(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(),
+                property.getPriceRange(), property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType(),
+                recommendations);
         listingPresenter.prepareSuccessView(listingOutputData);
 
     }
