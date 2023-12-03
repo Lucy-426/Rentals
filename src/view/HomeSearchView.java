@@ -28,7 +28,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     public final WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<>();
 
-    private static final double DISTANCE_THRESHOLD = 0.02;
+    private static final double DISTANCE_THRESHOLD = 0.001;
 
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
@@ -226,12 +226,18 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                                 HomeSearchState currentState = homeSearchViewModel.getState();
                                 currentState.setCity(homeSearchViewModel.getState().getSearchBarInput());
                                 homeSearchViewModel.setState(currentState);
+                                // Left map centering commented to save API usage credits
 //                                centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
+//                                jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
+
                             } else if (input.matches(".+")) {
                                 HomeSearchState currentState = homeSearchViewModel.getState();
                                 currentState.setAddress(homeSearchViewModel.getState().getSearchBarInput());
                                 homeSearchViewModel.setState(currentState);
+                                // Left map centering commented to save API usage credits
 //                                centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
+//                                jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
+
                             }
 
                             homeSearchController.execute(homeSearchViewModel.getState().getId(),
@@ -243,8 +249,6 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                             jxMapKit.getMainMap().repaint();
                             waypointPainter.setWaypoints(homeSearchViewModel.getState().getWaypoints());
                             jxMapKit.getMainMap().setOverlayPainter(waypointPainter);
-
-                            jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
                         }
                     }
                 }
@@ -344,12 +348,12 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
             @Override
             public void mouseClicked(MouseEvent e) {
                 GeoPosition clickedPosition = jxMapKit.getMainMap().convertPointToGeoPosition(e.getPoint());
+                HomeSearchState currentState = homeSearchViewModel.getState();
+                HashMap<Waypoint, String> waypointIDMap = currentState.getWaypointIDMap();
 
                 // Check if any waypoint was clicked
                 for (Waypoint waypoint : homeSearchViewModel.getState().getWaypoints()) {
                     if (isCloseEnough(waypoint.getPosition(), clickedPosition, DISTANCE_THRESHOLD)) {
-                        HomeSearchState currentState = homeSearchViewModel.getState();
-                        HashMap<Waypoint, String> waypointIDMap = currentState.getWaypointIDMap();
                         String id = waypointIDMap.get(waypoint);
                         listingController.execute(id);
                     }
