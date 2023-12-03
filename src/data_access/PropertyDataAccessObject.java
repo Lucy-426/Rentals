@@ -44,8 +44,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private static final String API_TOKEN = "bdc142f975386786593145e4c20e19e3";
 
     // The cities that we are getting listings from
-    private static final Pair<String, String> SF_CA = new Pair<>("37.656305", "-122.417006");
-    private static final Pair<String, String> MINNEAPOLIS_MN = new Pair<>("44.996091", "-93.364628");
+//    private static final Pair<String, String> SF_CA = new Pair<>("37.656305", "-122.417006");
+//    private static final Pair<String, String> MINNEAPOLIS_MN = new Pair<>("44.996091", "-93.364628");
     private static final Pair<String, String> LA_CA = new Pair<>("34.029082", "-118.25947");
 //    private static final Pair<String, String> PHILADELPHIA_PA = new Pair<>("39.993614", "-75.150923");
 //    private static final Pair<String, String> DETROIT_MI = new Pair<>("42.352656", "-83.088938");
@@ -65,8 +65,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         this.propertyFactory = propertyFactory;
 
         // saving all the cities from above to a list
-        cities.add(SF_CA);
-        cities.add(MINNEAPOLIS_MN);
+//        cities.add(SF_CA);
+//        cities.add(MINNEAPOLIS_MN);
         cities.add(LA_CA);
 //        cities.add(PHILADELPHIA_PA);
 //        cities.add(DETROIT_MI);
@@ -173,7 +173,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     coordinates.put(id, new Pair(lat, lon));
 
                     // TODO: Still need to fix this because it takes too long to run so no memory error happens
-                    String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
+//                    String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
+                    String walkScore = "0";
 
                     List<String> givenList = Arrays.asList("Yes", "No");
                     Random rand = new Random();
@@ -363,14 +364,20 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
     @Override
-    public Set<Waypoint> getCoordinates(HashMap<String, String> properties) {
-        Set<Waypoint> waypoints = new HashSet<>();
+    public Set<Waypoint> getCoordinates(HashMap<Waypoint, String> properties) {
+        return properties.keySet();
+    }
+
+    @Override
+    public HashMap<Waypoint, String> getWaypointToID(HashMap<String, String> properties) {
+        HashMap<Waypoint, String> waypointToID = new HashMap<>();
         for (String id : properties.keySet()) {
             double latitude = (double) coordinates.get(id).getFirst();
             double longitude = (double) coordinates.get(id).getSecond();
-            waypoints.add(new DefaultWaypoint(latitude, longitude));
+            Waypoint waypoint = new DefaultWaypoint(latitude, longitude);
+            waypointToID.put(waypoint, id);
         }
-        return waypoints;
+        return waypointToID;
     }
 
     @Override
