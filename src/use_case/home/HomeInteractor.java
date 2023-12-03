@@ -2,8 +2,10 @@ package use_case.home;
 
 import entity.Property;
 import entity.PropertyFactory;
+import org.jdesktop.swingx.mapviewer.Waypoint;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class HomeInteractor implements HomeInputBoundary {
 
@@ -29,7 +31,9 @@ public class HomeInteractor implements HomeInputBoundary {
 
         homeDataAccessObject.filter();
         HashMap<String, String> displayedProperties = homeDataAccessObject.getFilteredProperties();
-        HomeOutputData homeOutputData = new HomeOutputData(displayedProperties);
+        HashMap<Waypoint, String> waypointToID = homeDataAccessObject.getWaypointToID(displayedProperties);
+        Set<Waypoint> waypoints = homeDataAccessObject.getCoordinates(waypointToID);
+        HomeOutputData homeOutputData = new HomeOutputData(displayedProperties, waypointToID, waypoints);
         homePresenter.prepareSuccessView(homeOutputData);
     }
 
