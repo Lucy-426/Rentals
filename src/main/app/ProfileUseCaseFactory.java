@@ -1,8 +1,10 @@
 package main.app;
 
+import data_access.PropertyDataAccessObject;
 import data_access.UserDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homeSearch.HomeSearchViewModel;
+import interface_adapter.listing.ListingViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -27,13 +29,14 @@ public class ProfileUseCaseFactory {
     /** Prevent instantiation. */
     private ProfileUseCaseFactory() {}
 
-    public static SavedView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
-                                   SavedViewModel savedViewModel) {
+    public static SavedView create(UserDataAccessObject userDataAccessObject, PropertyDataAccessObject propertyDataAccessObject,
+                                   ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
+                                   ListingViewModel listingViewModel, SavedViewModel savedViewModel) {
 
         try {
-            SavedController savedController = createUserProfileUseCase(viewManagerModel, homeSearchViewModel,
-                    savedViewModel);
-            return new SavedView(savedController, savedViewModel);
+            SavedController savedController = createUserProfileUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel,
+                    listingViewModel);
+            return new SavedView(savedController, savedViewModel, userDataAccessObject);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data profile.");
         }
@@ -41,12 +44,13 @@ public class ProfileUseCaseFactory {
         return null;
     }
 
-    private static SavedController createUserProfileUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
-                                                          SavedViewModel savedViewModel) throws IOException {
+    private static SavedController createUserProfileUseCase(PropertyDataAccessObject propertyDataAccessObject,
+                                                            ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
+                                                            ListingViewModel listingViewModel) throws IOException {
         // Notice how we pass this method's parameters to the Presenter.
-        SavedOutputBoundary savedOutputBoundary = new SavedPresenter(viewManagerModel, savedViewModel, homeSearchViewModel);
+        SavedOutputBoundary savedOutputBoundary = new SavedPresenter(viewManagerModel, listingViewModel, homeSearchViewModel);
 
-        SavedInputBoundary savedInteractor = new SavedInteractor(savedOutputBoundary);
+        SavedInputBoundary savedInteractor = new SavedInteractor(propertyDataAccessObject, savedOutputBoundary);
 
         return new SavedController(savedInteractor);
     }

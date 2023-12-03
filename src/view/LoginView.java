@@ -127,13 +127,26 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     }
                 });
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
 
-        this.add(title);
-        this.add(usernameInfo);
-        this.add(usernameErrorField);
-        this.add(passwordInfo);
-        this.add(passwordErrorField);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        title.setFont(new Font("Arial", 1, 30));
+        title.setSize(200, 60);
+        c.gridx = 0;
+        c.gridy = 0;
+        this.add(title, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 0;
+        this.add(usernameInfo, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 0;
+        this.add(passwordInfo, c);
+
         this.add(buttons);
     }
 

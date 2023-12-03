@@ -1,6 +1,7 @@
 package interface_adapter.listing;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.login.LoginState;
 import use_case.listing.ListingOutputBoundary;
 import use_case.listing.ListingOutputData;
 
@@ -33,5 +34,11 @@ public class ListingPresenter implements ListingOutputBoundary{
         listingViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(listingViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
+    }
+
+    public void listingSaved(String msg) {
+        ListingState listingState = listingViewModel.getState();
+        listingState.setSaveMsg(msg);
+        listingViewModel.firePropertyChanged();
     }
 }

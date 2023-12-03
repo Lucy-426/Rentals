@@ -12,10 +12,8 @@ public class SavedController {
         this.savedInteractor = savedInteractor;
     }
 
-    public void execute(String rentalType, int daysListedAgo, float price, int walkScore, int numBed, int numBath,
-                        int squareFeet, boolean furnished, boolean parking, String contact){
-        SavedInputData savedInputData = new SavedInputData(rentalType, daysListedAgo, price, walkScore, numBed, numBath,
-                squareFeet, furnished, parking, contact);
+    public void execute(String id){
+        SavedInputData savedInputData = new SavedInputData(id);
 
         savedInteractor.execute(savedInputData);
     }

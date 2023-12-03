@@ -6,6 +6,7 @@ import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homeSearch.HomeSearchViewModel;
+import interface_adapter.listing.ListingViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -31,12 +32,12 @@ public class LoginUseCaseFactory {
     private LoginUseCaseFactory() {}
 
     public static LoginView create(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
-                                   LoginViewModel loginViewModel, SavedViewModel savedViewModel,
+                                   LoginViewModel loginViewModel, ListingViewModel listingViewModel,
                                    UserDataAccessObject userDataAccessObject) {
 
         try {
             LoginController loginController = createUserLoginUseCase(viewManagerModel, homeSearchViewModel,
-                    loginViewModel, savedViewModel, userDataAccessObject);
+                    loginViewModel, listingViewModel, userDataAccessObject);
             return new LoginView(loginController, loginViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -46,11 +47,11 @@ public class LoginUseCaseFactory {
     }
 
     private static LoginController createUserLoginUseCase(ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
-                                                          LoginViewModel loginViewModel, SavedViewModel savedViewModel,
+                                                          LoginViewModel loginViewModel, ListingViewModel listingViewModel,
                                                           UserDataAccessObject userDataAccessObject) throws IOException {
         // Notice how we pass this method's parameters to the Presenter.
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, homeSearchViewModel,
-                loginViewModel, savedViewModel);
+                loginViewModel, listingViewModel);
 
         LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);

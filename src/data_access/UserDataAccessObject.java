@@ -16,7 +16,7 @@ public class UserDataAccessObject implements UserSignupDataAccessInterface {
 
     private final Map<String, User> accounts = new HashMap<>();
 
-    private final Map<String, ArrayList<Property>> userProperties = new HashMap<>();
+    private final Map<String, Map<String, Property>> userProperties = new HashMap<>();
 
     private UserFactory userFactory;
 
@@ -59,7 +59,7 @@ public class UserDataAccessObject implements UserSignupDataAccessInterface {
     }
 
     @Override
-    public ArrayList<Property> getUserProperties(String username) {
+    public Map<String, Property> getUserProperties(String username) {
         return userProperties.get(username);
     }
 
@@ -68,10 +68,10 @@ public class UserDataAccessObject implements UserSignupDataAccessInterface {
     @Override
     public void saveUserProperty(String username, Property property) {
         if (userProperties.containsKey(username)) {
-            userProperties.get(username).add(property);
+            userProperties.get(username).put(property.getID(), property);
         } else {
-            userProperties.put(username, new ArrayList<Property>());
-            userProperties.get(username).add(property);
+            userProperties.put(username, new HashMap<>());
+            userProperties.get(username).put(property.getID(), property);
         }
     }
 

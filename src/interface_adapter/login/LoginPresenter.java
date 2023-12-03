@@ -3,6 +3,8 @@ package interface_adapter.login;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
+import interface_adapter.listing.ListingState;
+import interface_adapter.listing.ListingViewModel;
 import interface_adapter.saved.SavedState;
 import interface_adapter.saved.SavedViewModel;
 import interface_adapter.signup.SignupState;
@@ -20,17 +22,17 @@ public class LoginPresenter implements LoginOutputBoundary {
 
     private final HomeSearchViewModel homeSearchViewModel;
     private final LoginViewModel loginViewModel;
-    private final SavedViewModel savedViewModel;
+    private final ListingViewModel listingViewModel;
     private ViewManagerModel viewManagerModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
                           HomeSearchViewModel homeSearchViewModel,
                           LoginViewModel loginViewModel,
-                          SavedViewModel savedViewModel) {
+                          ListingViewModel listingViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.homeSearchViewModel = homeSearchViewModel;
         this.loginViewModel = loginViewModel;
-        this.savedViewModel = savedViewModel;
+        this.listingViewModel = listingViewModel;
     }
 
     //@Override
@@ -45,6 +47,12 @@ public class LoginPresenter implements LoginOutputBoundary {
         homeSearchState.setSavedState(savedState);
         this.homeSearchViewModel.setState(homeSearchState);
         this.homeSearchViewModel.firePropertyChanged();
+        // Set listing to show save button
+        ListingState listingState = listingViewModel.getState();
+        listingState.setLoggedIn(true);
+        listingState.setUsername(response.getUsername());
+        this.listingViewModel.setState(listingState);
+        this.listingViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(homeSearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }

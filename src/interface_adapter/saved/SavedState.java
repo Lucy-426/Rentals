@@ -3,10 +3,12 @@ package interface_adapter.saved;
 import entity.Property;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SavedState {
     private String username = "";
-    private ArrayList<Property> savedListings;
+    private Map<String, Property> savedListings;
 
     public SavedState(SavedState copy) {
         username = copy.username;
@@ -20,13 +22,13 @@ public class SavedState {
         return username;
     }
 
-    public ArrayList<Property> getSavedListings() { return savedListings; }
+    public Map<String, Property> getSavedListings() { return savedListings; }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public void setSavedListings(ArrayList<Property> savedListings) {
+    public void setSavedListings(Map<String, Property> savedListings) {
         this.savedListings = savedListings;
     }
 

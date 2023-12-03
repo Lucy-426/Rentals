@@ -3,30 +3,45 @@ package interface_adapter.saved;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
+import interface_adapter.listing.ListingState;
+import interface_adapter.listing.ListingViewModel;
 import use_case.listing.ListingOutputBoundary;
 import use_case.listing.ListingOutputData;
 import use_case.saved.SavedOutputBoundary;
 import use_case.saved.SavedOutputData;
 
 public class SavedPresenter implements SavedOutputBoundary {
-    private final SavedViewModel savedViewModel;
+    private final ListingViewModel listingViewModel;
 
     private final HomeSearchViewModel homeSearchViewModel;
 
     private ViewManagerModel viewManagerModel;
 
-    public SavedPresenter(ViewManagerModel viewManagerModel, SavedViewModel savedViewModel,
+    public SavedPresenter(ViewManagerModel viewManagerModel, ListingViewModel listingViewModel,
                           HomeSearchViewModel homeSearchViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.savedViewModel = savedViewModel;
+        this.listingViewModel = listingViewModel;
         this.homeSearchViewModel = homeSearchViewModel;
     }
 
 
     @Override
     public void prepareSuccessView(SavedOutputData savedOutputData) {
-        SavedState savedState = savedViewModel.getState();
-        viewManagerModel.setActiveView(savedViewModel.getViewName());
+        ListingState listingState = listingViewModel.getState();
+        listingState.setId(savedOutputData.getId());
+        listingState.setCity(savedOutputData.getCity());
+        listingState.setAddress(savedOutputData.getAddress());
+        listingState.setNumRooms(savedOutputData.getNumRooms());
+        listingState.setPrice(savedOutputData.getPrice());
+        listingState.setNumBaths(savedOutputData.getNumBaths());
+        listingState.setWalkScore(savedOutputData.getWalkScore());
+        listingState.setFurnished(savedOutputData.getFurnished());
+        listingState.setListingType(savedOutputData.getListingType());
+        listingState.setRecommendations(savedOutputData.getRecommendations());
+
+        this.listingViewModel.setState(listingState);
+        listingViewModel.firePropertyChanged();
+        viewManagerModel.setActiveView(listingViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 

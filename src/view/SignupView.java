@@ -147,12 +147,32 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     public void keyReleased(KeyEvent e) {
                     }
                 });
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        this.add(title);
-        this.add(usernameInfo);
-        this.add(passwordInfo);
-        this.add(repeatPasswordInfo);
+        setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        title.setFont(new Font("Arial", 1, 30));
+        title.setSize(200, 60);
+        c.gridx = 0;
+        c.gridy = 0;
+        this.add(title, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 0;
+        this.add(usernameInfo, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 0;
+        this.add(passwordInfo, c);
+
+        c.gridx = 0;
+        c.gridy = 5;
+        c.gridwidth = 0;
+        this.add(repeatPasswordInfo, c);
+
         this.add(buttons);
     }
 

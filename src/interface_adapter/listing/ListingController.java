@@ -34,4 +34,11 @@ public class ListingController {
         viewManagerModel.setActiveView(homeSearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
+
+    public void saveListing(String username, String id) {
+        ListingInputData listingInputData = new ListingInputData(id);
+        listingInputData.setUsername(username);
+
+        listingInteractor.saveListing(listingInputData);
+    }
 }

@@ -1,5 +1,6 @@
 package main.app;
 
+import data_access.UserDataAccessObject;
 import interface_adapter.listing.ListingController;
 import interface_adapter.listing.ListingPresenter;
 import interface_adapter.listing.ListingViewModel;
@@ -31,13 +32,14 @@ import java.io.IOException;
 public class HomeSearchUseCaseFactory {
     private HomeSearchUseCaseFactory() {};
 
-    public static HomeSearchView create(PropertyDataAccessObject propertyDataAccessObject, ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
+    public static HomeSearchView create(PropertyDataAccessObject propertyDataAccessObject, UserDataAccessObject userDataAccessObject,
+                                        ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel,
                                         ListingViewModel listingViewModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel, SavedViewModel savedViewModel) {
         try {
             HomeSearchController homeSearchController = createHomeSearchUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel,
-                    signupViewModel, loginViewModel, savedViewModel);
+                    signupViewModel, loginViewModel, savedViewModel, listingViewModel);
 
-            ListingController listingController = createListingUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel, listingViewModel);
+            ListingController listingController = createListingUseCase(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homeSearchViewModel, listingViewModel);
             CenterMapController centerMapController = createCenterMapUseCase(viewManagerModel, homeSearchViewModel);
             return new HomeSearchView(homeSearchController, listingController, homeSearchViewModel, centerMapController);
 
@@ -48,10 +50,11 @@ public class HomeSearchUseCaseFactory {
     }
 
     private static HomeSearchController createHomeSearchUseCase(PropertyDataAccessObject propertyDataAccessObject, ViewManagerModel viewManagerModel,
-                HomeSearchViewModel homeSearchViewModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel, SavedViewModel savedViewModel) throws IOException {
+                HomeSearchViewModel homeSearchViewModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel, SavedViewModel savedViewModel,
+                                                                ListingViewModel listingViewModel) throws IOException {
 
         HomeOutputBoundary homeOutputBoundary = new HomeSearchPresenter(homeSearchViewModel, viewManagerModel, signupViewModel,
-                loginViewModel, savedViewModel);
+                loginViewModel, savedViewModel, listingViewModel);
 
         PropertyFactory propertyFactory = new PropertyFactory();
 
@@ -60,17 +63,19 @@ public class HomeSearchUseCaseFactory {
         return new HomeSearchController(homeInteractor, homeSearchViewModel, viewManagerModel);
 
     }
-    public static ListingView createListingView(PropertyDataAccessObject propertyDataAccessObject, ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
-        ListingController listingController = createListingUseCase(propertyDataAccessObject, viewManagerModel, homeSearchViewModel, listingViewModel);
+    public static ListingView createListingView(PropertyDataAccessObject propertyDataAccessObject, UserDataAccessObject userDataAccessObject,
+                                                ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
+        ListingController listingController = createListingUseCase(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homeSearchViewModel, listingViewModel);
         return new ListingView(listingController, listingViewModel);
 
     }
 
-    private static ListingController createListingUseCase(PropertyDataAccessObject propertyDataAccessObject, ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
+    private static ListingController createListingUseCase(PropertyDataAccessObject propertyDataAccessObject, UserDataAccessObject userDataAccessObject,
+                                                          ViewManagerModel viewManagerModel, HomeSearchViewModel homeSearchViewModel, ListingViewModel listingViewModel) {
 
         ListingOutputBoundary listingOutputBoundary = new ListingPresenter(viewManagerModel, listingViewModel);
 
-        ListingInputBoundary listingInteractor = new ListingInteractor(propertyDataAccessObject, listingOutputBoundary);
+        ListingInputBoundary listingInteractor = new ListingInteractor(propertyDataAccessObject, userDataAccessObject, listingOutputBoundary);
 
         return new ListingController(listingInteractor, homeSearchViewModel, viewManagerModel);
 

@@ -55,22 +55,22 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel,
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel,
                 signupViewModel, loginViewModel, savedViewModel);
         views.add(homeSearchView, homeSearchView.viewName);
 
-        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         views.add(listingView, listingView.viewName);
 
         SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, signupViewModel,
                 userDataAccessObject);
         views.add(signupView, signupView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, savedViewModel,
+        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, listingViewModel,
                 userDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        SavedView savedView = ProfileUseCaseFactory.create(viewManagerModel, homesearchViewModel, savedViewModel);
+        SavedView savedView = ProfileUseCaseFactory.create(userDataAccessObject, propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel, savedViewModel);
         views.add(savedView, savedView.viewName);
 
 

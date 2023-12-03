@@ -4,13 +4,14 @@ import entity.Property;
 import entity.User;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface UserSignupDataAccessInterface {
     boolean existsByName(String identifier);
 
     String getUserPassword(String identifier);
 
-    ArrayList<Property> getUserProperties(String username);
+    Map<String, Property> getUserProperties(String username);
 
     void saveUserProperty(String username, Property property);
 

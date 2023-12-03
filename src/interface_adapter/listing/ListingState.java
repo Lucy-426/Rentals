@@ -23,6 +23,12 @@ public class ListingState {
 
     private HashMap<String, String> recommendations;
 
+    private boolean loggedIn = false;
+
+    private String username = "";
+
+    private String saveMsg = null;
+
 
     public ListingState(ListingState copy) {
         this.id = copy.id;
@@ -35,7 +41,9 @@ public class ListingState {
         this.furnished = copy.furnished;
         this.listingType = copy.listingType;
         this.recommendations = copy.recommendations;
-
+        this.loggedIn = copy.loggedIn;
+        this.username = copy.username;
+        this.saveMsg = copy.saveMsg;
     }
 
     public ListingState() {}
@@ -73,6 +81,12 @@ public class ListingState {
     public HashMap<String, String> getRecommendations() {
         return recommendations;
     }
+
+    public boolean isLoggedIn() { return loggedIn; }
+
+    public String getUsername() { return username; }
+
+    public String getSaveMsg() { return saveMsg; }
 
     public void setId(String id) {
         this.id = id;
@@ -113,4 +127,10 @@ public class ListingState {
     public void setRecommendations(HashMap<String, String> recommendations) {
         this.recommendations = recommendations;
     }
+
+    public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }
+
+    public void setUsername(String username) { this.username = username; }
+
+    public void setSaveMsg(String msg) { this.saveMsg = msg; }
 }

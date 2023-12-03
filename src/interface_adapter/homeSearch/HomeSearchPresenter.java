@@ -1,6 +1,8 @@
 package interface_adapter.homeSearch;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.listing.ListingState;
+import interface_adapter.listing.ListingViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.saved.SavedState;
@@ -22,14 +24,18 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
 
     private SavedViewModel savedViewModel;
 
+    private ListingViewModel listingViewModel;
+
     // TODO: link listing view model?
     public HomeSearchPresenter(HomeSearchViewModel homesearchViewModel, ViewManagerModel viewManagerModel,
-                               SignupViewModel signupViewModel, LoginViewModel loginViewModel, SavedViewModel savedViewModel) {
+                               SignupViewModel signupViewModel, LoginViewModel loginViewModel,
+                               SavedViewModel savedViewModel, ListingViewModel listingViewModel) {
         this.homesearchViewModel = homesearchViewModel;
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
         this.loginViewModel = loginViewModel;
         this.savedViewModel = savedViewModel;
+        this.listingViewModel = listingViewModel;
     }
     @Override
     public void prepareSuccessView(HomeOutputData homeOutputData) {
@@ -68,6 +74,11 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
         homeSearchState.setLoggedIn(false);
         this.homesearchViewModel.setState(homeSearchState);
         this.homesearchViewModel.firePropertyChanged();
+        ListingState listingState = listingViewModel.getState();
+        listingState.setLoggedIn(false);
+        listingState.setUsername("");
+        this.listingViewModel.setState(listingState);
+        this.listingViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(homesearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }

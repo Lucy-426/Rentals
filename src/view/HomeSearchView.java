@@ -45,8 +45,6 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     // Scroll pane
     private JScrollPane listingsScroll;
     private ArrayList<JButton> listingButtons = new ArrayList<>();
-    private JTextArea listingsArea;
-
     private JPanel buttonsPanel;
 
 
