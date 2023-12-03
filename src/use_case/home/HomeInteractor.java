@@ -31,8 +31,9 @@ public class HomeInteractor implements HomeInputBoundary {
 
         homeDataAccessObject.filter();
         HashMap<String, String> displayedProperties = homeDataAccessObject.getFilteredProperties();
-        Set<Waypoint> waypoints = homeDataAccessObject.getCoordinates(displayedProperties);
-        HomeOutputData homeOutputData = new HomeOutputData(displayedProperties, waypoints);
+        HashMap<Waypoint, String> waypointToID = homeDataAccessObject.getWaypointToID(displayedProperties);
+        Set<Waypoint> waypoints = homeDataAccessObject.getCoordinates(waypointToID);
+        HomeOutputData homeOutputData = new HomeOutputData(displayedProperties, waypointToID, waypoints);
         homePresenter.prepareSuccessView(homeOutputData);
     }
 
