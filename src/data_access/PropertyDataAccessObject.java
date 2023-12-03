@@ -1,5 +1,10 @@
 package data_access;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.PlacesApi;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.PlacesSearchResponse;
+import com.google.maps.model.PlacesSearchResult;
 import com.jayway.jsonpath.JsonPath;
 import entity.Property;
 import entity.PropertyFactory;
@@ -7,6 +12,8 @@ import kotlin.Pair;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
+import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,9 +28,14 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
+
+    private Map<String, Property> filtered_properties;
+
     private Map<String, Property> filteredProperties;
 
     private Map<String, Property> recommendedProperties;
+
+    private final Map<String, Pair> coordinates = new HashMap<>();
 
     private final WalkScoreDataAccessObject walkScoreCalculator = new WalkScoreDataAccessObject();
 
@@ -32,8 +44,8 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private static final String API_TOKEN = "bdc142f975386786593145e4c20e19e3";
 
     // The cities that we are getting listings from
-    private static final Pair<String, String> SF_CA = new Pair<>("37.656305", "-122.417006");
-    private static final Pair<String, String> MINNEAPOLIS_MN = new Pair<>("44.996091", "-93.364628");
+//    private static final Pair<String, String> SF_CA = new Pair<>("37.656305", "-122.417006");
+//    private static final Pair<String, String> MINNEAPOLIS_MN = new Pair<>("44.996091", "-93.364628");
     private static final Pair<String, String> LA_CA = new Pair<>("34.029082", "-118.25947");
 //    private static final Pair<String, String> PHILADELPHIA_PA = new Pair<>("39.993614", "-75.150923");
 //    private static final Pair<String, String> DETROIT_MI = new Pair<>("42.352656", "-83.088938");
@@ -47,12 +59,14 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
     private Property inputProperty;
 
+    private final String MAPS_API_KEY = "AIzaSyAMz9doGhcdEYjPoXY3Cv4TCd58-eHDubU";
+
     public PropertyDataAccessObject(String csvPath, PropertyFactory propertyFactory) throws IOException {
         this.propertyFactory = propertyFactory;
 
         // saving all the cities from above to a list
-        cities.add(SF_CA);
-        cities.add(MINNEAPOLIS_MN);
+//        cities.add(SF_CA);
+//        cities.add(MINNEAPOLIS_MN);
         cities.add(LA_CA);
 //        cities.add(PHILADELPHIA_PA);
 //        cities.add(DETROIT_MI);
@@ -156,8 +170,11 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     String longitude = JsonPath.read(propertyJson, "$.location.longitude");
                     double lon = Double.parseDouble(longitude);
 
+                    coordinates.put(id, new Pair(lat, lon));
+
                     // TODO: Still need to fix this because it takes too long to run so no memory error happens
-                    String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
+//                    String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
+                    String walkScore = "0";
 
                     List<String> givenList = Arrays.asList("Yes", "No");
                     Random rand = new Random();
@@ -344,6 +361,54 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     @Override
     public Property getProperty(String id) {
         return properties.get(id);
+    }
+
+    @Override
+    public Set<Waypoint> getCoordinates(HashMap<Waypoint, String> properties) {
+        return properties.keySet();
+    }
+
+    @Override
+    public HashMap<Waypoint, String> getWaypointToID(HashMap<String, String> properties) {
+        HashMap<Waypoint, String> waypointToID = new HashMap<>();
+        for (String id : properties.keySet()) {
+            double latitude = (double) coordinates.get(id).getFirst();
+            double longitude = (double) coordinates.get(id).getSecond();
+            Waypoint waypoint = new DefaultWaypoint(latitude, longitude);
+            waypointToID.put(waypoint, id);
+        }
+        return waypointToID;
+    }
+
+    @Override
+    public double getLat(String id) {
+        try {
+            if (coordinates.containsKey(id)) {
+                return (double) coordinates.get(id).getFirst();
+            } else {
+                System.out.println(id + " does not exist");
+                System.out.println(coordinates.get(id).getFirst());
+                return 0;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public double getLong(String id) {
+        try {
+            if (coordinates.containsKey(id)) {
+                return (double) coordinates.get(id).getSecond();
+            } else {
+                System.out.println(id + " does not exist");
+                return 0;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
 
