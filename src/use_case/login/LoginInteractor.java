@@ -1,12 +1,8 @@
 package use_case.login;
 
-import data_access.UserSignupDataAccessInterface;
+import use_case.signup.UserSignupDataAccessInterface;
 import entity.Property;
-import entity.User;
-import use_case.signup.SignupOutputData;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 

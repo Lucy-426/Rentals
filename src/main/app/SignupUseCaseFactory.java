@@ -1,12 +1,9 @@
 package main.app;
 
 import data_access.UserDataAccessObject;
-import data_access.UserSignupDataAccessInterface;
 import entity.CommonUserFactory;
-import entity.User;
 import entity.UserFactory;
 import interface_adapter.*;
-import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.signup.SignupController;

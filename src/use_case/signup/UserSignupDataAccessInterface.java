@@ -1,4 +1,4 @@
-package data_access;
+package use_case.signup;
 
 import entity.Property;
 import entity.User;

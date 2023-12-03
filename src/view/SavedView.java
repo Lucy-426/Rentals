@@ -1,22 +1,16 @@
 package view;
 
-import data_access.UserSignupDataAccessInterface;
+import use_case.signup.UserSignupDataAccessInterface;
 import entity.Property;
-import interface_adapter.listing.ListingViewModel;
 import interface_adapter.saved.SavedController;
-import interface_adapter.saved.SavedState;
 import interface_adapter.saved.SavedViewModel;
-import use_case.saved.SavedOutputBoundary;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -44,6 +38,8 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
         this.savedViewModel = savedViewModel;
         this.savedViewModel.addPropertyChangeListener(this);
         this.userSignupDataAccessInterface = userSignupDataAccessInterface;
+
+        this.removeAll();
 
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -85,6 +81,31 @@ public class SavedView extends JPanel implements ActionListener, PropertyChangeL
 
         listingsScroll = new JScrollPane(buttonsPanel);
         this.add(listingsScroll);
+
+        // Updates the profile page to add buttons according to the filtered listings
+        Map<String, Property> savedListings = userSignupDataAccessInterface.getUserProperties(savedViewModel.getState().getUsername());
+        if (!(savedListings == null)) {
+            listingButtons = new ArrayList<>();
+            for (String id : savedListings.keySet()) {
+                JButton listingButton = new JButton(savedListings.get(id).getAddress());
+                listingButton.setName(id);
+                listingButton.addActionListener(this);
+                listingButtons.add(listingButton);
+            }
+        }
+        buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+        for (JButton button : listingButtons) {
+            buttonsPanel.add(button);
+        }
+        this.remove(listingsScroll);
+        listingsScroll = new JScrollPane(buttonsPanel);
+        listingsScroll.setPreferredSize(new Dimension(400, 200));
+        c.gridx = 0;
+        c.gridy = 5;
+        c.gridwidth = 0;
+        this.add(listingsScroll, c);
+        this.add(buttons);
     }
 
     /**

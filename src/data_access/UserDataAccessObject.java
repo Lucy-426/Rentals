@@ -3,6 +3,7 @@ package data_access;
 import entity.Property;
 import entity.User;
 import entity.UserFactory;
+import use_case.signup.UserSignupDataAccessInterface;
 
 import java.io.*;
 import java.time.LocalDateTime;

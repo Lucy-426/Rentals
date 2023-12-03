@@ -1,8 +1,7 @@
 package use_case.listing;
 
-import data_access.UserSignupDataAccessInterface;
+import use_case.signup.UserSignupDataAccessInterface;
 import entity.Property;
-import interface_adapter.listing.ListingState;
 import use_case.home.HomeSearchDataAccessInterface;
 
 import java.util.HashMap;
