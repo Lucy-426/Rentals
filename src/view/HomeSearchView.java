@@ -169,13 +169,13 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         // Creating constraints for the map
         GridBagConstraints mc = new GridBagConstraints();
-        mc.gridx = 1;
-        mc.gridy = 0;
-        mc.gridwidth = 1;
-        mc.gridheight = 3;
-        mc.fill = GridBagConstraints.BOTH;
-        mc.weightx = 1;
-        mc.weighty = 1;
+        c.gridx = 35;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.gridheight = 3;
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.weighty = 1;
 
         // Displaying interactive map
         jxMapKit.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
@@ -184,7 +184,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         jxMapKit.setAddressLocationShown(true);
         jxMapKit.setAddressLocation(homeSearchViewModel.startPosition);
 
-        this.add(jxMapKit, mc);
+        this.add(jxMapKit, c);
 
 
         homeSearchBar.addKeyListener(
@@ -402,7 +402,6 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     }
 
     private static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        // This is a simplified method for illustration; in practice, you may use more accurate calculations
         return Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2));
     }
 }
