@@ -35,6 +35,7 @@ class ListingInteractorTest {
         };
 
         ListingInputBoundary interactor = new ListingInteractor(propertyDataAccessObject, successPresenter);
+
         interactor.execute(inputData);
 
 

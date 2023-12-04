@@ -4,6 +4,7 @@ import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homeSearch.HomeSearchViewModel;
+import interface_adapter.listing.ListingState;
 import interface_adapter.listing.ListingViewModel;
 import main.app.HomeSearchUseCaseFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
@@ -75,6 +77,12 @@ class ListingViewTest {
         }
         ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         PropertyChangeEvent propertyChangeEvent = new PropertyChangeEvent(this, "view", null, null);
+        HashMap<String, String> reccTest = new HashMap<>();
+        reccTest.put("recProp1", "test1");
+        reccTest.put("recProp2", "test2");
+        reccTest.put("recProp3", "test3");
+        ListingState state = listingViewModel.getState();
+        state.setRecommendations(reccTest);
         listingView.propertyChange(propertyChangeEvent);
     }
 }
