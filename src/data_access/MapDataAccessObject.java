@@ -14,16 +14,6 @@ public class MapDataAccessObject implements CenterMapDataAccessInterface {
 
     private static final String MAPS_API_KEY = "AIzaSyAMz9doGhcdEYjPoXY3Cv4TCd58-eHDubU";
 
-//    public void addWaypoint(double lat, double lng) {
-//        waypoints.add(new DefaultWaypoint(lat, lng));
-//    }
-//
-//    // IMPORTANT: ALL addresses to be shown on the map must be added to waypoints
-//    // via addWaypoint BEFORE calling populate!
-//    public void populate() {
-//        waypointPainter.setWaypoints(waypoints);
-//    }
-
     @Override
     public boolean exists (String address) {
         /*
@@ -48,28 +38,6 @@ public class MapDataAccessObject implements CenterMapDataAccessInterface {
             return false;
         }*/
         return true;
-    }
-
-    public String addressFromCoordinates(double lat, double lng) {
-        GeoApiContext context = new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build();
-
-        try {
-            // Perform geocoding request
-            GeocodingResult[] results = GeocodingApi.newRequest(context)
-                    .latlng(new com.google.maps.model.LatLng(lat, lng))
-                    .await();
-
-            // Print the formatted address
-            if (results != null && results.length > 0) {
-                return results[0].formattedAddress;
-            } else {
-                return null;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     @Override
