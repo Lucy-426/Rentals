@@ -1,13 +1,13 @@
 package use_case.listing;
 
 import data_access.PropertyDataAccessObject;
+import entity.Property;
 import entity.PropertyFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 class ListingInteractorTest {
 
@@ -26,16 +26,15 @@ class ListingInteractorTest {
             @Override
             public void prepareSuccessView(ListingOutputData listingOutputData) {
                 assertEquals(inputData.getId(), "17717493");
-                assertNull(propertyDataAccessObject.getRecommendedProperties());
-
-                //successPresenter.prepareSuccessView(listingOutputData);
             }
 
 
         };
-
+        Property property = propertyDataAccessObject.getProperty(inputData.getId());
+        propertyDataAccessObject.save(property);
+        propertyDataAccessObject.filter();
+        propertyDataAccessObject.makeRecommendations(property);
         ListingInputBoundary interactor = new ListingInteractor(propertyDataAccessObject, successPresenter);
-
         interactor.execute(inputData);
 
 
