@@ -1,0 +1,33 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+interface PropertyChangeListener {
++propertyChange(PropertyChangeEvent)
+}
+
+class HomeSearchState {
+}
+class PropertyChangeSupport{
++propertyChange(PropertyChangeEvent)
+}
+class HomeSearchView {
+-homeSearchViewModel: HomeSearchViewModel
++ propertyChange(PropertyChangeEvent evt)
+}
+
+class HomeSearchViewModel {
+-support: PropertyChangeSupport
+- state: HomeSearchState
++setState(HomeSearchState state)
++getState()
++firePropertyChanged()
++addPropertyChangeListener(PropertyChangeListener listener)
+}
+
+PropertyChangeListener <|.. HomeSearchView
+PropertyChangeSupport --* HomeSearchViewModel
+HomeSearchState --* HomeSearchViewModel
+HomeSearchView --> HomeSearchState
+PropertyChangeListener --o PropertyChangeSupport
+@enduml
