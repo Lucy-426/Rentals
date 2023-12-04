@@ -4,6 +4,8 @@ public class ListingInputData {
 
     private final String id;
 
+    private String username = "";
+
     public ListingInputData(String id) {
         this.id = id;
     }
@@ -11,4 +13,8 @@ public class ListingInputData {
     public String getId() {
         return id;
     }
+
+    public String getUsername() { return username; }
+
+    public void setUsername(String username) { this.username = username; }
 }

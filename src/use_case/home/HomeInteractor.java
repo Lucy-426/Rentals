@@ -2,6 +2,8 @@ package use_case.home;
 
 import entity.Property;
 import entity.PropertyFactory;
+import interface_adapter.saved.SavedState;
+
 import org.jdesktop.swingx.mapviewer.Waypoint;
 
 import java.util.HashMap;
@@ -37,4 +39,15 @@ public class HomeInteractor implements HomeInputBoundary {
         homePresenter.prepareSuccessView(homeOutputData);
     }
 
+    public void displaySignupView() {
+        homePresenter.displaySignupView();
+    }
+
+    public void displayLoginView() {
+        homePresenter.displayLoginView();
+    }
+
+    public void displayProfile(SavedState savedState) { homePresenter.displayProfile(savedState); }
+
+    public void logOut() { homePresenter.logOut(); }
 }

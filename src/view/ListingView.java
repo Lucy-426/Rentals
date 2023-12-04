@@ -20,6 +20,8 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
     private ArrayList<JButton> listingButtons = new ArrayList<>();
 
     private JPanel buttonsPanel;
+
+    private JPanel buttons;
     private JScrollPane listingScroll;
 
     private JButton recommendation1 = new JButton();
@@ -47,6 +49,9 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         this.listingController = controller;
         this.listingViewModel = viewModel;
         listingViewModel.addPropertyChangeListener(this);
+
+        buttons = new JPanel();
+        this.add(buttons);
 
 
         setLayout(new GridBagLayout());
@@ -202,15 +207,46 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         furnished.setText(state.getFurnished());
         listingType.setText(state.getListingType());
 
-        ArrayList<String> buttonNames = new ArrayList<>(state.getRecommendations().values());
-        ArrayList<String> idNames = new ArrayList<>(state.getRecommendations().keySet());
+        if (state.getRecommendations() != null) {
+            ArrayList<String> buttonNames = new ArrayList<>(state.getRecommendations().values());
+            ArrayList<String> idNames = new ArrayList<>(state.getRecommendations().keySet());
 
-        recommendation1.setText(buttonNames.get(0));
-        recommendation1.setName(idNames.get(0));
-        recommendation2.setText(buttonNames.get(1));
-        recommendation2.setName(idNames.get(1));
-        recommendation3.setText(buttonNames.get(2));
-        recommendation3.setName(idNames.get(2));
+            recommendation1.setText(buttonNames.get(0));
+            recommendation1.setName(idNames.get(0));
+            recommendation2.setText(buttonNames.get(1));
+            recommendation2.setName(idNames.get(1));
+            recommendation3.setText(buttonNames.get(2));
+            recommendation3.setName(idNames.get(2));
+        }
 
+        ListingState currentState = listingViewModel.getState();
+
+        // Updates home page buttons depending on whether user is logged in
+        if (currentState.isLoggedIn()) {
+            this.remove(buttons);
+            buttons = new JPanel();
+            JButton save = new JButton("Save Listing");
+            buttons.add(save);
+
+            save.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(save)) {
+                                listingController.saveListing(listingViewModel.getState().getUsername(),
+                                        listingViewModel.getState().getId());
+                                if (state.getSaveMsg() != null) {
+                                    JOptionPane.showMessageDialog(buttons, state.getSaveMsg());
+                                }
+                            }
+                        }
+                    }
+            );
+        } else {
+            this.remove(buttons);
+            buttons = new JPanel();
+        }
+        this.add(buttons);
+        this.revalidate();
+        this.repaint();
     }
 }

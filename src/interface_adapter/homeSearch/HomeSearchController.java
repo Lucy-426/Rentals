@@ -1,5 +1,6 @@
 package interface_adapter.homeSearch;
 
+import interface_adapter.saved.SavedState;
 import interface_adapter.ViewManagerModel;
 import use_case.home.HomeInputBoundary;
 import use_case.home.HomeInputData;
@@ -24,5 +25,17 @@ public class HomeSearchController {
 
         homeInteractor.execute(homeInputData);
     }
+
+    public void displaySignupView() {
+        homeInteractor.displaySignupView();
+    }
+
+    public void displayLoginView() {
+        homeInteractor.displayLoginView();
+    }
+
+    public void displayProfile(SavedState savedState) { homeInteractor.displayProfile(savedState); }
+
+    public void logOut() { homeInteractor.logOut(); }
 
 }
