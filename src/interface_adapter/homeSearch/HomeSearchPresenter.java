@@ -26,7 +26,6 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
 
     private ListingViewModel listingViewModel;
 
-    // TODO: link listing view model?
     public HomeSearchPresenter(HomeSearchViewModel homesearchViewModel, ViewManagerModel viewManagerModel,
                                SignupViewModel signupViewModel, LoginViewModel loginViewModel,
                                SavedViewModel savedViewModel, ListingViewModel listingViewModel) {
@@ -41,6 +40,8 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
     public void prepareSuccessView(HomeOutputData homeOutputData) {
         HomeSearchState homeSearchState = homesearchViewModel.getState();
         homeSearchState.setDisplayedListings(homeOutputData.getDisplayedProperties());
+        homeSearchState.setWaypoints(homeOutputData.getWaypoints());
+        homeSearchState.setWaypointIDMap(homeOutputData.getWaypointIDMap());
         homesearchViewModel.setState(homeSearchState);
         homesearchViewModel.firePropertyChanged();
 
@@ -82,5 +83,4 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
         viewManagerModel.setActiveView(homesearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
-
 }

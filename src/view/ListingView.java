@@ -1,10 +1,8 @@
 package view;
 
-import interface_adapter.homeSearch.HomeSearchState;
 import interface_adapter.listing.ListingController;
 import interface_adapter.listing.ListingState;
 import interface_adapter.listing.ListingViewModel;
-import interface_adapter.login.LoginState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -209,15 +207,17 @@ public class ListingView extends JPanel implements ActionListener, PropertyChang
         furnished.setText(state.getFurnished());
         listingType.setText(state.getListingType());
 
-        ArrayList<String> buttonNames = new ArrayList<>(state.getRecommendations().values());
-        ArrayList<String> idNames = new ArrayList<>(state.getRecommendations().keySet());
+        if (state.getRecommendations() != null) {
+            ArrayList<String> buttonNames = new ArrayList<>(state.getRecommendations().values());
+            ArrayList<String> idNames = new ArrayList<>(state.getRecommendations().keySet());
 
-        recommendation1.setText(buttonNames.get(0));
-        recommendation1.setName(idNames.get(0));
-        recommendation2.setText(buttonNames.get(1));
-        recommendation2.setName(idNames.get(1));
-        recommendation3.setText(buttonNames.get(2));
-        recommendation3.setName(idNames.get(2));
+            recommendation1.setText(buttonNames.get(0));
+            recommendation1.setName(idNames.get(0));
+            recommendation2.setText(buttonNames.get(1));
+            recommendation2.setName(idNames.get(1));
+            recommendation3.setText(buttonNames.get(2));
+            recommendation3.setName(idNames.get(2));
+        }
 
         ListingState currentState = listingViewModel.getState();
 

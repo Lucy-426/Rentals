@@ -7,6 +7,8 @@ import kotlin.Pair;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
+import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,9 +23,14 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
     private final Map<String, Property> properties = new HashMap<>();
+
+    private Map<String, Property> filtered_properties;
+
     private Map<String, Property> filteredProperties;
 
     private Map<String, Property> recommendedProperties;
+
+    private final Map<String, Pair> coordinates = new HashMap<>();
 
     private final WalkScoreDataAccessObject walkScoreCalculator = new WalkScoreDataAccessObject();
 
@@ -47,6 +54,10 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
     private Property inputProperty;
 
+    private ArrayList<JSONObject> responseBodies = new ArrayList<>();
+
+    private final String MAPS_API_KEY = "AIzaSyAMz9doGhcdEYjPoXY3Cv4TCd58-eHDubU";
+
     public PropertyDataAccessObject(String csvPath, PropertyFactory propertyFactory) throws IOException {
         this.propertyFactory = propertyFactory;
 
@@ -68,22 +79,18 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         headers.put("numBaths", 5);
         headers.put("walkScore", 6);
         headers.put("furnished", 7);
-        headers.put("listingType", 8);
+        headers.put("latitude", 8);
+        headers.put("longitude", 9);
+        headers.put("listingType", 10);
 
         // go through each city and load in the data for the listings in that city
         if (csvFile.length() == 0) {
-            for (Pair city : cities) {
-                load(city);
-            }
-
-            // Once all the cities' data have been loaded,
-            // save (write all the data) to csv
-            this.save();
+            load(cities);
         } else {
             try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
                 String header = reader.readLine();
 
-                assert header.equals("id,city,address,numRooms,priceRange,numBaths,walkScore,furnished,listingType");
+                assert header.equals("id,city,address,numRooms,priceRange,numBaths,walkScore,furnished,latitude,longitude,listingType");
 
                 String row;
                 while ((row = reader.readLine()) != null) {
@@ -97,8 +104,11 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
                     String walkscore = String.valueOf(col[headers.get("walkScore")]);
                     String furnished = String.valueOf(col[headers.get("furnished")]);
                     String listingType = String.valueOf(col[headers.get("listingType")]);
+                    String latitude = String.valueOf(col[headers.get("latitude")]);
+                    String longitude = String.valueOf(col[headers.get("longitude")]);
                     Property property = propertyFactory.create(id, city, address, rooms, price, baths, walkscore, furnished, listingType);
                     properties.put(property.getID(), property);
+                    coordinates.put(id, new Pair(Double.parseDouble(latitude), Double.parseDouble(longitude)));
                 }
             }
         }
@@ -110,68 +120,96 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     }
 
     // Method to call the API for a given city and parse the json response
-    private void load(Pair<String, String> city) {
+    private void load(ArrayList<Pair> cities) {
+        for (Pair city : cities) {
+            OkHttpClient client = new OkHttpClient();
 
-        OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(API_URL + "assessment/snapshot?latitude=" + city.getFirst() + "&longitude=" + city.getSecond() + "&radius=1&orderby=distance+desc")
+                    .get()
+                    .addHeader("apikey", API_TOKEN)
+                    .build();
 
-        Request request = new Request.Builder()
-                .url(API_URL + "assessment/snapshot?latitude=" + city.getFirst() + "&longitude=" + city.getSecond() + "&radius=1&orderby=distance+desc")
-                .get()
-                .addHeader("apikey", API_TOKEN)
-                .build();
+            try {
+                Response response = client.newCall(request).execute();
 
+                JSONObject responseBody = new JSONObject(response.body().string());
+                responseBodies.add(responseBody);
+            } catch (IOException | JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+        // Writing the Property object inside of properties to the csv file
+
+        BufferedWriter writer;
         try {
-            Response response = client.newCall(request).execute();
+            writer = new BufferedWriter(new FileWriter(csvFile));
+            writer.write(String.join(",", headers.keySet()));
+            writer.newLine();
 
-            JSONObject responseBody = new JSONObject(response.body().string());
+            for (JSONObject responseBody: responseBodies) {
+                // for each property in the listing, filter out the fields that we need and create the property
+                JSONArray rawPropertiesData = responseBody.getJSONArray("property");
+                for (int i = 0; i < rawPropertiesData.length(); i++) {
+                    String propertyJson = rawPropertiesData.getJSONObject(i).toString();
 
-            // for each property in the listing, filter out the fields that we need and create the property
-            JSONArray rawPropertiesData = responseBody.getJSONArray("property");
-            for (int i = 0; i < rawPropertiesData.length(); i++) {
-                String propertyJson = rawPropertiesData.getJSONObject(i).toString();
+                    // Check if property is residential, don't use the ones that are not
+                    String propertyType = JsonPath.read(propertyJson, "$.summary[?(@.propsubtype == 'Residential')]").toString();
+                    if (!Objects.equals(propertyType, "[]")) {
 
-                // Check if property is residential, don't use the ones that are not
-                String propertyType = JsonPath.read(propertyJson, "$.summary[?(@.propsubtype == 'Residential')]").toString();
-                if (!Objects.equals(propertyType, "[]")) {
+                        // get the attributes we need for each property
+                        String id_before = JsonPath.read(propertyJson, "$.identifier[?(@.Id != '')].Id").toString();
+                        String id = id_before.substring(1, id_before.length() - 1);
 
-                    // get the attributes we need for each property
-                    String id_before = JsonPath.read(propertyJson, "$.identifier[?(@.Id != '')].Id").toString();
-                    String id = id_before.substring(1, id_before.length() - 1);
+                        String city_located = JsonPath.read(propertyJson, "$.address.locality");
 
-                    String city_located = JsonPath.read(propertyJson, "$.address.locality");
+                        String address = JsonPath.read(propertyJson, "$.address.line1");
 
-                    String address = JsonPath.read(propertyJson, "$.address.line1");
+                        String numRooms_before = JsonPath.read(propertyJson, "$.building.rooms[?(@.beds != '')].beds").toString();
+                        String numRooms = numRooms_before.substring(1, numRooms_before.length() - 1);
 
-                    String numRooms_before = JsonPath.read(propertyJson, "$.building.rooms[?(@.beds != '')].beds").toString();
-                    String numRooms = numRooms_before.substring(1, numRooms_before.length() - 1);
+                        String priceRange_before = JsonPath.read(propertyJson, "$.assessment.assessed.[?(@.assdttlvalue != '')].assdttlvalue").toString();
+                        String priceRange = priceRange_before.substring(1, priceRange_before.length() - 1);
 
-                    String priceRange_before = JsonPath.read(propertyJson, "$.assessment.assessed.[?(@.assdttlvalue != '')].assdttlvalue").toString();
-                    String priceRange = priceRange_before.substring(1, priceRange_before.length() - 1);
+                        String numBaths_before = JsonPath.read(propertyJson, "$.building.rooms[?(@.bathstotal != '')].bathstotal").toString();
+                        String numBaths = numBaths_before.substring(1, numBaths_before.length() - 1);
 
-                    String numBaths_before = JsonPath.read(propertyJson, "$.building.rooms[?(@.bathstotal != '')].bathstotal").toString();
-                    String numBaths = numBaths_before.substring(1, numBaths_before.length() - 1);
+                        String latitude = JsonPath.read(propertyJson, "$.location.latitude");
+                        double lat = Double.parseDouble(latitude);
+                        String longitude = JsonPath.read(propertyJson, "$.location.longitude");
+                        double lon = Double.parseDouble(longitude);
 
-                    String latitude = JsonPath.read(propertyJson, "$.location.latitude");
-                    double lat = Double.parseDouble(latitude);
-                    String longitude = JsonPath.read(propertyJson, "$.location.longitude");
-                    double lon = Double.parseDouble(longitude);
+                        String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
+                        coordinates.put(id, new Pair(lat, lon));
 
-                    String walkScore = Integer.toString(walkScoreCalculator.calculation(lat, lon));
 
-                    List<String> givenList = Arrays.asList("Yes", "No");
-                    Random rand = new Random();
-                    String furnished = givenList.get(rand.nextInt(givenList.size()));
+                        List<String> givenList = Arrays.asList("Yes", "No");
+                        Random rand = new Random();
+                        String furnished = givenList.get(rand.nextInt(givenList.size()));
 
-                    String listingType = JsonPath.read(propertyJson, "$.summary.propclass");
+                        String listingType = JsonPath.read(propertyJson, "$.summary.propclass");
 
-                    // Create the property based on the attributes we parsed above
-                    Property newProperty = propertyFactory.create(id, city_located, address, numRooms, priceRange, numBaths, walkScore, furnished, listingType);
+                        // Create the property based on the attributes we parsed above
+                        Property newProperty = propertyFactory.create(id, city_located, address, numRooms, priceRange, numBaths, walkScore, furnished, listingType);
 
-                    // Save the property to list of properties
-                    properties.put(newProperty.getID(), newProperty);
+                        // Save the property to list of properties
+                        properties.put(newProperty.getID(), newProperty);
+
+                        // Go through properties and format attributes to csv file columns
+                        String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(
+                                newProperty.getID(), newProperty.getCity(), newProperty.getAddress(), newProperty.getNumRooms(), newProperty.getPriceRange(),
+                                newProperty.getNumBaths(), newProperty.getWalkScore(), newProperty.getFurnished(), lat, lon, newProperty.getListingType()
+                        );
+                        writer.write(line);
+                        writer.newLine();
+                    }
                 }
             }
-        } catch (IOException | JSONException e) {
+
+            writer.close();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -305,31 +343,6 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
         }
     }
 
-
-    // Writing the Property object inside of properties to the csv file
-    private void save() {
-        BufferedWriter writer;
-        try {
-            writer = new BufferedWriter(new FileWriter(csvFile));
-            writer.write(String.join(",", headers.keySet()));
-            writer.newLine();
-
-            // Go through properties and format attributes to csv file columns
-            for (Property property : properties.values()) {
-                String line = "%s,%s,%s,%s,%s,%s,%s,%s,%s".formatted(
-                        property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(), property.getPriceRange(),
-                        property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType()
-                );
-                writer.write(line);
-                writer.newLine();
-            }
-
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public HashMap<String, String> getFilteredProperties() {
         HashMap<String, String> displayProperties = new HashMap<>();
@@ -342,6 +355,54 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     @Override
     public Property getProperty(String id) {
         return properties.get(id);
+    }
+
+    @Override
+    public Set<Waypoint> getCoordinates(HashMap<Waypoint, String> properties) {
+        return properties.keySet();
+    }
+
+    @Override
+    public HashMap<Waypoint, String> getWaypointToID(HashMap<String, String> properties) {
+        HashMap<Waypoint, String> waypointToID = new HashMap<>();
+        for (String id : properties.keySet()) {
+            double latitude = (double) coordinates.get(id).getFirst();
+            double longitude = (double) coordinates.get(id).getSecond();
+            Waypoint waypoint = new DefaultWaypoint(latitude, longitude);
+            waypointToID.put(waypoint, id);
+        }
+        return waypointToID;
+    }
+
+    @Override
+    public double getLat(String id) {
+        try {
+            if (coordinates.containsKey(id)) {
+                return (double) coordinates.get(id).getFirst();
+            } else {
+                System.out.println(id + " does not exist");
+                System.out.println(coordinates.get(id).getFirst());
+                return 0;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public double getLong(String id) {
+        try {
+            if (coordinates.containsKey(id)) {
+                return (double) coordinates.get(id).getSecond();
+            } else {
+                System.out.println(id + " does not exist");
+                return 0;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
 

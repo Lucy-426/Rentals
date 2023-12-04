@@ -6,17 +6,8 @@ import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.listing.ListingState;
 import interface_adapter.listing.ListingViewModel;
 import interface_adapter.saved.SavedState;
-import interface_adapter.saved.SavedViewModel;
-import interface_adapter.signup.SignupState;
-import interface_adapter.signup.SignupViewModel;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
-import use_case.signup.SignupOutputBoundary;
-import use_case.signup.SignupOutputData;
-import view.SavedView;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class LoginPresenter implements LoginOutputBoundary {
 
