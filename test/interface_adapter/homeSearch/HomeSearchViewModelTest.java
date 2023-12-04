@@ -63,5 +63,7 @@ class HomeSearchViewModelTest {
     void getState() {
         HomeSearchViewModel homeSearchViewModel = new HomeSearchViewModel();
         HomeSearchState state = homeSearchViewModel.getState();
+        state.setCity("city");
+        assertEquals(state.getCity(), "city");
     }
 }
