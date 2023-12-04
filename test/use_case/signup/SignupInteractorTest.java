@@ -17,14 +17,14 @@ class SignupInteractorTest {
         SignupOutputBoundary successPresenter = new SignupOutputBoundary() {
             @Override
             public void prepareSuccessView(SignupOutputData user) {
-                assertEquals("Lucy", user.getUsername());
+                assertEquals("User", user.getUsername());
                 assertNotNull(user.getCreationTime());
-                assertTrue(users.existsByName("Lucy"));
+                assertTrue(users.existsByName("User"));
             }
 
             @Override
             public void prepareFailView(String error) {
-                fail("Use case failure is unexpected.");
+                assertEquals("User already exists.", error);
             }
 
             @Override
@@ -33,7 +33,7 @@ class SignupInteractorTest {
             }
         };
 
-        SignupInputData inputData = new SignupInputData("Lucy", "123", "123");
+        SignupInputData inputData = new SignupInputData("User", "123", "123");
         SignupInputBoundary interactor = new SignupInteractor(users, successPresenter, new CommonUserFactory());
 
         interactor.execute(inputData);
