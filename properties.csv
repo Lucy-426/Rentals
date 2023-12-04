@@ -1,0 +1,5 @@
+id,city,address,numRooms,priceRange,numBaths,walkScore,furnished,listingType
+34149940,LOS ANGELES,1511 E 23RD ST,8,787629,4,0,Yes,Duplex, Triplex, Quadplex
+13302684,LOS ANGELES,1262 E ADAMS BLVD,3,401000,1,0,Yes,Single Family Residence / Townhouse
+154650151,LOS ANGELES,743 E JEFFERSON BLVD,,301413,,0,Yes,Duplex, Triplex, Quadplex
+17726340,LOS ANGELES,2322 HOOPER AVE,8,276340,4,0,No,Duplex, Triplex, Quadplex
