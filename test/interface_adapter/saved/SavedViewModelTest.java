@@ -12,6 +12,7 @@ import use_case.saved.SavedInteractor;
 import view.SavedView;
 
 import java.io.IOException;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,4 +57,7 @@ class SavedViewModelTest {
         savedViewModel.setState(state);
         assertEquals(state, savedViewModel.getState());
     }
+
+    @Test
+    void getState() {}
 }

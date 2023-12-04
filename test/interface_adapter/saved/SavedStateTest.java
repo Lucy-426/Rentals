@@ -23,4 +23,11 @@ class SavedStateTest {
         assertNull(state.getSavedListings());
     }
 
+    @Test
+    void setUsername() {
+    }
+
+    @Test
+    void setSavedListings() {
+    }
 }
