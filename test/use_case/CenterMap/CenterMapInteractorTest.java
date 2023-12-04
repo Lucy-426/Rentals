@@ -29,22 +29,4 @@ class CenterMapInteractorTest {
         CenterMapInputBoundary interactor = new CenterMapInteractor(mapDataAccessObject, successPresenter);
         interactor.execute(inputData);
     }
-
-    @Test
-    void failTest() {
-        CenterMapInputData inputData = new CenterMapInputData("Fake Address 9999");
-        MapDataAccessObject mapDataAccessObject = new MapDataAccessObject();
-
-        CenterMapOutputBoundary successPresenter = new CenterMapOutputBoundary() {
-            @Override
-            public void prepareSuccessView(CenterMapOutputData centerMapOutputData) {
-                fail("Use case success is unexpected");
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-
-            }
-        };
-    }
 }
