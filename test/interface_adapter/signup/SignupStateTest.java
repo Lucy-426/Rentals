@@ -20,22 +20,27 @@ class SignupStateTest {
         String error = "error";
         state.setUsernameError(error);
         assertEquals(error, state.getUsernameError());
+
     }
 
     @Test
     void getPassword() {
+
         SignupState state = new SignupState();
         String password = "password";
         state.setPassword(password);
         assertEquals(password, state.getPassword());
+
     }
 
     @Test
     void getPasswordError() {
+
         SignupState state = new SignupState();
         String error = "error";
         state.setPasswordError(error);
         assertEquals(error, state.getPasswordError());
+
     }
 
     @Test
@@ -44,6 +49,7 @@ class SignupStateTest {
         String password = "password";
         state.setRepeatPassword(password);
         assertEquals(password, state.getRepeatPassword());
+
     }
 
     @Test
@@ -54,4 +60,27 @@ class SignupStateTest {
         assertEquals(error, state.getRepeatPasswordError());
     }
 
+    @Test
+    void setUsername() {
+    }
+
+    @Test
+    void setUsernameError() {
+    }
+
+    @Test
+    void setPassword() {
+    }
+
+    @Test
+    void setPasswordError() {
+    }
+
+    @Test
+    void setRepeatPassword() {
+    }
+
+    @Test
+    void setRepeatPasswordError() {
+    }
 }

@@ -40,28 +40,6 @@ public class MapDataAccessObject implements CenterMapDataAccessInterface {
         return true;
     }
 
-    public String addressFromCoordinates(double lat, double lng) {
-        GeoApiContext context = new GeoApiContext.Builder().apiKey(MAPS_API_KEY).build();
-
-        try {
-            // Perform geocoding request
-            GeocodingResult[] results = GeocodingApi.newRequest(context)
-                    .latlng(new com.google.maps.model.LatLng(lat, lng))
-                    .await();
-
-            // Print the formatted address
-            if (results != null && results.length > 0) {
-                return results[0].formattedAddress;
-            } else {
-                return null;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     @Override
     public double getLat(String address) {
         try {

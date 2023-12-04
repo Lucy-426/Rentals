@@ -20,8 +20,6 @@ class LoginStateTest {
         String error = "usernameError";
         loginState.setUsernameError(error);
         assertEquals(error, loginState.getUsernameError());
-
-
     }
 
     @Test
@@ -41,4 +39,19 @@ class LoginStateTest {
         assertEquals(error, loginState.getPasswordError());
     }
 
+    @Test
+    void setUsername() {
+    }
+
+    @Test
+    void setUsernameError() {
+    }
+
+    @Test
+    void setPassword() {
+    }
+
+    @Test
+    void setPasswordError() {
+    }
 }

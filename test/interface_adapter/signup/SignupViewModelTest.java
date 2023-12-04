@@ -26,6 +26,7 @@ class SignupViewModelTest {
     void firePropertyChanged() {
         SignupViewModel signupViewModel = new SignupViewModel();
         signupViewModel.firePropertyChanged();
+
     }
 
     @Test
@@ -46,6 +47,7 @@ class SignupViewModelTest {
                 signupViewModel, userDataAccessObject);
 
         signupViewModel.addPropertyChangeListener(signupView);
+
     }
 
     @Test

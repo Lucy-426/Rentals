@@ -1,20 +1,16 @@
 package interface_adapter.login;
 
-import data_access.PropertyDataAccessObject;
 import data_access.UserDataAccessObject;
 import entity.CommonUserFactory;
-import entity.PropertyFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.listing.ListingViewModel;
-import main.app.HomeSearchUseCaseFactory;
 import main.app.LoginUseCaseFactory;
-import org.apache.commons.logging.Log;
 import org.junit.jupiter.api.Test;
 import view.LoginView;
-import view.ViewManager;
 
 import java.io.IOException;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,7 +30,6 @@ class LoginViewModelTest {
 
     @Test
     void addPropertyChangeListener() {
-
         UserDataAccessObject userDataAccessObject;
         try {
             userDataAccessObject = new UserDataAccessObject("./users.csv", new CommonUserFactory());
@@ -47,6 +42,7 @@ class LoginViewModelTest {
         ListingViewModel listingViewModel = new ListingViewModel();
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, homeSearchViewModel, loginViewModel, listingViewModel, userDataAccessObject);
         loginViewModel.addPropertyChangeListener(loginView);
+
     }
 
     @Test

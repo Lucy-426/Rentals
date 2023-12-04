@@ -1,8 +1,6 @@
 package interface_adapter.saved;
 
 import data_access.PropertyDataAccessObject;
-import data_access.UserDataAccessObject;
-import entity.CommonUserFactory;
 import entity.PropertyFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homeSearch.HomeSearchViewModel;
