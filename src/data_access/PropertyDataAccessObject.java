@@ -370,19 +370,13 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
 
     @Override
     public HashMap<Waypoint, String> getWaypointToID(HashMap<String, String> properties) {
-        System.out.println(properties);
         HashMap<Waypoint, String> waypointToID = new HashMap<>();
         for (String id : properties.keySet()) {
-            System.out.println(id);
             double latitude = (double) coordinates.get(id).getFirst();
-            System.out.println(latitude);
             double longitude = (double) coordinates.get(id).getSecond();
-            System.out.println(longitude);
             Waypoint waypoint = new DefaultWaypoint(latitude, longitude);
-            System.out.println(waypoint);
             waypointToID.put(waypoint, id);
         }
-        System.out.println(waypointToID);
         return waypointToID;
     }
 
