@@ -1,5 +1,6 @@
 package interface_adapter.homeSearch;
 
+import interface_adapter.saved.SavedState;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -30,6 +31,10 @@ public class HomeSearchState {
 
     private String listingType;
 
+    private boolean loggedIn = false;
+
+    private SavedState savedState = null;
+
     private HashMap<String, String> displayedListings;
 
     private HashMap<Waypoint, String> waypointIDMap;
@@ -49,6 +54,8 @@ public class HomeSearchState {
         walkScore = copy.walkScore;
         furnished = copy.furnished;
         listingType = copy.listingType;
+        loggedIn = copy.loggedIn;
+        savedState = copy.savedState;
         displayedListings = copy.displayedListings;
         waypointIDMap = copy.waypointIDMap;
         waypoints = copy.waypoints;
@@ -92,6 +99,10 @@ public class HomeSearchState {
     public String getListingType() {
         return listingType;
     }
+
+    public boolean getLoggedIn() { return loggedIn; }
+
+    public SavedState getSavedState() { return savedState; }
 
     public HashMap<String, String> getDisplayedListings() {
         return displayedListings;
@@ -144,6 +155,10 @@ public class HomeSearchState {
     public void setListingType(String listingType) {
         this.listingType = listingType;
     }
+
+    public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }
+
+    public void setSavedState(SavedState savedState) { this.savedState = savedState; }
 
     public void setDisplayedListings(HashMap<String, String> displayedListings) {
         this.displayedListings = displayedListings;

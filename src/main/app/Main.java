@@ -1,19 +1,17 @@
 package main.app;
 
-import org.jdesktop.swingx.JXMapKit;
-import org.jdesktop.swingx.JXMapViewer;
-import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
-import org.jdesktop.swingx.mapviewer.Waypoint;
+import data_access.UserDataAccessObject;
+import entity.CommonUserFactory;
 import data_access.PropertyDataAccessObject;
 import entity.PropertyFactory;
 
 import interface_adapter.homeSearch.HomeSearchViewModel;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.saved.SavedViewModel;
+import interface_adapter.signup.SignupViewModel;
 import interface_adapter.listing.ListingViewModel;
-import view.HomeSearchView;
-import view.ListingView;
-import view.ViewManager;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,8 +35,18 @@ public class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
+        UserDataAccessObject userDataAccessObject;
+        try {
+            userDataAccessObject = new UserDataAccessObject("./users.csv", new CommonUserFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
+        SignupViewModel signupViewModel = new SignupViewModel();
+        LoginViewModel loginViewModel = new LoginViewModel();
         ListingViewModel listingViewModel = new ListingViewModel();
+        SavedViewModel savedViewModel = new SavedViewModel();
 
         PropertyDataAccessObject propertyDataAccessObject;
         try {
@@ -47,13 +55,24 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-
-        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
-
+        HomeSearchView homeSearchView = HomeSearchUseCaseFactory.create(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel,
+                signupViewModel, loginViewModel, savedViewModel);
         views.add(homeSearchView, homeSearchView.viewName);
 
-        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         views.add(listingView, listingView.viewName);
+
+        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, signupViewModel,
+                userDataAccessObject);
+        views.add(signupView, signupView.viewName);
+
+        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, homesearchViewModel, loginViewModel, listingViewModel,
+                userDataAccessObject);
+        views.add(loginView, loginView.viewName);
+
+        SavedView savedView = ProfileUseCaseFactory.create(userDataAccessObject, propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel, savedViewModel);
+        views.add(savedView, savedView.viewName);
+
 
         viewManagerModel.setActiveView(homeSearchView.viewName);
         viewManagerModel.firePropertyChanged();

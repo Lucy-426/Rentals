@@ -7,7 +7,6 @@ import interface_adapter.listing.ListingController;
 
 import interface_adapter.CenterMap.CenterMapController;
 import org.jdesktop.swingx.JXMapKit;
-import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
@@ -24,6 +23,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     public final String viewName = "Search";
 
+    private final HomeSearchViewModel homeSearchViewModel;
+
     public final JXMapKit jxMapKit = new JXMapKit();
 
     public final WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<>();
@@ -31,9 +32,10 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     private static final double distanceThreshold = 0.001;
 
     private final JTextField homeSearchBar = new JTextField(30);
-    private JButton searchButton;
 
-    private final HomeSearchViewModel homeSearchViewModel;
+    private JPanel buttons;
+
+    private JButton searchButton;
 
 //    filters
     private JComboBox<String> numRooms;
@@ -70,6 +72,35 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         JLabel title = new JLabel(homeSearchViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        buttons = new JPanel();
+
+        JButton signUp = new JButton("Sign Up");
+        buttons.add(signUp);
+        JButton logIn = new JButton("Log In");
+        buttons.add(logIn);
+
+        signUp.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(signUp)) {
+                            homeSearchController.displaySignupView();
+                        }
+                    }
+                }
+        );
+
+        logIn.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(logIn)) {
+                            homeSearchController.displayLoginView();
+                        }
+                    }
+                }
+        );
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         LabelTextPanel searchBar = new LabelTextPanel(
                 new JLabel(homeSearchViewModel.SEARCH_BAR_LABEL), homeSearchBar);
         searchButton = new JButton("Search");
@@ -101,8 +132,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         listingType.setSelectedIndex(0);
         listingType.addActionListener(this);
 
-
-        // for formatting
+//        for formatting
+        setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
@@ -186,6 +217,8 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
         this.add(jxMapKit, c);
 
+        // Signup + LogIn / Profile + LogOut Button Panel
+        this.add(buttons);
 
         homeSearchBar.addKeyListener(
                 new KeyListener() {
@@ -228,16 +261,16 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                                 currentState.setCity(homeSearchViewModel.getState().getSearchBarInput());
                                 homeSearchViewModel.setState(currentState);
                                 // Left map centering commented to save API usage credits
-//                                centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
-//                                jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
+                                centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
+                                jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
 
                             } else if (input.matches(".+")) {
                                 HomeSearchState currentState = homeSearchViewModel.getState();
                                 currentState.setAddress(homeSearchViewModel.getState().getSearchBarInput());
                                 homeSearchViewModel.setState(currentState);
                                 // Left map centering commented to save API usage credits
-//                                centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
-//                                jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
+                                centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
+                                jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
 
                             }
 
@@ -373,6 +406,66 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        HomeSearchState currentState = homeSearchViewModel.getState();
+
+        // Updates home page buttons depending on whether user is logged in
+        if (currentState.getLoggedIn()) {
+            this.remove(buttons);
+            buttons = new JPanel();
+            JButton profile = new JButton("Profile");
+            buttons.add(profile);
+            JButton logOut = new JButton("Log Out");
+            buttons.add(logOut);
+
+            profile.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(profile)) {
+                                homeSearchController.displayProfile(homeSearchViewModel.getState().getSavedState());
+                            }
+                        }
+                    }
+            );
+
+            logOut.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(logOut)) {
+                                homeSearchController.logOut();
+                            }
+                        }
+                    }
+            );
+        } else {
+            this.remove(buttons);
+
+            buttons = new JPanel();
+            JButton signUp = new JButton("Sign Up");
+            buttons.add(signUp);
+            JButton logIn = new JButton("Log In");
+            buttons.add(logIn);
+
+            signUp.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(signUp)) {
+                                homeSearchController.displaySignupView();
+                            }
+                        }
+                    }
+            );
+
+            logIn.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt.getSource().equals(logIn)) {
+                                homeSearchController.displayLoginView();
+                            }
+                        }
+                    }
+            );
+        }
+
         // Updates the home page to add buttons according to the filtered listings
         if (!(homeSearchViewModel.getState().getDisplayedListings() == null)) {
             listingButtons = new ArrayList<>();
@@ -392,6 +485,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         listingsScroll = new JScrollPane(buttonsPanel);
         listingsScroll.setPreferredSize(new Dimension(200, 200));
         this.add(listingsScroll);
+        this.add(buttons);
         this.revalidate();
         this.repaint();
     }
