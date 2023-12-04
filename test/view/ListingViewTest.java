@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -56,10 +57,24 @@ class ListingViewTest {
         listingView.actionPerformed(mockEvent);
 
         assertEquals("SampleButton", mockButton.getName());
+        listingViewModel.addPropertyChangeListener(listingView);
     }
 
     @Test
     void propertyChange() {
+        ViewManagerModel viewManagerModel = new ViewManagerModel();
 
+        HomeSearchViewModel homesearchViewModel = new HomeSearchViewModel();
+        ListingViewModel listingViewModel = new ListingViewModel();
+
+        PropertyDataAccessObject propertyDataAccessObject;
+        try {
+            propertyDataAccessObject = new PropertyDataAccessObject("./properties.csv", new PropertyFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
+        PropertyChangeEvent propertyChangeEvent = new PropertyChangeEvent(this, "view", null, null);
+        listingView.propertyChange(propertyChangeEvent);
     }
 }

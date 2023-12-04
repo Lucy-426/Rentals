@@ -1,7 +1,6 @@
 package use_case.listing;
 
 import data_access.PropertyDataAccessObject;
-import entity.Property;
 import entity.PropertyFactory;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +14,7 @@ class ListingInteractorTest {
 
     @Test
     void successTest() {
-        ListingInputData inputData = new ListingInputData("testID");
+        ListingInputData inputData = new ListingInputData("17717493");
         PropertyDataAccessObject propertyDataAccessObject;
         try {
             propertyDataAccessObject = new PropertyDataAccessObject("./properties.csv", new PropertyFactory());
@@ -26,7 +25,7 @@ class ListingInteractorTest {
         ListingOutputBoundary successPresenter = new ListingOutputBoundary() {
             @Override
             public void prepareSuccessView(ListingOutputData listingOutputData) {
-                assertEquals(inputData.getId(), "testID");
+                assertEquals(inputData.getId(), "17717493");
                 assertNull(propertyDataAccessObject.getRecommendedProperties());
 
                 //successPresenter.prepareSuccessView(listingOutputData);
@@ -37,11 +36,7 @@ class ListingInteractorTest {
 
         ListingInputBoundary interactor = new ListingInteractor(propertyDataAccessObject, successPresenter);
         interactor.execute(inputData);
-        Property property = new Property("testID", "New York", "123 Smith St",
-                "3", "400", "2", "7", "No", "Rental");
-        ListingOutputData listingOutputDataTest = new ListingOutputData(property.getID(), property.getCity(), property.getAddress(), property.getNumRooms(),
-                property.getPriceRange(), property.getNumBaths(), property.getWalkScore(), property.getFurnished(), property.getListingType(),
-                null);
+
 
     }
 }
