@@ -38,7 +38,9 @@ class HomeSearchControllerTest {
         HomeInputBoundary homeInteractor = new HomeInteractor(propertyDataAccessObject, homeSearchPresenter, new PropertyFactory());
         HomeSearchController controller = new HomeSearchController(homeInteractor, homeSearchViewModel, viewManagerModel);
 
-        controller.execute(null, null, null, null, null, null, null, null, null);
+        controller.execute("testId", "testCity", "testAddress", "testRooms",
+                "testPrice", "testBaths", "testScore", "testFurnished",
+                "testType");
     }
 
     @Test
