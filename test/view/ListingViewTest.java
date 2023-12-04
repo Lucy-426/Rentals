@@ -1,6 +1,8 @@
 package view;
 
 import data_access.PropertyDataAccessObject;
+import data_access.UserDataAccessObject;
+import entity.CommonUserFactory;
 import entity.PropertyFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homeSearch.HomeSearchViewModel;
@@ -33,7 +35,15 @@ class ListingViewTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
+
+        UserDataAccessObject userDataAccessObject;
+        try {
+            userDataAccessObject = new UserDataAccessObject("./users.csv", new CommonUserFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         assertEquals("Listing", listingView.viewName);
 
     }
@@ -50,7 +60,15 @@ class ListingViewTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
+
+        UserDataAccessObject userDataAccessObject;
+        try {
+            userDataAccessObject = new UserDataAccessObject("./users.csv", new CommonUserFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
 
         JButton mockButton = new JButton();
         mockButton.setName("SampleButton");
@@ -75,7 +93,15 @@ class ListingViewTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
+
+        UserDataAccessObject userDataAccessObject;
+        try {
+            userDataAccessObject = new UserDataAccessObject("./users.csv", new CommonUserFactory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        ListingView listingView = HomeSearchUseCaseFactory.createListingView(propertyDataAccessObject, userDataAccessObject, viewManagerModel, homesearchViewModel, listingViewModel);
         PropertyChangeEvent propertyChangeEvent = new PropertyChangeEvent(this, "view", null, null);
         HashMap<String, String> reccTest = new HashMap<>();
         reccTest.put("recProp1", "test1");
