@@ -19,13 +19,12 @@ public class HomeSearchPresenter implements HomeOutputBoundary {
     public void prepareSuccessView(HomeOutputData homeOutputData) {
         HomeSearchState homeSearchState = homesearchViewModel.getState();
         homeSearchState.setDisplayedListings(homeOutputData.getDisplayedProperties());
+        homeSearchState.setWaypoints(homeOutputData.getWaypoints());
+        homeSearchState.setWaypointIDMap(homeOutputData.getWaypointIDMap());
         homesearchViewModel.setState(homeSearchState);
         homesearchViewModel.firePropertyChanged();
 
         viewManagerModel.setActiveView(homesearchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
-
-
     }
-
 }

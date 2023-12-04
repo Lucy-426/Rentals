@@ -7,22 +7,28 @@ import interface_adapter.listing.ListingController;
 
 import interface_adapter.CenterMap.CenterMapController;
 import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.Waypoint;
+import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HomeSearchView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "Search";
 
     public final JXMapKit jxMapKit = new JXMapKit();
+
+    public final WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<>();
+
+    private static final double distanceThreshold = 0.001;
 
     private final JTextField homeSearchBar = new JTextField(30);
     private JButton searchButton;
@@ -40,7 +46,6 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
     // Scroll pane
     private JScrollPane listingsScroll;
     private ArrayList<JButton> listingButtons = new ArrayList<>();
-
     private JPanel buttonsPanel;
 
 
@@ -162,6 +167,16 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         // Add the JScrollPane to the panel
         this.add(listingsScroll, c);
 
+        // Creating constraints for the map
+        GridBagConstraints mc = new GridBagConstraints();
+        c.gridx = 35;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.gridheight = 3;
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.weighty = 1;
+
         // Displaying interactive map
         jxMapKit.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
         jxMapKit.setDataProviderCreditShown(true);
@@ -169,7 +184,7 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         jxMapKit.setAddressLocationShown(true);
         jxMapKit.setAddressLocation(homeSearchViewModel.startPosition);
 
-        this.add(jxMapKit);
+        this.add(jxMapKit, c);
 
 
         homeSearchBar.addKeyListener(
@@ -212,10 +227,18 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                                 HomeSearchState currentState = homeSearchViewModel.getState();
                                 currentState.setCity(homeSearchViewModel.getState().getSearchBarInput());
                                 homeSearchViewModel.setState(currentState);
+                                // Left map centering commented to save API usage credits
+//                                centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
+//                                jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
+
                             } else if (input.matches(".+")) {
                                 HomeSearchState currentState = homeSearchViewModel.getState();
                                 currentState.setAddress(homeSearchViewModel.getState().getSearchBarInput());
                                 homeSearchViewModel.setState(currentState);
+                                // Left map centering commented to save API usage credits
+//                                centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
+//                                jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
+
                             }
 
                             homeSearchController.execute(homeSearchViewModel.getState().getId(),
@@ -224,8 +247,9 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                                     homeSearchViewModel.getState().getNumBaths(), homeSearchViewModel.getState().getWalkScore(),
                                     homeSearchViewModel.getState().getFurnished(), homeSearchViewModel.getState().getListingType());
 
-                            centerMapController.execute(homeSearchViewModel.getState().getSearchBarInput());
-                            jxMapKit.setAddressLocation(homeSearchViewModel.getState().getStartPosition());
+                            jxMapKit.getMainMap().repaint();
+                            waypointPainter.setWaypoints(homeSearchViewModel.getState().getWaypoints());
+                            jxMapKit.getMainMap().setOverlayPainter(waypointPainter);
                         }
                     }
                 }
@@ -320,6 +344,23 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
                     }
                 }
         );
+
+        jxMapKit.getMainMap().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                GeoPosition clickedPosition = jxMapKit.getMainMap().convertPointToGeoPosition(e.getPoint());
+                HomeSearchState currentState = homeSearchViewModel.getState();
+                HashMap<Waypoint, String> waypointIDMap = currentState.getWaypointIDMap();
+
+                // Check if any waypoint was clicked
+                for (Waypoint waypoint : homeSearchViewModel.getState().getWaypoints()) {
+                    if (isCloseEnough(waypoint.getPosition(), clickedPosition, distanceThreshold)) {
+                        String id = waypointIDMap.get(waypoint);
+                        listingController.execute(id);
+                    }
+                }
+            }
+        });
     }
 
     public void actionPerformed(ActionEvent evt) {
@@ -353,6 +394,16 @@ public class HomeSearchView extends JPanel implements ActionListener, PropertyCh
         this.add(listingsScroll);
         this.revalidate();
         this.repaint();
+    }
+
+    private static boolean isCloseEnough(GeoPosition position1, GeoPosition position2, double threshold) {
+        double distance = calculateDistance(position1.getLatitude(), position1.getLongitude(),
+                position2.getLatitude(), position2.getLongitude());
+        return distance <= threshold;
+    }
+
+    private static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        return Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2));
     }
 }
 
