@@ -410,29 +410,30 @@ public class PropertyDataAccessObject implements HomeSearchDataAccessInterface {
     public void makeRecommendations(Property property) {
         recommendedProperties = new HashMap<>();
         String city = property.getCity();
-
-        // make a hashmap and add properties with the same city to it
-        HashMap<String, Property> cityRecommendations = new HashMap<>();
-        for (Map.Entry<String, Property> entry : filteredProperties.entrySet()) {
-            if (city.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID())) {
-                cityRecommendations.put(entry.getKey(), entry.getValue());
-            }
-        }
-        if (cityRecommendations.size() < 3) {
-            for (Map.Entry<String, Property> entry : properties.entrySet()) {
-                if ((city.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID()))) {
+        if (this.filteredProperties != null) {
+            // make a hashmap and add properties with the same city to it
+            HashMap<String, Property> cityRecommendations = new HashMap<>();
+            for (Map.Entry<String, Property> entry : filteredProperties.entrySet()) {
+                if (city.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID())) {
                     cityRecommendations.put(entry.getKey(), entry.getValue());
                 }
             }
-        }
-        int count = 0;
-        for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
-            // pass through the first 3 recommended listings from cityRecommendations
-            if (count < 3) {
-                recommendedProperties.put(entry.getKey(), entry.getValue());
-                count += 1;
-            } else {
-                break;
+            if (cityRecommendations.size() < 3) {
+                for (Map.Entry<String, Property> entry : properties.entrySet()) {
+                    if ((city.equals(entry.getValue().getCity()) && !entry.getValue().getID().equals(property.getID()))) {
+                        cityRecommendations.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            int count = 0;
+            for (Map.Entry<String, Property> entry : cityRecommendations.entrySet()) {
+                // pass through the first 3 recommended listings from cityRecommendations
+                if (count < 3) {
+                    recommendedProperties.put(entry.getKey(), entry.getValue());
+                    count += 1;
+                } else {
+                    break;
+                }
             }
         }
 
